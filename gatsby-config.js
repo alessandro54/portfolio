@@ -5,7 +5,8 @@ module.exports = {
     author: `@alessandro`,
     github: `https://github.com/alessandro54`,
     linkedin: `https://www.linkedin.com/in/alessandrochumpitaz/`,
-    contactMail: `alessandrochumpitazp@gmail.com`
+    contactMail: `alessandrochumpitazp@gmail.com`,
+    currentHour: new Date().getHours()
   },
   plugins: [
     `gatsby-plugin-react-helmet`,

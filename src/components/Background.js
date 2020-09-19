@@ -1,17 +1,16 @@
 import React, { useEffect, useRef, useState } from "react"
 
 import {Canvas, useFrame} from "react-three-fiber";
-import { OrbitControls, softShadows } from "drei"
+import { Dodecahedron, softShadows } from "drei"
 
 softShadows();
 const SpinningMesh = ({position, args, color}) => {
 
   const mesh = useRef(null);
-  useFrame(() => (mesh.current.rotation.x = mesh.current.rotation.y += 0.01));
+  useFrame(() => (mesh.current.rotation.x = mesh.current.rotation.y += -0.005));
   return (
     <mesh castShadow ref={mesh}
           position={position}
-          onPointerUp={e => console.log('up')}
     >
       <boxBufferGeometry attach={'geometry'} args = {args}/>
       <meshStandardMaterial attach={'material'} color={color} transparent opacity={0.7}/>
@@ -21,14 +20,11 @@ const SpinningMesh = ({position, args, color}) => {
 
 
 const Background = () => {
-  const [width, setWidth] = useState(window.innerWidth);
-  const [height, setHeight] = useState(window.innerHeight)
+  const [dimensions, setDimensions] = useState({ x: window.innerWidth, y: window.innerHeight});
   const handleResize = () => {
-    setHeight(window.innerHeight);
-    setWidth(window.innerWidth)
+    setDimensions({ x: window.innerWidth, y: window.innerHeight})
   }
   useEffect(()=> {
-    handleResize()
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize)
@@ -38,7 +34,7 @@ const Background = () => {
     //Here goes the 3D background
     <Canvas
       shadowMap
-      style={{backgroundColor:"lightblue",zIndex:-1,width:width, height:height, position:"fixed",top:0,left:0}}
+      style={{backgroundColor:`lightblue`,zIndex:-1,width:dimensions.x, height:dimensions.y, position:"fixed",top:0,left:0}}
       colorManagement
       camera={{position: [-5,2,10],fov:40}}>
       <ambientLight intensity={0.3} />
@@ -65,9 +61,9 @@ const Background = () => {
           <shadowMaterial attach={'material'} opacity={0.3}/>
         </mesh>
       </group>
-      <SpinningMesh position = {[0,1,0]} args={[3,2,1]} color={'lightblue'}/>
-      <SpinningMesh position = {[-2,1,-5]} color = {'pink'}/>
-      <SpinningMesh position = {[5,1,-2]} color={'lightblue'}/>
+      <SpinningMesh position = {[0,1,0]} args={[3,2,1]} color={'#E69C77'}/>
+      <SpinningMesh position = {[-2,1,-5]} color = {'#F0E181'}/>
+      <SpinningMesh position = {[5,1,-2]} color={'#002e39'}/>
     </Canvas>
   )
 }

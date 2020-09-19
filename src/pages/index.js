@@ -1,12 +1,12 @@
 import React from "react"
-import Card from "../components/index/Card"
+import Hero from "../components/index/Hero"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
 const IndexPage = () => (
   <Layout>
-    <SEO title="Home" />
-    <Card/>
+    <SEO title="Home"/>
+    <Hero/>
   </Layout>
 )
 
