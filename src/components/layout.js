@@ -5,23 +5,13 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React, { useEffect } from "react"
+import React from "react"
 import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
 import "./layout.css"
-import Background from "./Background"
+import Background from "./threeobjects/Background"
 
 const Layout = ({ children }) => {
-  const data = useStaticQuery(graphql`
-    query SiteModeQuery {
-      site {
-        siteMetadata {
-          currentHour
-        }
-      }
-    }
-  `)
-  const handleMode = () => { return (data.site.siteMetadata.currentHour >= 18) ? 'dark' : 'light' }
+
   return (
     <>
       <div
@@ -36,11 +26,14 @@ const Layout = ({ children }) => {
           padding: `0 1.0875rem 1.45rem`,
         }}
       >
-        <Background mode = {handleMode()}/>
+        <Background/>
         {children}
         <footer style={{
-          marginTop: `2rem`,
-          color:'white'
+          position:"fixed",
+          bottom:0,
+          color:'black',
+          zIndex:8,
+          fontFamily: "font-family: 'Roboto', sans-serif",
         }}>
           © {new Date().getFullYear()}, Built in <a href="https://www.gatsbyjs.com">Gatsby</a> and Designed by alessandro
           {` `}

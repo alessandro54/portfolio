@@ -1,5 +1,4 @@
 import React from "react"
-import {Link} from "gatsby"
 import styled from "styled-components"
 const StyledButton = styled.div`
     background: rgba(0,0,0,0.10);
@@ -9,15 +8,21 @@ const StyledButton = styled.div`
     padding: 5%;
     font-size: 1.2vw;
     font-weight: bold;
-    a:visited,a:active,a:link {
-        text-decoration: none;
-        color:white;
+    transition: 0.1s;
+    &:hover {
+      transform: scale(1.1);
+      transition: 0.1s;
+      background: rgba(0,0,0,0.4);
+    }
+    a {
+      color: white; 
+      cursor: pointer;
     }
 `
-const Button = ({type}) => {
+const Button = ({type,handleClick}) => {
   return(
-    <StyledButton>
-      <Link to = {`/${type}`}>{type.charAt(0).toUpperCase() + type.slice(1)}</Link>
+    <StyledButton onClick = {e => handleClick(type)}>
+      <a>{type.charAt(0).toUpperCase() + type.slice(1)}</a>
     </StyledButton>
   )
 }

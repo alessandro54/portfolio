@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
+    title: `Alessandro`,
     description: `Alessandro Chumpitaz Portfolio`,
     author: `@alessandro`,
     github: `https://github.com/alessandro54`,
