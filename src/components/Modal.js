@@ -1,8 +1,8 @@
 import React from "react"
 import styled from "styled-components"
-import About from "./views/about"
-import Contact from "./views/contact"
-import Projects from "./views/projects"
+import About from "../pages/about"
+import Contact from "../pages/contact"
+import Projects from "../pages/projects"
 
 const StyledModal = styled.div`
     display: ${props => !props.show ? 'flex' : 'none'};

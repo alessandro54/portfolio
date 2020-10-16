@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import styled from  "styled-components"
-import Button from "../Button"
-import Modal from "../Modal"
+import Button from "../components/Button"
+import Modal from "../components/Modal"
 
 const Wrapper = styled.div`
     z-index: 4;
@@ -42,7 +42,7 @@ const ButtonZone = styled.div`
     display: flex;
     justify-content: center;
 `
-const Main = ({mode}) => {
+const Main = () => {
   const [show,setShow] = useState(true)
   const [type,setType] = useState('')
   const handleButtonClick = (type) => {

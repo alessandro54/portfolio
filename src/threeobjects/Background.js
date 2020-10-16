@@ -82,9 +82,9 @@ const Background = () => {
             <shadowMaterial attach={'material'} opacity={0.3}/>
           </mesh>
         </group>
-        <Icosahedron position={[-2,0,-5]} color={'#F0E181'} radius={40}/>
-        <Icosahedron position={[8,0,0]} color={'lightblue'} radius={60}/>
-        <Icosahedron position={[2,4,0]} color={'pink'} radius={100}/>
+        <Icosahedron position={[-3,0,-5]} color={'#F0E181'} radius={40} rotation={0.005}/>
+        <Icosahedron position={[8,0,0]} color={'lightblue'} radius={60} rotation={-0.005}/>
+        <Icosahedron position={[2,3,0]} color={'pink'} radius={100} rotation={0.008}/>
         <Terrain/>
         <Stars/>
       </PerspectiveCamera>

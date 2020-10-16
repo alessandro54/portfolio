@@ -8,7 +8,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import "./layout.css"
-import Background from "./threeobjects/Background"
+import Background from "../threeobjects/Background"
 
 const Layout = ({ children }) => {
 
