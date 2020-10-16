@@ -37,10 +37,28 @@ const StyledCard = styled.div`
       font-size: 1rem;
       margin: 0;
     }
+    @media only screen and (max-width: 768px) {
+        width: 95vw;
+        div {
+          width: 90%;
+        }
+        div h1 {
+          font-size: 2rem;
+          text-align: center;
+        }
+        div p {
+          margin-top: 5vh;
+        }
+    
+    }
 `
 const ButtonZone = styled.div`
     display: flex;
     justify-content: center;
+    @media only screen and (max-width: 768px) {
+        margin-top:15vw;
+        flex-direction: column;
+    }
 `
 const Main = () => {
   const [show,setShow] = useState(true)

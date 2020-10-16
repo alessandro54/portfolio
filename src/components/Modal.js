@@ -8,11 +8,15 @@ const StyledModal = styled.div`
     display: ${props => !props.show ? 'flex' : 'none'};
     width: 80vw;
     height: 40vw;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0,0,0,0.6);
     overflow-y: auto;
     justify-content: center;
     align-items: center;
     position: relative;
+    @media only screen and (max-width: 768px) {
+        height: 80vh;
+    
+    }
 `
 const ExitButton = styled.div`
     color: white;
@@ -26,6 +30,9 @@ const ExitButton = styled.div`
         color: lightblue;
         transition: 0.5s;
         transform: scale(1.2);
+    }
+    @media only screen and (max-width: 768px) {
+        font-size: 5rem;
     }
 `
 const Modal = ({type,visibility,handleClick}) => {

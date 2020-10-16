@@ -24,10 +24,10 @@ const Projects = () => {
   `)
   return (
     <Wrapper>
-      {allProject.nodes.map((node) => {
+      {allProject.nodes.map((node,i) => {
         return (
           <Project
-            key = {node.id}
+            key = {i}
             {...node}
           />
         )

@@ -5,6 +5,19 @@ const AboutCard = styled.div`
     font-size: 2vw;
     font-family: 'Roboto', sans-serif;
     display: flex;
+    @media only screen and (max-width: 768px) {
+        justify-content: center;
+        h2 {
+            font-size: 3rem; 
+            text-align: center;
+        }
+        p {
+            text-align: center;
+            margin-top: 10%;
+            font-size: 1rem;
+            line-height: 30px;
+        }
+    }
 `
 const About = () => {
   const calculateAge = () => {

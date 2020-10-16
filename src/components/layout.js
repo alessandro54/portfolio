@@ -9,6 +9,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import "./layout.css"
 import Background from "../threeobjects/Background"
+import Footer from "./footer"
 
 const Layout = ({ children }) => {
 
@@ -28,21 +29,11 @@ const Layout = ({ children }) => {
       >
         <Background/>
         {children}
-        <footer style={{
-          position:"fixed",
-          bottom:0,
-          color:'black',
-          zIndex:8,
-          fontFamily: "font-family: 'Roboto', sans-serif",
-        }}>
-          © {new Date().getFullYear()}, Built in <a href="https://www.gatsbyjs.com">Gatsby</a> and Designed by alessandro
-          {` `}
-        </footer>
+        <Footer/>
       </div>
     </>
   )
 }
-
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
 }

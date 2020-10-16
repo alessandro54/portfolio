@@ -33,7 +33,8 @@ module.exports = {
     },
     'react-three-fiber',
     'gatsby-plugin-styled-components',
-    'drei'
+    'drei',
+    "react-icons"
     // this (optional) plugin enables Progressive Web Background + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,

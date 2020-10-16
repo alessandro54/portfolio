@@ -32,7 +32,7 @@ const Terrain = () => {
 }
 
 const Background = () => {
-  const [dimensions, setDimensions] = useState({});
+  const [dimensions, setDimensions] = useState({x:0,y:0});
   const cam = useRef();
   const handleResize = () => {
     setDimensions({ x: window.innerWidth, y: window.innerHeight})
