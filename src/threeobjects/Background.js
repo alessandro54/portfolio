@@ -32,17 +32,24 @@ const Terrain = () => {
 }
 
 const Background = () => {
-  const [dimensions, setDimensions] = useState({ x: window.innerWidth, y: window.innerHeight});
+  const [dimensions, setDimensions] = useState({});
   const cam = useRef();
   const handleResize = () => {
     setDimensions({ x: window.innerWidth, y: window.innerHeight})
   }
-  useEffect(()=> {
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setDimensions({ x: window.innerWidth, y: window.innerHeight})
     }
   },[])
+  useEffect(()=> {
+    if (typeof  window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize)
+      }
+    }
+  },[dimensions])
 
   return (
     //Here goes the 3D background
