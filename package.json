@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "Alessandro Portfolio",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
-  "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "description": "My personal Portfolio built in Gatsby",
+  "version": "1.0.0",
+  "author": "Alessandro Chumpitaz <alessandro.chumpitazp@gmail.com",
   "dependencies": {
     "babel-plugin-styled-components": "^1.11.1",
     "drei": "^1.5.6",
@@ -43,9 +43,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
-  },
-  "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/alessandro54/portfolio"
   }
 }

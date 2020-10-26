@@ -1,36 +1,43 @@
 import React from "react"
 import styled from "styled-components"
 const StyledButton = styled.div`
-    background: rgba(0,0,0,0.10);
-    backdrop-filter: blur(5px);
+    background: rgba(0,0,0,0.3);
     font-family: 'Roboto', sans-serif;
-    margin: 10% 0 8px 0;
     padding: 5%;
-    font-size: 1.2vw;
+    font-size: 1.7vw;
     font-weight: bold;
     transition: 0.1s;
     display: flex;
     justify-content: center;
     align-items: center;
     &:hover {
-      transform: scale(1.1);
-      transition: 0.1s;
-      background: rgba(0,0,0,0.4);
+      transform: scale(1.15);
+      transition: 0.2s;
+      background: rgba(0,0,0,0.8);
+      z-index: 10;
+      cursor: pointer;
+      backdrop-filter: blur(5px);
     }
     p {
       color: white; 
       cursor: pointer;
       margin: 0;
     }
+    
+    @media only screen 
+    and (min-device-width: 768px) 
+    and (max-device-width: 1024px) 
+    and (-webkit-min-device-pixel-ratio: 1) {
+        font-size: 5vw;
+        width: 400px;
+    }
     @media only screen and (max-width: 768px) {
+    width: 70vw ;
         font-size: 2.5rem;
         padding: 7% 0;
-        margin: 1vw;
         p {
           text-align: center;
         }
-        border-radius: 8px;
-        border: 1px solid white;
     }
 `
 const Button = ({type,handleClick}) => {

@@ -23,6 +23,17 @@ const Card = styled.div`
         width: 60%;
         font-family: 'Roboto', sans-serif                           
     }
+    @media only screen and (max-width: 768px) {
+        .info {
+            h1 {
+                  font-size: 7vw;
+                  text-align: center;
+            }
+            p {
+                font-size: 5vw;
+            }
+        }
+    }
 `
 const Project = ({title,description,back,front,url}) => {
   const handleClick = () => {

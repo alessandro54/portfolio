@@ -9,7 +9,6 @@ import React from "react"
 import PropTypes from "prop-types"
 import "./layout.css"
 import Background from "../threeobjects/Background"
-import Footer from "./footer"
 
 const Layout = ({ children }) => {
 
@@ -29,7 +28,6 @@ const Layout = ({ children }) => {
       >
         <Background/>
         {children}
-        <Footer/>
       </div>
     </>
   )

@@ -13,6 +13,12 @@ const StyledModal = styled.div`
     justify-content: center;
     align-items: center;
     position: relative;
+    @media only screen 
+    and (min-device-width: 768px) 
+    and (max-device-width: 1024px) 
+    and (-webkit-min-device-pixel-ratio: 1) {
+        height: 80vh;
+    }
     @media only screen and (max-width: 768px) {
         height: 80vh;
     
@@ -45,6 +51,8 @@ const Modal = ({type,visibility,handleClick}) => {
         return <Projects/>;
       case 'contact':
         return <Contact/>
+      default :
+        return <h1>Not found!</h1>
     }
   }
   return (

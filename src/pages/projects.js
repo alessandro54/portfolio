@@ -6,7 +6,11 @@ import Project from "../components/Project"
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 0 30%;
+    padding: 0 20%;
+    @media only screen and (max-width: 768px) {
+        padding: 2%;
+    
+    }
 `
 const Projects = () => {
   const {allProject} = useStaticQuery(graphql`
