@@ -1,6 +1,6 @@
 import React from "react"
-import Main from "./main"
-import Layout from "../components/layout"
+import Main from "../components/tabs/main"
+import Layout from "../components/layout/layout"
 import SEO from "../components/seo"
 
 const IndexPage = () => (

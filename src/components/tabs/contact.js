@@ -60,8 +60,8 @@ const Contact = () => {
     <StyledCard>
       <h1>Contact</h1>
       <div className={"links"}>
-        <a href={'https://linkedin.com/in/alessandrochumpitaz'}><FaLinkedin/></a>
-        <a href={'https://github.com/alessandro54'}><FaGithub/></a>
+        <a href={'https://linkedin.com/in/alessandrochumpitaz'}><FaLinkedin/> </a>
+        <a href={'https://github.com/alessandro54'}><FaGithub/> </a>
       </div>
       <div className={"email"}>
         <AiOutlineMail/>

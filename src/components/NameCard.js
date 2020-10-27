@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 const StyledNameCard = styled.div`
     display: flex;
-    width: 50vw; height: 32vh;
+    width: 50vw; height: 30vh;
     justify-content: center; align-items: center;
     border-top:  2px solid white ; border-bottom: 2px solid white;
     font-family: 'Roboto', sans-serif;
@@ -22,15 +22,14 @@ const StyledNameCard = styled.div`
     }
     div h1 {
       font-size: 3.5vw;
-      margin: 0;
+      margin: 0 0 1vw 0;
       text-align: center;
     }
     div p {
       font-size: 1.5rem;
       margin: 0;
+      text-align: center;
     }
-
-    /* Portrait Tablet */
     @media only screen 
     and (min-device-width: 768px)
      and (max-device-width: 1024px)

@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import styled from  "styled-components"
-import Button from "../components/Button"
-import Modal from "../components/Modal"
-import NameCard from "../components/NameCard"
-import Buttons from "../components/Buttons"
+import Modal from "../Modal"
+import NameCard from "../NameCard"
+import Buttons from "../Buttons"
 
 const Wrapper = styled.div`
     z-index: 4;
@@ -21,9 +20,9 @@ const Main = () => {
   const handleModalExit = () => {
     setModalVisibility(!modalVisibility)
   }
-  const handleEscPress = (e) => {
+  const handleEscPress = useCallback((e) => {
     if (e.keyCode === 27) setModalVisibility(true)
-  }
+  },[])
   useEffect(() => {
     window.addEventListener("keydown",handleEscPress,false);
     return () => window.removeEventListener("keydown",handleEscPress,false);

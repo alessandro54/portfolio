@@ -1,7 +1,7 @@
 import React from "react"
 import { useStaticQuery, graphql} from "gatsby"
 import styled from "styled-components"
-import Project from "../components/Project"
+import Project from "../Project"
 
 const Wrapper = styled.div`
     display: flex;
