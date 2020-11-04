@@ -27,17 +27,24 @@ const StyledButton = styled.div`
     @media only screen 
     and (min-device-width: 768px) 
     and (max-device-width: 1024px) 
-    and (-webkit-min-device-pixel-ratio: 1) {
+    and (-webkit-min-device-pixel-ratio: 1)
+     and (orientation: portrait){
         font-size: 5vw;
         width: 400px;
     }
-    @media only screen and (max-width: 768px) {
+    @media only screen and (max-width: 768px)
+     and (orientation: portrait){
     width: 70vw ;
         font-size: 2.5rem;
         padding: 7% 0;
         p {
           text-align: center;
         }
+    }
+    @media only screen and (max-width: 768px)
+     and (orientation: landscape) {
+        width: 20vw;
+        height: 10vh;
     }
 `
 const Button = ({type,handleClick}) => {

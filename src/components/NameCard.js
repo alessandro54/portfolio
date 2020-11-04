@@ -33,7 +33,8 @@ const StyledNameCard = styled.div`
     @media only screen 
     and (min-device-width: 768px)
      and (max-device-width: 1024px)
-       and (-webkit-min-device-pixel-ratio: 1) {
+       and (-webkit-min-device-pixel-ratio: 1)
+         and (orientation: portrait){
           width: 80vw; height: 20vh;
           padding: 0 5vw 0 5vw;
           border-top: none; border-bottom: none;
@@ -55,11 +56,11 @@ const StyledNameCard = styled.div`
           width: 90%;
         }
         div h1 {
-          font-size: 2rem;
+          font-size: 1.5rem;
           text-align: center;
         }
         div p {
-          margin-top: 5vh;
+          margin-top: 2vh;
           text-align: center;
         }
     }
