@@ -28,9 +28,10 @@ const ExitButton = styled.div`
     color: white;
     font-size: 5vw;
     position: absolute;
-    top: 10%;
+    top: 5%;
     right: 10%;
     z-index: 10;
+    height: auto;
     &:hover {
         cursor: pointer;
         color: lightblue;
@@ -38,7 +39,7 @@ const ExitButton = styled.div`
         transform: scale(1.2);
     }
     @media only screen and (max-width: 768px) {
-        font-size: 5rem;
+        font-size: 4rem;
     }
 `
 const Modal = ({type,visibility,handleClick}) => {

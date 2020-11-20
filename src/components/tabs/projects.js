@@ -6,6 +6,7 @@ import Project from "../Project"
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
+    align-items: center;
     padding: 0 20%;
     @media only screen and (max-width: 768px) {
         padding: 2%;

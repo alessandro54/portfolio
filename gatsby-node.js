@@ -13,7 +13,7 @@ exports.sourceNodes = ({actions, createNodeId,createContentDigest }) => {
       description: "Movie Indexing Web App, featuring Auth and Custom Redux Protected Router.",
       front: ['React','Redux'],
       back: ['Express.js','MongoDB'],
-      url: 'https://moviesky.vercel.app/'
+      url: 'https://moviesky.alessandro.top/'
     },
     {
       id: 2,
