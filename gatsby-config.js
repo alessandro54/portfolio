@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
-    title: `Alessandro Chumpitaz`,
-    description: `Alessandro Chumpitaz Portfolio`,
+    title: `Alessandro Chumpitaz Developer`,
+    description: `Portfolio`,
     author: `@alessandro`,
     github: `https://github.com/alessandro54`,
     linkedin: `https://www.linkedin.com/in/alessandrochumpitaz/`,
@@ -34,7 +34,8 @@ module.exports = {
     'react-three-fiber',
     'gatsby-plugin-styled-components',
     'drei',
-    "react-icons"
+    'react-icons',
+    'gatsby-plugin-postcss'
     // this (optional) plugin enables Progressive Web Background + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
