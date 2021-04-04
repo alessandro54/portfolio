@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react"
 
-import {useFrame} from "react-three-fiber"
+import {useFrame} from "@react-three/fiber"
 
 const Icosahedron = ({position, radius,color, rotation}) => {
   const mesh = useRef()
