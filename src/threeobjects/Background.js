@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
 
-import {Canvas, useFrame} from "react-three-fiber";
-import { PerspectiveCamera, softShadows, Stars } from "drei"
+import {Canvas, useFrame} from "@react-three/fiber";
+import { PerspectiveCamera, softShadows, Stars } from "@react-three/drei"
 import Icosahedron from "./Icosahedron"
 
 softShadows();
