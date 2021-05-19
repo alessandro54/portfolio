@@ -6,6 +6,12 @@
 
 // You can delete this file if you're not using it
 exports.sourceNodes = ({actions, createNodeId,createContentDigest }) => {
+  const experience = [
+    {
+      id: 1,
+      title: 'Turismoi',
+    }
+  ]
   const projects = [
     {
       id: 1,

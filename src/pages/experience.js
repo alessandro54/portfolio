@@ -1,9 +1,11 @@
 import React from "react"
 import Layout from "../components/layout/layout"
+import SEO from "../components/seo"
 const Experience = () => {
   return (
     <Layout>
-      <h1>af</h1>
+      <SEO title="Experience"/>
+      <h1>Work in progress..</h1>
     </Layout>
   )
 }

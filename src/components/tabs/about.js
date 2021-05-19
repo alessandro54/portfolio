@@ -2,12 +2,12 @@ import React from "react"
 
 const About = () => {
   const calculateAge = () => {
-    let diff = Date.now() - new Date(1998,4,21).getTime()
-    let ageDate = new Date(diff);
-    return Math.abs(ageDate.getUTCFullYear()- 1970)
+    let birthday = +new Date('1998-04-21')
+    return ~~((Date.now() - birthday) / (31557600000))
   }
   return (
     <div>
+      <h1>About me</h1>
       <div>
         <h2>Hi!, I'm Alessandro.</h2>
         <p>I'm a {calculateAge()} years old Peruvian 🇵🇪 Full-Stack Software Web Developer</p>
@@ -15,5 +15,4 @@ const About = () => {
     </div>
   )
 }
-
 export default About

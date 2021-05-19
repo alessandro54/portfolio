@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react"
 import Layout from "../components/layout/layout"
 import SEO from "../components/seo"
-import NameCard from "../components/index/NameCard"
-import Buttons from "../components/index/Buttons"
-import Modal from "../components/index/Modal"
+import NameCard from "../components/NameCard"
+import Buttons from "../components/Buttons"
+import Modal from "../components/Modal"
+import Background from "../threeobjects/Background"
 
 const IndexPage = () => {
 
@@ -11,12 +12,8 @@ const IndexPage = () => {
   const [selectedWindow,setSelectedWindow] = useState('');
 
   const handleButtonClick = (type) => {
-    if (type === 'experience') {
-      window.location.href = "/experience"
-    }
-    else if (type === 'blog') {
-      window.location.href = "https://blog.alessandroparis.dev"
-    }
+    if (type === 'experience') window.location.href = "/experience"
+    else if (type === 'blog') window.location.href = "https://blog.alessandroparis.dev"
     else {
       setModalVisibility(!modalVisibility)
       setSelectedWindow(type)
@@ -28,7 +25,7 @@ const IndexPage = () => {
   };
 
   const handleEscPress = useCallback((e) => {
-    if (e.keyCode === 27) setModalVisibility(true)
+    if (e.keyCode === 27) setModalVisibility(false)
   },[]);
 
   useEffect(() => {
@@ -39,6 +36,7 @@ const IndexPage = () => {
   return (
     <Layout>
       <SEO title="Home"/>
+      <Background/>
       <div className="z-10">
         <section className={!modalVisibility ? 'block' : 'hidden'}>
           <NameCard/>
