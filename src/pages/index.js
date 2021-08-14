@@ -5,6 +5,7 @@ import NameCard from "../components/NameCard"
 import Buttons from "../components/Buttons"
 import Modal from "../components/Modal"
 import Background from "../threeobjects/Background"
+import Social from "../components/Social"
 
 const IndexPage = () => {
 
@@ -37,6 +38,7 @@ const IndexPage = () => {
     <Layout>
       <SEO title="Home"/>
       <Background/>
+      <Social/>
       <div className="z-10">
         <section className={!modalVisibility ? 'block' : 'hidden'}>
           <NameCard/>
