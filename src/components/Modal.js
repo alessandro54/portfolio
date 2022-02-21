@@ -1,6 +1,6 @@
-import React from "react"
-import About from "./tabs/about"
-import Contact from "./tabs/contact"
+import React from "react";
+import About from "./tabs/about";
+import Contact from "./tabs/contact";
 
 const Modal = ({type,visibility,handleClick}) => {
   const content = (type) => {
@@ -16,8 +16,8 @@ const Modal = ({type,visibility,handleClick}) => {
       onClick={(e) => {e.preventDefault();console.log('aaaa')}}
     >
       <div className="w-11/12 lg:w-3/5 h-3/5 p-5 flex flex-col justify-center items-center bg-black
-           bg-opacity-50 rounded"
-           style={{backdropFilter:"blur(10px"}}
+          bg-opacity-50 rounded"
+          style={{backdropFilter:"blur(10px"}}
       >
         <div className="w-full h-1/6 flex justify-end items-center">
           <span
@@ -35,4 +35,4 @@ const Modal = ({type,visibility,handleClick}) => {
   )
 }
 
-export default Modal
+export default Modal;

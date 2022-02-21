@@ -9,4 +9,4 @@ const Experience = () => {
     </Layout>
   )
 }
-export default Experience
+export default Experience;

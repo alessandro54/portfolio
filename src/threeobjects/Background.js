@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Suspense } from "react"
 import * as THREE from 'three';
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Stars, Reflector, useTexture, CameraShake, OrbitControls } from "@react-three/drei"
+import { Stars, Reflector, useTexture, CameraShake, OrbitControls  } from "@react-three/drei"
 import { KernelSize } from 'postprocessing'
 import Icosahedron from "./Icosahedron"
 import { EffectComposer, Bloom } from '@react-three/postprocessing'

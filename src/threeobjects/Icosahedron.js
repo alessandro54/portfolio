@@ -1,14 +1,13 @@
-import React, { useRef, useState } from "react"
-
-import {useFrame} from "@react-three/fiber"
+import React, { useRef, useState } from "react";
+import { useFrame } from "@react-three/fiber";
 
 
 const Icosahedron = ({position, radius,color, rotation}) => {
-  const mesh = useRef()
+  const mesh = useRef();
 
-  const [hovered, setHover] = useState(false)
-  const [active, setActive] = useState(false)
-  const [hoverColor, setHoverColor] = useState(`#${Math.floor(Math.random()*16777215).toString(16)}`)
+  const [hovered, setHover] = useState(false);
+  const [active, setActive] = useState(false);
+  const [hoverColor, setHoverColor] = useState(`#${Math.floor(Math.random()*16777215).toString(16)}`);
 
   useFrame(({mouse}) => {
     mesh.current.rotation.x = mesh.current.rotation.y += rotation ;
@@ -34,4 +33,4 @@ const Icosahedron = ({position, radius,color, rotation}) => {
   )
 }
 
-export default Icosahedron
+export default Icosahedron;

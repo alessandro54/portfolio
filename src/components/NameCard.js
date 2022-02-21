@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 
 const NameCard = () => {
   const border = "border-r-2 border-l-2 md:border-l-0 md:border-r-0 md:border-t-2 md:border-b-2 border-white"
@@ -15,4 +15,4 @@ const NameCard = () => {
     </div>
   )
 }
-export default NameCard
+export default NameCard;

@@ -1,6 +1,5 @@
-import React from "react"
-import PropTypes from "prop-types"
-import Background from "../../threeobjects/Background"
+import React from "react";
+import PropTypes from "prop-types";
 
 const Layout = ({ children }) => {
   return (
@@ -16,4 +15,4 @@ Layout.propTypes = {
   children: PropTypes.node.isRequired,
 }
 
-export default Layout
+export default Layout;

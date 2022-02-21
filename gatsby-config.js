@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
-    title: `Alessandro Software Developer`,
-    description: `Full Stack Peruvian Software Developer`,
+    title: `Alessandro Chumpitaz Software Engineer`,
+    description: `Full Stack Peruvian Software Engineer`,
     author: `@alessandro54`,
     github: `https://github.com/alessandro54`,
     linkedin: `https://www.linkedin.com/in/alessandrochumpitaz/`,

@@ -5,7 +5,7 @@ const Icon = ({url, icon}) => <a className='hover:text-rose-400 cursor-pointer m
 
 const Social = () => {
     const items = [
-        { url: 'https://linkedin.com/in/alessandrochumpitaz',icon: <FaLinkedin/>},
+        { url: 'https://linkedin.com/in/alessandroparis',icon: <FaLinkedin/>},
         { url: 'https://github.com/alessandro54', icon: <FaGithub/>},
         { url: 'https://www.instagram.com/_alessandro54/', icon: <FaInstagram/>}
     ]

@@ -1,5 +1,5 @@
-import React from "react"
-import {AiOutlineMail} from "react-icons/ai"
+import React from "react";
+import { AiOutlineMail } from "react-icons/ai";
 
 const Contact = () => {
   return (
@@ -13,4 +13,4 @@ const Contact = () => {
   )
 }
 
-export default Contact
+export default Contact;
