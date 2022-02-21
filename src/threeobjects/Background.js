@@ -1,39 +1,28 @@
-import React, { useEffect, useRef, useState } from "react"
-
-import {Canvas, useFrame} from "@react-three/fiber";
-import { PerspectiveCamera, softShadows, Stars } from "@react-three/drei"
+import React, { useEffect, useState, Suspense } from "react"
+import * as THREE from 'three';
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Stars, Reflector, useTexture, CameraShake, OrbitControls } from "@react-three/drei"
+import { KernelSize } from 'postprocessing'
 import Icosahedron from "./Icosahedron"
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
-softShadows();
-const GROUND_HEIGHT = -20;
-const Terrain = () => {
-  const terrain = useRef();
-
-  useFrame(() => {
-    terrain.current.position.z += 0.01;
-  });
+const Terrain = (props) => {
+  const [floor, normal] = useTexture(['/floor.jpeg', '/normal.jpeg'])
   return (
-    <mesh
-      visible
-      position={[0, GROUND_HEIGHT, 0]}
-      rotation={[-Math.PI / 2, 0, 0]}
-      ref={terrain}
-    >
-      <planeBufferGeometry attach="geometry" args={[5000, 5000, 128, 128]} />
-      <meshStandardMaterial
-        attach="material"
-        color="white"
-        roughness={1}
-        metalness={0}
-        wireframe
-      />
-    </mesh>
+    <Reflector resolution={1024} args={[40, 80]} {...props}>
+      {(Material, props) => <Material color="#f0f0f0" metalness={0} roughnessMap={floor} normalMap={normal} normalScale={[2, 2]} {...props} />}
+    </Reflector>
   );
+}
+const Rig = () => {
+  const [vec] = useState(() => new THREE.Vector3())
+  const { camera, mouse } = useThree()
+  useFrame(() => camera.position.lerp(vec.set(mouse.x * 2, 1, 15), 0.01))
+  return <CameraShake yawFrequency={0.2} pitchFrequency={0.2} rollFrequency={0.2} />
 }
 
 const Background = () => {
   const [dimensions, setDimensions] = useState({x:0,y:0});
-  const cam = useRef();
   const handleResize = () => {
     setDimensions({ x: window.innerWidth, y: window.innerHeight})
   }
@@ -54,50 +43,36 @@ const Background = () => {
   return (
     //Here goes the 3D background
     <Canvas
-      shadowMap
-      style={{backgroundColor:`lightblue`,zIndex:3,width:dimensions.x, height:dimensions.y, position:"fixed",top:0,left:0}}
-      colorManagement
+      style={{backgroundColor: 'black',zIndex:3,width:dimensions.x, height:dimensions.y, position:"fixed",top:0,left:0}}
+      camera={{position: [0, 0, 14]}}
+      dpr={[1, 1.5]}
     >
-      <PerspectiveCamera
-        ref = {cam}
-        fov={60}
-        rotateX={-Math.PI}
-        
-        position={[-4,0,0]}
-      >
-        <ambientLight intensity={0.3} />
+      <Suspense fallback={null}>
+        <group>
+          <Icosahedron position={[-12,1,2]} color={'#d673fa'} radius={40} rotation={0.001}/>
+          <Icosahedron position={[5,1,7]} color={'#88dff7'} radius={30} rotation={-0.001}/>
+          <Icosahedron position={[3,8,-1]} color={'#f2d1b8'} radius={80} rotation={0.001}/>
+          <Icosahedron position={[-8,6,-7]} color={'#979bfc'} radius={80} rotation={0.006}/>
+        <Terrain mirror={4} blur={[500, 400]} mixBlur={10} mixStrength={1.5} rotation={[-Math.PI / 2, 0, Math.PI / 2]} position-y={-2.5}/>
+        </group>
+        <EffectComposer multisampling={8}>
+          <Bloom kernelSize={3} luminanceThreshold={0} luminanceSmoothing={0.4} intensity={0.5} />
+          <Bloom kernelSize={KernelSize.HUGE} luminanceThreshold={0} luminanceSmoothing={0} intensity={0.5} />
+        </EffectComposer>
+      </Suspense>
+      <ambientLight intensity={0.3} />
+      <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
         <directionalLight
           castShadow
-          position={[0, 10, 0]}
-          intensity={1.5}
+          position={[0, 5, 0]}
+          intensity={1}
           shadow-mapSize-width={1024}
           shadow-mapSize-height={1024}
-          shadow-camera-far={50}
-          shadow-camera-left={-10}
-          shadow-camera-right={10}
-          shadow-camera-top={10}
-          shadow-camera-bottom={-10}
         />
-        <pointLight position={[-10,0,-20]} intensity={0.5}/>
-        <pointLight position={[0,-10,0]} intensity={1.5}/>
-        <group>
-          <mesh
-            rotation={[-Math.PI/2,0,0]}
-            position={[0,-3,0]}
-            receiveShadow>
-            <planeBufferGeometry attach={'geometry'} args={[100,100]}/>
-            <shadowMaterial attach={'material'} opacity={0.3}/>
-          </mesh>
-        </group>
-        <Icosahedron position={[-3,0,-5]} color={'#F0E181'} radius={40} rotation={0.005}/>
-        <Icosahedron position={[8,0,0]} color={'lightblue'} radius={60} rotation={-0.005}/>
-        <Icosahedron position={[2,3,0]} color={'pink'} radius={100} rotation={0.008}/>
-        <Terrain/>
-        <Stars/>
-      </PerspectiveCamera>
+      <Stars/>
+      <Rig/>
     </Canvas>
   )
 }
-
 
 export default Background;

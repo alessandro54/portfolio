@@ -5,30 +5,32 @@
   "version": "1.0.0",
   "author": "Alessandro Chumpitaz <alessandro.chumpitazp@gmail.com",
   "dependencies": {
-    "@react-three/drei": "^4.0.3",
-    "@react-three/fiber": "^6.0.7",
+    "@react-three/drei": "^8.10.2",
+    "@react-three/fiber": "^7.0.26",
+    "@react-three/postprocessing": "^2.1.3",
     "autoprefixer": "^10.2.1",
-    "gatsby": "^3.2.1",
+    "gatsby": "^4.7.2",
     "gatsby-image": "^3.2.0",
-    "gatsby-plugin-manifest": "^3.2.0",
-    "gatsby-plugin-offline": "^4.2.0",
-    "gatsby-plugin-postcss": "^4.5.0",
-    "gatsby-plugin-react-helmet": "^4.2.0",
-    "gatsby-plugin-sharp": "^3.2.0",
-    "gatsby-source-filesystem": "^3.2.0",
-    "gatsby-transformer-sharp": "^3.2.0",
+    "gatsby-plugin-manifest": "^4.7.0",
+    "gatsby-plugin-offline": "^5.7.0",
+    "gatsby-plugin-postcss": "^5.7.0",
+    "gatsby-plugin-react-helmet": "^5.7.0",
+    "gatsby-plugin-sharp": "^4.7.0",
+    "gatsby-source-filesystem": "^4.7.0",
+    "gatsby-transformer-sharp": "^4.7.0",
     "nodemailer": "^6.5.0",
     "postcss": "^8.2.4",
+    "postprocessing": "^6.24.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
-    "react-icons": "^4.2.0",
-    "tailwindcss": "^2.0.2",
-    "three": "^0.128.0"
+    "react-icons": "^4.3.1",
+    "tailwindcss": "^3.0.23",
+    "three": "^0.137.5"
   },
   "devDependencies": {
-    "prettier": "2.3.0"
+    "prettier": "^2.5.1"
   },
   "keywords": [
     "gatsby"
