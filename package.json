@@ -1,9 +1,9 @@
 {
   "name": "alessandro-portfolio",
   "private": true,
-  "description": "My personal Portfolio",
+  "description": "Alessandro Chumpitaz Software Engineer",
   "version": "1.0.0",
-  "author": "Alessandro Chumpitaz <alessandro.chumpitazp@gmail.com",
+  "author": "Alessandro Chumpitaz <alessandrochumpitaz@icloud.com",
   "dependencies": {
     "@react-three/drei": "^8.10.2",
     "@react-three/fiber": "^7.0.26",
