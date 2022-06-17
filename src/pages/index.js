@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react"
 import Layout from "../components/layout/layout"
-import SEO from "../components/seo"
+import Seo from "../components/seo"
 import NameCard from "../components/NameCard"
 import Buttons from "../components/Buttons"
 import Modal from "../components/Modal"
@@ -9,8 +9,8 @@ import Social from "../components/Social"
 
 const IndexPage = () => {
 
-  const [modalVisibility,setModalVisibility] = useState(false);
-  const [selectedWindow,setSelectedWindow] = useState('');
+  const [modalVisibility, setModalVisibility] = useState(false);
+  const [selectedWindow, setSelectedWindow] = useState('');
 
   const handleButtonClick = (type) => {
     if (type === 'experience') window.location.href = "/experience"
@@ -21,37 +21,39 @@ const IndexPage = () => {
     }
   };
 
-  const handleModalExit = () => {
+  const handleModalExit = (e) => {
+    e.stopPropagation()
     setModalVisibility(!modalVisibility)
   };
 
   const handleEscPress = useCallback((e) => {
+    e.stopPropagation()
     if (e.keyCode === 27) setModalVisibility(false)
-  },[]);
+  }, []);
 
   useEffect(() => {
-    window.addEventListener("keydown",handleEscPress,false);
-    return () => window.removeEventListener("keydown",handleEscPress,false);
-  },[handleEscPress]);
+    window.addEventListener("keydown", handleEscPress, false);
+    return () => window.removeEventListener("keydown", handleEscPress, false);
+  }, [handleEscPress]);
 
   return (
     <Layout>
-      <SEO title="Home"/>
-      <Background/>
-      <Social/>
+      <Seo title="Home" />
+      <Background />
+      <Social />
       <div className="z-10">
         <section className={!modalVisibility ? 'block' : 'hidden'}>
-          <NameCard/>
+          <NameCard />
           <Buttons
-            buttons={['about','experience', 'blog', 'contact']}
+            buttons={['about', 'experience', 'blog', 'contact']}
             onButtonClick={handleButtonClick}
           />
         </section>
         <Modal
           visibility={modalVisibility}
-          handleClick = {handleModalExit}
-          handlePress = {handleEscPress}
-          type = {selectedWindow}
+          handleClick={handleModalExit}
+          handlePress={handleEscPress}
+          type={selectedWindow}
         />
       </div>
     </Layout>

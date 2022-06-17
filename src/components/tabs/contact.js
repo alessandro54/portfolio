@@ -3,13 +3,16 @@ import { AiOutlineMail } from "react-icons/ai";
 
 const Contact = () => {
   return (
-    <dvi>
-      <h1>Contact</h1>
-      <div className={"email"}>
-        <AiOutlineMail/>
-        <p> alessandro.chumpitazp@gmail.com</p>
+    <div>
+      <div>
+        <div className={"email flex"}>
+          <h1 className={"mr-1"}>Contact</h1><AiOutlineMail />
+        </div>
+        <a href="mailto:alessandrochumpitaz@icloud.com">
+          Lets be in contact!
+        </a>
       </div>
-    </dvi>
+    </div>
   )
 }
 

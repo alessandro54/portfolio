@@ -1,11 +1,11 @@
 module.exports = {
   siteMetadata: {
-    title: `Alessandro Chumpitaz Software Engineer`,
-    description: `Full Stack Peruvian Software Engineer`,
+    title: `Alessandro Chumpitaz`,
+    description: `Alessandro Chumpitaz Software Engineer`,
     author: `@alessandro54`,
     github: `https://github.com/alessandro54`,
     linkedin: `https://www.linkedin.com/in/alessandrochumpitaz/`,
-    contactMail: `alessandrochumpitazp@gmail.com`,
+    contactMail: `alessandrochumpitaz@icloud.com`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
