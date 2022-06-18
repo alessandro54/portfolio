@@ -1,8 +1,8 @@
 module.exports = {
   siteMetadata: {
-    title: `Alessandro Chumpitaz`,
-    description: `Alessandro Chumpitaz Software Engineer`,
-    author: `@alessandro54`,
+    title: `Alessandro Chumpitaz Software Engineer`,
+    description: `Alessandro Chumpitaz Peruvian Full Stack Software Engineer`,
+    author: `alessandro chumpitaz`,
     github: `https://github.com/alessandro54`,
     linkedin: `https://www.linkedin.com/in/alessandrochumpitaz/`,
     contactMail: `alessandrochumpitaz@icloud.com`,
