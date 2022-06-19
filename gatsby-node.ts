@@ -5,33 +5,34 @@
  */
 
 // You can delete this file if you're not using it
-exports.sourceNodes = ({actions, createNodeId,createContentDigest }) => {
+exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
   const experience = [
     {
       id: 1,
-      title: 'Turismoi',
-    }
+      title: "Turismoi",
+    },
   ]
   const projects = [
     {
       id: 1,
       title: "Moviesky",
-      description: "Movie Indexing Web App, featuring Auth and Custom Redux Protected Router.",
-      front: ['React','Redux'],
-      back: ['Express.js','MongoDB'],
-      url: 'https://moviesky.alessandro.top/'
+      description:
+        "Movie Indexing Web App, featuring Auth and Custom Redux Protected Router.",
+      front: ["React", "Redux"],
+      back: ["Express.js", "MongoDB"],
+      url: "https://moviesky.alessandro.top/",
     },
     {
       id: 2,
       title: "Contactable",
       description: "Simple contact indexing app.",
-      front: ['React','Redux'],
-      back: ['Ruby on Rails','PostgreSQL'],
-      url: 'https://contactable-redux.vercel.app/contacts'
-    }
+      front: ["React", "Redux"],
+      back: ["Ruby on Rails", "PostgreSQL"],
+      url: "https://contactable-redux.vercel.app/contacts",
+    },
   ]
 
-  projects.forEach( project => {
+  projects.forEach(project => {
     const node = {
       id: createNodeId(`Project-${project.id}`),
       title: project.title,
