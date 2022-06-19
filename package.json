@@ -5,8 +5,8 @@
   "version": "1.0.0",
   "author": "Alessandro Chumpitaz <alessandrochumpitaz@icloud.com",
   "dependencies": {
-    "@react-three/drei": "^8.10.2",
-    "@react-three/fiber": "^7.0.26",
+    "@react-three/drei": "^9.13.2",
+    "@react-three/fiber": "^8.0.26",
     "@react-three/postprocessing": "^2.1.3",
     "autoprefixer": "^10.2.1",
     "gatsby": "^4.7.2",
@@ -22,15 +22,21 @@
     "postcss": "^8.2.4",
     "postprocessing": "^6.24.0",
     "prop-types": "^15.7.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-icons": "^4.3.1",
     "tailwindcss": "^3.0.23",
-    "three": "^0.137.5"
+    "three": "^0.141.0"
   },
   "devDependencies": {
-    "prettier": "^2.5.1"
+    "@types/node": "^18.0.0",
+    "@types/react": "^18.0.14",
+    "@types/react-dom": "^18.0.5",
+    "@types/react-helmet": "^6.1.5",
+    "@types/three": "^0.141.0",
+    "prettier": "^2.5.1",
+    "typescript": "^4.7.4"
   },
   "keywords": [
     "gatsby"

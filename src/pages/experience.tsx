@@ -4,9 +4,11 @@ import Seo from "../components/seo"
 const Experience = () => {
   return (
     <Layout>
-      <Seo title="Experience" />
-      <h1>Work in progress..</h1>
+      <>
+        <Seo title="Experience" />
+        <h1>Work in progress..</h1>
+      </>
     </Layout>
   )
 }
-export default Experience;
+export default Experience
