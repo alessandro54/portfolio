@@ -1,0 +1,26 @@
+---
+import '../styles/global.css'
+
+interface Props {
+  title?: string
+}
+
+const { title = 'Alessandro — Software Engineer' } = Astro.props
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <script is:inline>
+      (function(){
+        var t = localStorage.getItem('theme') || 'dark';
+        document.documentElement.dataset.theme = t;
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

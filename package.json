@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
-    "preview": "turbo preview"
+    "preview": "turbo preview",
+    "sanity:deploy": "pnpm --filter @portfolio/studio run deploy",
+    "sanity:schema:deploy": "pnpm --filter @portfolio/studio run schema:deploy"
   },
   "devDependencies": {
     "turbo": "^2"

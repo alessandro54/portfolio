@@ -11,6 +11,12 @@
     },
     "preview": {
       "dependsOn": ["build"]
+    },
+    "deploy": {
+      "cache": false
+    },
+    "schema:deploy": {
+      "cache": false
     }
   }
 }

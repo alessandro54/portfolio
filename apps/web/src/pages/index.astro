@@ -1,17 +1,334 @@
 ---
-
+import Layout from '../layouts/Layout.astro'
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout>
+  <canvas id="gl"></canvas>
+  <div id="vignette"></div>
+
+  <div class="relative z-[2]">
+
+    <!-- NAV -->
+    <nav class="fixed inset-x-0 top-0 z-[100] flex items-center justify-between px-12 py-[1.3rem] bg-[var(--nav-bg)] backdrop-blur-xl border-b border-[var(--rule)] transition-[background,border-color] duration-[400ms] max-[900px]:px-6 max-[900px]:py-4">
+      <div class="font-bold text-[0.9rem] tracking-[-0.01em] text-[var(--fg)]">Alessandro C.</div>
+      <div class="flex gap-[2.6rem] max-[900px]:hidden">
+        <a href="#services" class="text-[0.76rem] font-medium text-[var(--mid)] no-underline transition-colors duration-200 hover:text-[var(--fg)]">Services</a>
+        <a href="#work"     class="text-[0.76rem] font-medium text-[var(--mid)] no-underline transition-colors duration-200 hover:text-[var(--fg)]">Work</a>
+        <a href="#experience" class="text-[0.76rem] font-medium text-[var(--mid)] no-underline transition-colors duration-200 hover:text-[var(--fg)]">Experience</a>
+        <a href="#contact"  class="text-[0.76rem] font-medium text-[var(--mid)] no-underline transition-colors duration-200 hover:text-[var(--fg)]">Contact</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <button id="theme-toggle" aria-label="Toggle theme"
+          class="bg-transparent border border-[var(--rule)] text-[var(--mid)] cursor-pointer w-8 h-8 rounded-lg text-[0.9rem] flex items-center justify-center transition-[border-color,color] duration-200 hover:border-[var(--amber)] hover:text-[var(--amber)]">☀</button>
+        <a href="#contact"
+          class="inline-flex items-center gap-[0.4rem] px-5 py-[0.52rem] rounded-[7px] bg-[var(--amber)] text-[#0a0a0a] text-[0.76rem] font-semibold no-underline transition-[opacity,transform] duration-200 hover:opacity-[0.88] hover:-translate-y-px">Hire me →</a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section id="hero" class="h-[100svh] flex flex-col items-center justify-center text-center px-8 pt-24 pb-12 relative max-[900px]:px-6 max-[900px]:pt-20">
+      <div class="hero-badge inline-flex items-center gap-[0.55rem] text-[0.7rem] font-medium text-[var(--amber)] bg-[var(--amber-lo)] border border-[var(--amber-bd)] px-[0.9rem] py-[0.3rem] rounded-full mb-8">
+        <span class="badge-dot"></span>
+        Available for new engagements
+      </div>
+
+      <h1 class="text-[clamp(2.4rem,5.2vw,4.8rem)] font-extrabold leading-[1.07] tracking-[-0.04em] text-[var(--fg)] mb-6 max-[900px]:text-[2.4rem]">
+        Senior Software Engineer<br />
+        <span class="text-[var(--mid)] font-light">for teams that ship.</span>
+      </h1>
+
+      <p class="hero-sub text-[clamp(0.88rem,1.1vw,1.02rem)] leading-[1.75] text-[var(--mid)] max-w-[540px] mb-[2.4rem]">
+        I partner with startups and enterprises to architect and build
+        high-performance systems — from concept to production.
+        Fast, reliable, and built to last.
+      </p>
+
+      <div class="hero-btns flex gap-4 mb-[3.2rem]">
+        <a href="#contact" class="inline-flex items-center px-6 py-[0.7rem] rounded-[9px] text-[0.8rem] font-semibold no-underline tracking-[-0.01em] transition-all duration-[220ms] bg-[var(--fg)] text-[var(--bg)] hover:opacity-[0.88] hover:-translate-y-px">Get in touch →</a>
+        <a href="#work"    class="inline-flex items-center px-6 py-[0.7rem] rounded-[9px] text-[0.8rem] font-semibold no-underline tracking-[-0.01em] transition-all duration-[220ms] bg-transparent border border-[var(--rule)] text-[var(--mid)] hover:border-[var(--amber)] hover:text-[var(--fg)]">See my work</a>
+      </div>
+
+      <div class="hero-stats flex items-center border border-[var(--rule)] rounded-xl overflow-hidden bg-[var(--blur-bg)] backdrop-blur-[16px] max-[900px]:flex-wrap max-[900px]:rounded-[10px]">
+        <div class="px-[2.2rem] py-4 border-r border-[var(--rule)] text-center max-[900px]:border-b">
+          <div class="text-[1.5rem] font-extrabold tracking-[-0.04em] text-[var(--fg)] leading-none mb-1">7<em class="text-[var(--amber)] not-italic text-[1.1rem]">+</em></div>
+          <div class="text-[0.6rem] tracking-[0.08em] text-[var(--dim)] uppercase">Years in industry</div>
+        </div>
+        <div class="px-[2.2rem] py-4 border-r border-[var(--rule)] text-center max-[900px]:border-b">
+          <div class="text-[1.5rem] font-extrabold tracking-[-0.04em] text-[var(--fg)] leading-none mb-1">40<em class="text-[var(--amber)] not-italic text-[1.1rem]">+</em></div>
+          <div class="text-[0.6rem] tracking-[0.08em] text-[var(--dim)] uppercase">Projects delivered</div>
+        </div>
+        <div class="px-[2.2rem] py-4 border-r border-[var(--rule)] text-center max-[900px]:border-b">
+          <div class="text-[1.5rem] font-extrabold tracking-[-0.04em] text-[var(--fg)] leading-none mb-1">50k</div>
+          <div class="text-[0.6rem] tracking-[0.08em] text-[var(--dim)] uppercase">Daily active users</div>
+        </div>
+        <div class="px-[2.2rem] py-4 text-center">
+          <div class="text-[1.5rem] font-extrabold tracking-[-0.04em] text-[var(--fg)] leading-none mb-1">3</div>
+          <div class="text-[0.6rem] tracking-[0.08em] text-[var(--dim)] uppercase">Open-source libs</div>
+        </div>
+      </div>
+
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+        <span class="text-[0.56rem] tracking-[0.22em] text-[var(--dim)] uppercase">Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- TICKER -->
+    <div class="overflow-hidden border-y border-[var(--rule)] py-[0.85rem] whitespace-nowrap">
+      <div class="ticker-track">
+        <div class="flex items-center gap-[1.2rem]"><span class="text-[0.67rem] tracking-[0.12em] uppercase text-[var(--dim)] whitespace-nowrap">System Architecture</span><div class="w-[3px] h-[3px] rounded-full bg-[var(--amber-bd)]"></div></div>
+        <div class="flex items-center gap-[1.2rem]"><span class="text-[0.67rem] tracking-[0.12em] uppercase text-[var(--dim)] whitespace-nowrap">Performance Engineering</span><div class="w-[3px] h-[3px] rounded-full bg-[var(--amber-bd)]"></div></div>
+        <div class="flex items-center gap-[1.2rem]"><span class="text-[0.67rem] tracking-[0.12em] uppercase text-[var(--dim)] whitespace-nowrap">Cloud Infrastructure</span><div class="w-[3px] h-[3px] rounded-full bg-[var(--amber-bd)]"></div></div>
+        <div class="flex items-center gap-[1.2rem]"><span class="text-[0.67rem] tracking-[0.12em] uppercase text-[var(--dim)] whitespace-nowrap">Real-time Systems</span><div class="w-[3px] h-[3px] rounded-full bg-[var(--amber-bd)]"></div></div>
+        <div class="flex items-center gap-[1.2rem]"><span class="text-[0.67rem] tracking-[0.12em] uppercase text-[var(--dim)] whitespace-nowrap">API Design</span><div class="w-[3px] h-[3px] rounded-full bg-[var(--amber-bd)]"></div></div>
+        <div class="flex items-center gap-[1.2rem]"><span class="text-[0.67rem] tracking-[0.12em] uppercase text-[var(--dim)] whitespace-nowrap">Graphics Programming</span><div class="w-[3px] h-[3px] rounded-full bg-[var(--amber-bd)]"></div></div>
+        <div class="flex items-center gap-[1.2rem]"><span class="text-[0.67rem] tracking-[0.12em] uppercase text-[var(--dim)] whitespace-nowrap">Distributed Systems</span><div class="w-[3px] h-[3px] rounded-full bg-[var(--amber-bd)]"></div></div>
+        <div class="flex items-center gap-[1.2rem]"><span class="text-[0.67rem] tracking-[0.12em] uppercase text-[var(--dim)] whitespace-nowrap">Technical Leadership</span><div class="w-[3px] h-[3px] rounded-full bg-[var(--amber-bd)]"></div></div>
+        <div class="flex items-center gap-[1.2rem]"><span class="text-[0.67rem] tracking-[0.12em] uppercase text-[var(--dim)] whitespace-nowrap">System Architecture</span><div class="w-[3px] h-[3px] rounded-full bg-[var(--amber-bd)]"></div></div>
+        <div class="flex items-center gap-[1.2rem]"><span class="text-[0.67rem] tracking-[0.12em] uppercase text-[var(--dim)] whitespace-nowrap">Performance Engineering</span><div class="w-[3px] h-[3px] rounded-full bg-[var(--amber-bd)]"></div></div>
+        <div class="flex items-center gap-[1.2rem]"><span class="text-[0.67rem] tracking-[0.12em] uppercase text-[var(--dim)] whitespace-nowrap">Cloud Infrastructure</span><div class="w-[3px] h-[3px] rounded-full bg-[var(--amber-bd)]"></div></div>
+        <div class="flex items-center gap-[1.2rem]"><span class="text-[0.67rem] tracking-[0.12em] uppercase text-[var(--dim)] whitespace-nowrap">Real-time Systems</span><div class="w-[3px] h-[3px] rounded-full bg-[var(--amber-bd)]"></div></div>
+        <div class="flex items-center gap-[1.2rem]"><span class="text-[0.67rem] tracking-[0.12em] uppercase text-[var(--dim)] whitespace-nowrap">API Design</span><div class="w-[3px] h-[3px] rounded-full bg-[var(--amber-bd)]"></div></div>
+        <div class="flex items-center gap-[1.2rem]"><span class="text-[0.67rem] tracking-[0.12em] uppercase text-[var(--dim)] whitespace-nowrap">Graphics Programming</span><div class="w-[3px] h-[3px] rounded-full bg-[var(--amber-bd)]"></div></div>
+        <div class="flex items-center gap-[1.2rem]"><span class="text-[0.67rem] tracking-[0.12em] uppercase text-[var(--dim)] whitespace-nowrap">Distributed Systems</span><div class="w-[3px] h-[3px] rounded-full bg-[var(--amber-bd)]"></div></div>
+        <div class="flex items-center gap-[1.2rem]"><span class="text-[0.67rem] tracking-[0.12em] uppercase text-[var(--dim)] whitespace-nowrap">Technical Leadership</span><div class="w-[3px] h-[3px] rounded-full bg-[var(--amber-bd)]"></div></div>
+      </div>
+    </div>
+
+    <!-- SERVICES -->
+    <section id="services" class="px-12 py-24 max-[900px]:px-6 max-[900px]:py-16">
+      <div class="text-[0.62rem] font-medium tracking-[0.18em] uppercase text-[var(--amber)] mb-[0.55rem]">What I do</div>
+      <h2 class="text-[clamp(1.5rem,2.4vw,2.1rem)] font-bold tracking-[-0.025em] text-[var(--fg)] mb-[2.8rem]">Services <span class="text-[var(--mid)] font-light">&amp; Expertise</span></h2>
+      <div class="r grid grid-cols-3 gap-px bg-[var(--rule)] border border-[var(--rule)] rounded-xl overflow-hidden max-[900px]:grid-cols-1">
+        <div class="svc bg-[var(--bg)] px-8 pt-[2.2rem] pb-8 hover:bg-[var(--surface)] transition-colors duration-[250ms]">
+          <div class="w-[38px] h-[38px] rounded-[9px] bg-[var(--amber-lo)] border border-[var(--amber-bd)] flex items-center justify-center text-base mb-[1.4rem]">⬡</div>
+          <div class="text-[0.94rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.7rem]">System Architecture</div>
+          <p class="text-[0.79rem] leading-[1.8] text-[var(--mid)]">Designing scalable, maintainable backend systems from the ground up. Distributed architecture, event-driven design, and long-term technical roadmaps.</p>
+        </div>
+        <div class="svc bg-[var(--bg)] px-8 pt-[2.2rem] pb-8 hover:bg-[var(--surface)] transition-colors duration-[250ms]">
+          <div class="w-[38px] h-[38px] rounded-[9px] bg-[var(--amber-lo)] border border-[var(--amber-bd)] flex items-center justify-center text-base mb-[1.4rem]">◈</div>
+          <div class="text-[0.94rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.7rem]">Performance Engineering</div>
+          <p class="text-[0.79rem] leading-[1.8] text-[var(--mid)]">Diagnosing and eliminating bottlenecks at every layer. From GPU pipelines to database queries — I make software measurably faster.</p>
+        </div>
+        <div class="svc bg-[var(--bg)] px-8 pt-[2.2rem] pb-8 hover:bg-[var(--surface)] transition-colors duration-[250ms]">
+          <div class="w-[38px] h-[38px] rounded-[9px] bg-[var(--amber-lo)] border border-[var(--amber-bd)] flex items-center justify-center text-base mb-[1.4rem]">◎</div>
+          <div class="text-[0.94rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.7rem]">Technical Leadership</div>
+          <p class="text-[0.79rem] leading-[1.8] text-[var(--mid)]">Acting as principal engineer or tech lead — setting standards, unblocking teams, reviewing code, and owning delivery end-to-end.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY WORK WITH ME -->
+    <section class="px-12 pb-24 max-[900px]:px-6 max-[900px]:pb-16">
+      <div class="text-[0.62rem] font-medium tracking-[0.18em] uppercase text-[var(--amber)] mb-[0.55rem]">Why work with me</div>
+      <h2 class="text-[clamp(1.5rem,2.4vw,2.1rem)] font-bold tracking-[-0.025em] text-[var(--fg)] mb-[2.8rem]">What you <span class="text-[var(--mid)] font-light">can expect</span></h2>
+      <div class="r grid grid-cols-2 gap-px bg-[var(--rule)] border border-[var(--rule)] rounded-xl overflow-hidden max-[900px]:grid-cols-1">
+        <div class="why-feature col-span-2 bg-[var(--surface)] px-12 py-[2.8rem] grid grid-cols-2 gap-16 items-center max-[900px]:col-span-1 max-[900px]:grid-cols-1 max-[900px]:gap-6 max-[900px]:px-8 max-[900px]:py-8">
+          <div class="text-[clamp(1.15rem,1.9vw,1.65rem)] font-bold tracking-[-0.025em] text-[var(--fg)] leading-[1.32]">
+            I build software that performs under pressure,
+            <em class="gradient-text">scales with your growth,</em> and doesn't need to be rewritten in a year.
+          </div>
+          <div>
+            <p class="text-[0.81rem] leading-[1.85] text-[var(--mid)]">With 7 years across startups, scale-ups and enterprise teams, I've learned that the best code is the code that keeps working. I bring that hard-won perspective to every engagement.</p>
+            <p class="text-[0.81rem] leading-[1.85] text-[var(--mid)] mt-[0.9rem]">You'll always know where the project stands. I communicate clearly, document thoroughly, and treat deadlines as commitments.</p>
+          </div>
+        </div>
+        <div class="why-card bg-[var(--bg)] p-8 hover:bg-[var(--surface)] transition-colors duration-[250ms]">
+          <div class="text-[0.58rem] tracking-[0.12em] text-[var(--dim)] mb-[0.9rem]">01</div>
+          <div class="text-[0.92rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.6rem]">End-to-end ownership</div>
+          <p class="text-[0.79rem] leading-[1.8] text-[var(--mid)]">From architecture to deployment — I own the full lifecycle so your team stays focused on the product.</p>
+        </div>
+        <div class="why-card bg-[var(--bg)] p-8 hover:bg-[var(--surface)] transition-colors duration-[250ms]">
+          <div class="text-[0.58rem] tracking-[0.12em] text-[var(--dim)] mb-[0.9rem]">02</div>
+          <div class="text-[0.92rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.6rem]">Fast time-to-value</div>
+          <p class="text-[0.79rem] leading-[1.8] text-[var(--mid)]">I ramp up quickly, ask the right questions early, and ship working software in the first week.</p>
+        </div>
+        <div class="why-card bg-[var(--bg)] p-8 hover:bg-[var(--surface)] transition-colors duration-[250ms]">
+          <div class="text-[0.58rem] tracking-[0.12em] text-[var(--dim)] mb-[0.9rem]">03</div>
+          <div class="text-[0.92rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.6rem]">Clear communication</div>
+          <p class="text-[0.79rem] leading-[1.8] text-[var(--mid)]">Detailed status updates, early risk flags, and an honest picture of progress at every stage.</p>
+        </div>
+        <div class="why-card bg-[var(--bg)] p-8 hover:bg-[var(--surface)] transition-colors duration-[250ms]">
+          <div class="text-[0.58rem] tracking-[0.12em] text-[var(--dim)] mb-[0.9rem]">04</div>
+          <div class="text-[0.92rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.6rem]">Long-term thinking</div>
+          <p class="text-[0.79rem] leading-[1.8] text-[var(--mid)]">Systems I build are designed to outlast the engagement and grow with your needs.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORK -->
+    <section id="work" class="px-12 pb-24 max-[900px]:px-6 max-[900px]:pb-16">
+      <div class="text-[0.62rem] font-medium tracking-[0.18em] uppercase text-[var(--amber)] mb-[0.55rem]">Selected projects</div>
+      <h2 class="text-[clamp(1.5rem,2.4vw,2.1rem)] font-bold tracking-[-0.025em] text-[var(--fg)] mb-[2.8rem]">Recent <span class="text-[var(--mid)] font-light">work</span></h2>
+      <div class="r grid grid-cols-2 gap-px bg-[var(--rule)] border border-[var(--rule)] rounded-xl overflow-hidden max-[900px]:grid-cols-1">
+        <div class="wk group bg-[var(--bg)] p-8 flex flex-col gap-[0.9rem] hover:bg-[var(--surface)] transition-colors duration-[250ms] cursor-default">
+          <div class="flex justify-between">
+            <span class="text-[0.58rem] tracking-[0.1em] text-[var(--dim)]">01</span>
+            <span class="text-[0.75rem] text-[var(--dim)] transition-[transform,color] duration-[250ms] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--amber)]">↗</span>
+          </div>
+          <div class="text-[0.93rem] font-semibold tracking-[-0.01em] text-[var(--fg)]">3D Visualisation Platform</div>
+          <p class="text-[0.78rem] leading-[1.78] text-[var(--mid)] flex-1">Rebuilt the rendering pipeline for a platform serving 50,000 daily users — cutting GPU load by 70% and load time from 8s to under 2s.</p>
+          <div class="flex flex-wrap gap-[0.3rem] pt-[0.7rem] border-t border-[var(--rule)]">
+            <span class="text-[0.6rem] px-[0.52rem] py-[0.18rem] rounded-[4px] bg-[var(--tag-bg)] text-[var(--dim)]">Real-time rendering</span>
+            <span class="text-[0.6rem] px-[0.52rem] py-[0.18rem] rounded-[4px] bg-[var(--tag-bg)] text-[var(--dim)]">C++</span>
+            <span class="text-[0.6rem] px-[0.52rem] py-[0.18rem] rounded-[4px] bg-[var(--tag-bg)] text-[var(--dim)]">OpenGL</span>
+          </div>
+        </div>
+        <div class="wk group bg-[var(--bg)] p-8 flex flex-col gap-[0.9rem] hover:bg-[var(--surface)] transition-colors duration-[250ms] cursor-default">
+          <div class="flex justify-between">
+            <span class="text-[0.58rem] tracking-[0.1em] text-[var(--dim)]">02</span>
+            <span class="text-[0.75rem] text-[var(--dim)] transition-[transform,color] duration-[250ms] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--amber)]">↗</span>
+          </div>
+          <div class="text-[0.93rem] font-semibold tracking-[-0.01em] text-[var(--fg)]">Event-Driven Data Platform</div>
+          <p class="text-[0.78rem] leading-[1.78] text-[var(--mid)] flex-1">Designed Kafka-based event streaming handling 2M+ events/day, reducing processing latency by 40%.</p>
+          <div class="flex flex-wrap gap-[0.3rem] pt-[0.7rem] border-t border-[var(--rule)]">
+            <span class="text-[0.6rem] px-[0.52rem] py-[0.18rem] rounded-[4px] bg-[var(--tag-bg)] text-[var(--dim)]">Distributed systems</span>
+            <span class="text-[0.6rem] px-[0.52rem] py-[0.18rem] rounded-[4px] bg-[var(--tag-bg)] text-[var(--dim)]">Go</span>
+            <span class="text-[0.6rem] px-[0.52rem] py-[0.18rem] rounded-[4px] bg-[var(--tag-bg)] text-[var(--dim)]">Kafka</span>
+          </div>
+        </div>
+        <div class="wk group bg-[var(--bg)] p-8 flex flex-col gap-[0.9rem] hover:bg-[var(--surface)] transition-colors duration-[250ms] cursor-default">
+          <div class="flex justify-between">
+            <span class="text-[0.58rem] tracking-[0.1em] text-[var(--dim)]">03</span>
+            <span class="text-[0.75rem] text-[var(--dim)] transition-[transform,color] duration-[250ms] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--amber)]">↗</span>
+          </div>
+          <div class="text-[0.93rem] font-semibold tracking-[-0.01em] text-[var(--fg)]">Geospatial Terrain Engine</div>
+          <p class="text-[0.78rem] leading-[1.78] text-[var(--mid)] flex-1">GPU-accelerated terrain at continent-scale, interactive framerates — powering a geospatial analytics product.</p>
+          <div class="flex flex-wrap gap-[0.3rem] pt-[0.7rem] border-t border-[var(--rule)]">
+            <span class="text-[0.6rem] px-[0.52rem] py-[0.18rem] rounded-[4px] bg-[var(--tag-bg)] text-[var(--dim)]">GPU compute</span>
+            <span class="text-[0.6rem] px-[0.52rem] py-[0.18rem] rounded-[4px] bg-[var(--tag-bg)] text-[var(--dim)]">Vulkan</span>
+            <span class="text-[0.6rem] px-[0.52rem] py-[0.18rem] rounded-[4px] bg-[var(--tag-bg)] text-[var(--dim)]">Geospatial</span>
+          </div>
+        </div>
+        <div class="wk group bg-[var(--bg)] p-8 flex flex-col gap-[0.9rem] hover:bg-[var(--surface)] transition-colors duration-[250ms] cursor-default">
+          <div class="flex justify-between">
+            <span class="text-[0.58rem] tracking-[0.1em] text-[var(--dim)]">04</span>
+            <span class="text-[0.75rem] text-[var(--dim)] transition-[transform,color] duration-[250ms] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--amber)]">↗</span>
+          </div>
+          <div class="text-[0.93rem] font-semibold tracking-[-0.01em] text-[var(--fg)]">High-Performance API Server</div>
+          <p class="text-[0.78rem] leading-[1.78] text-[var(--mid)] flex-1">300k req/s async HTTP backbone powering a real-time analytics SaaS used by 10,000+ businesses in 30 countries.</p>
+          <div class="flex flex-wrap gap-[0.3rem] pt-[0.7rem] border-t border-[var(--rule)]">
+            <span class="text-[0.6rem] px-[0.52rem] py-[0.18rem] rounded-[4px] bg-[var(--tag-bg)] text-[var(--dim)]">High throughput</span>
+            <span class="text-[0.6rem] px-[0.52rem] py-[0.18rem] rounded-[4px] bg-[var(--tag-bg)] text-[var(--dim)]">Rust</span>
+            <span class="text-[0.6rem] px-[0.52rem] py-[0.18rem] rounded-[4px] bg-[var(--tag-bg)] text-[var(--dim)]">SaaS</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience" class="px-12 pb-24 max-[900px]:px-6 max-[900px]:pb-16">
+      <div class="text-[0.62rem] font-medium tracking-[0.18em] uppercase text-[var(--amber)] mb-[0.55rem]">Career</div>
+      <h2 class="text-[clamp(1.5rem,2.4vw,2.1rem)] font-bold tracking-[-0.025em] text-[var(--fg)] mb-[2.8rem]">Experience</h2>
+      <div class="r flex flex-col">
+        <div class="exp-row grid grid-cols-[200px_1fr] gap-12 py-[2.2rem] border-t border-b border-[var(--rule)] max-[900px]:grid-cols-1 max-[900px]:gap-2">
+          <div class="flex flex-col gap-[0.45rem]">
+            <div class="text-[0.7rem] text-[var(--dim)]">2023 — Present</div>
+            <div class="text-[0.65rem] font-medium text-[var(--amber)] bg-[var(--amber-lo)] border border-[var(--amber-bd)] px-[0.6rem] py-[0.2rem] rounded-[4px] w-fit">Acme Graphics Corp</div>
+          </div>
+          <div>
+            <div class="text-[0.93rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.55rem]">Senior Software Engineer</div>
+            <p class="text-[0.79rem] leading-[1.8] text-[var(--mid)]">Technical lead for a real-time 3D visualisation product. Rebuilt the rendering pipeline, cut infrastructure costs by 35%, and scaled the team from 3 to 6 engineers.</p>
+          </div>
+        </div>
+        <div class="exp-row grid grid-cols-[200px_1fr] gap-12 py-[2.2rem] border-b border-[var(--rule)] max-[900px]:grid-cols-1 max-[900px]:gap-2">
+          <div class="flex flex-col gap-[0.45rem]">
+            <div class="text-[0.7rem] text-[var(--dim)]">2021 — 2023</div>
+            <div class="text-[0.65rem] font-medium text-[var(--amber)] bg-[var(--amber-lo)] border border-[var(--amber-bd)] px-[0.6rem] py-[0.2rem] rounded-[4px] w-fit">Distributed Systems Co.</div>
+          </div>
+          <div>
+            <div class="text-[0.93rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.55rem]">Software Engineer</div>
+            <p class="text-[0.79rem] leading-[1.8] text-[var(--mid)]">Owned the data ingestion platform handling 2M+ events/day. Delivered the streaming migration that became the foundation for three new product lines.</p>
+          </div>
+        </div>
+        <div class="exp-row grid grid-cols-[200px_1fr] gap-12 py-[2.2rem] border-b border-[var(--rule)] max-[900px]:grid-cols-1 max-[900px]:gap-2">
+          <div class="flex flex-col gap-[0.45rem]">
+            <div class="text-[0.7rem] text-[var(--dim)]">2019 — 2021</div>
+            <div class="text-[0.65rem] font-medium text-[var(--amber)] bg-[var(--amber-lo)] border border-[var(--amber-bd)] px-[0.6rem] py-[0.2rem] rounded-[4px] w-fit">TechStart Labs</div>
+          </div>
+          <div>
+            <div class="text-[0.93rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.55rem]">Software Developer</div>
+            <p class="text-[0.79rem] leading-[1.8] text-[var(--mid)]">Full-stack development for a SaaS analytics dashboard used by 10,000+ businesses across 30 countries.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="border-t border-[var(--rule)] px-12 py-[5.5rem] max-[900px]:px-6 max-[900px]:py-16">
+      <div class="r grid grid-cols-2 gap-24 items-center max-[900px]:grid-cols-1 max-[900px]:gap-12">
+        <div>
+          <h2 class="text-[clamp(1.8rem,3vw,2.8rem)] font-bold tracking-[-0.03em] text-[var(--fg)] leading-[1.1] mb-4">
+            Ready to build<br />something <em class="gradient-text">great?</em>
+          </h2>
+          <p class="text-[0.82rem] leading-[1.82] text-[var(--mid)]">Whether you need a senior engineer to lead a project, a technical partner for a product build, or an expert for a specific challenge — let's talk.</p>
+        </div>
+        <div class="flex flex-col gap-[1.2rem]">
+          <a href="mailto:par.214@gmail.com"
+            class="flex items-center justify-between px-[1.3rem] py-[1.1rem] rounded-[10px] bg-[var(--surface)] border border-[var(--rule)] no-underline transition-[border-color] duration-200 hover:border-[var(--amber)]">
+            <div>
+              <div class="text-[0.6rem] font-medium tracking-[0.1em] uppercase text-[var(--dim)] mb-[0.2rem]">Email me directly</div>
+              <div class="text-[0.86rem] font-medium text-[var(--fg)]">par.214@gmail.com</div>
+            </div>
+            <span class="text-[0.78rem] text-[var(--dim)]">→</span>
+          </a>
+          <div class="flex gap-[0.6rem]">
+            <a href="#" class="flex-1 py-[0.7rem] rounded-[8px] text-center bg-[var(--surface)] border border-[var(--rule)] text-[0.72rem] font-medium text-[var(--mid)] no-underline transition-[border-color,color] duration-200 hover:border-[var(--amber)] hover:text-[var(--fg)]">GitHub</a>
+            <a href="#" class="flex-1 py-[0.7rem] rounded-[8px] text-center bg-[var(--surface)] border border-[var(--rule)] text-[0.72rem] font-medium text-[var(--mid)] no-underline transition-[border-color,color] duration-200 hover:border-[var(--amber)] hover:text-[var(--fg)]">LinkedIn</a>
+            <a href="#" class="flex-1 py-[0.7rem] rounded-[8px] text-center bg-[var(--surface)] border border-[var(--rule)] text-[0.72rem] font-medium text-[var(--mid)] no-underline transition-[border-color,color] duration-200 hover:border-[var(--amber)] hover:text-[var(--fg)]">Resume PDF</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="flex justify-between px-12 py-[1.2rem] border-t border-[var(--rule)] text-[0.6rem] text-[var(--dim)] max-[900px]:flex-col max-[900px]:gap-[0.4rem] max-[900px]:px-6 max-[900px]:py-4">
+    <span>© 2026 Alessandro Chumpitaz</span>
+    <span>Senior Software Engineer · Available now</span>
+  </footer>
+</Layout>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" is:inline></script>
+<script src="../scripts/scene.ts"></script>
+<script>
+  // Scroll reveals
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      const kids = e.target.querySelectorAll('.svc, .wk, .exp-row, .why-card, .why-feature');
+      kids.forEach((k: Element, i: number) => {
+        const el = k as HTMLElement;
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(14px)';
+        el.style.transition = `opacity .65s ${i * 0.07}s ease, transform .65s ${i * 0.07}s ease`;
+        setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'none'; }, 60 + i * 70);
+      });
+    });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.r').forEach(el => io.observe(el));
+
+  // Hero entrance
+  const heroKids = document.querySelectorAll('.hero-badge, #hero h1, .hero-sub, .hero-btns, .hero-stats');
+  heroKids.forEach((k: Element, i: number) => {
+    const el = k as HTMLElement;
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(22px)';
+    el.style.transition = `opacity .9s ${0.15 + i * 0.11}s ease, transform .9s ${0.15 + i * 0.11}s ease`;
+    setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'none'; }, 200 + i * 110);
+  });
+
+  // Theme toggle
+  const btn = document.getElementById('theme-toggle') as HTMLButtonElement;
+  const html = document.documentElement;
+  function syncBtn() {
+    btn.textContent = html.dataset.theme === 'light' ? '☽' : '☀';
+  }
+  syncBtn();
+  btn.addEventListener('click', () => {
+    html.dataset.theme = html.dataset.theme === 'light' ? 'dark' : 'light';
+    localStorage.setItem('theme', html.dataset.theme);
+    syncBtn();
+  });
+</script>
