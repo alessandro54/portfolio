@@ -1,0 +1,57 @@
+<section id="hero">
+  <div class="hero-badge">
+    <span class="badge-dot"></span>
+    Available for new engagements
+  </div>
+
+  <h1>
+    Senior Software Engineer<br>
+    <span class="soft">for teams that ship.</span>
+  </h1>
+
+  <p class="hero-sub">
+    I partner with startups and enterprises to architect and build
+    high-performance systems — from concept to production.
+    Fast, reliable, and built to last.
+  </p>
+
+  <div class="hero-btns">
+    <a href="#contact" class="btn btn-solid">Get in touch →</a>
+    <a href="#work" class="btn btn-ghost">See my work</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hstat">
+      <div class="hstat-n">7<em>+</em></div>
+      <div class="hstat-l">Years in industry</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-n">40<em>+</em></div>
+      <div class="hstat-l">Projects delivered</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-n">50k</div>
+      <div class="hstat-l">Daily active users</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-n">3</div>
+      <div class="hstat-l">Open-source libs</div>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<script>
+  const heroKids = document.querySelectorAll('.hero-badge, #hero h1, .hero-sub, .hero-btns, .hero-stats');
+  heroKids.forEach((k: Element, i: number) => {
+    const el = k as HTMLElement;
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(22px)';
+    el.style.transition = `opacity .9s ${0.15 + i * 0.11}s ease, transform .9s ${0.15 + i * 0.11}s ease`;
+    setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'none'; }, 200 + i * 110);
+  });
+</script>

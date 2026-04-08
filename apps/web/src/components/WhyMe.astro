@@ -1,0 +1,32 @@
+---
+const cards = [
+  { n: '01', title: 'End-to-end ownership', text: 'From architecture to deployment — I own the full lifecycle so your team stays focused on the product.' },
+  { n: '02', title: 'Fast time-to-value', text: 'I ramp up quickly, ask the right questions early, and ship working software in the first week.' },
+  { n: '03', title: 'Clear communication', text: 'Detailed status updates, early risk flags, and an honest picture of progress at every stage.' },
+  { n: '04', title: 'Long-term thinking', text: 'Systems I build are designed to outlast the engagement and grow with your needs.' },
+];
+---
+
+<section class="section" style="padding-top:0">
+  <div class="s-label">Why work with me</div>
+  <h2>What you <span class="soft">can expect</span></h2>
+  <div class="why-wrap r">
+    <div class="why-feature">
+      <div class="why-quote">
+        I build software that performs under pressure,
+        <em>scales with your growth,</em> and doesn't need to be rewritten in a year.
+      </div>
+      <div>
+        <p class="why-body">With 7 years across startups, scale-ups and enterprise teams, I've learned that the best code is the code that keeps working. I bring that hard-won perspective to every engagement.</p>
+        <p class="why-body">You'll always know where the project stands. I communicate clearly, document thoroughly, and treat deadlines as commitments.</p>
+      </div>
+    </div>
+    {cards.map(card => (
+      <div class="why-card">
+        <div class="why-n">{card.n}</div>
+        <div class="why-ttl">{card.title}</div>
+        <p class="why-txt">{card.text}</p>
+      </div>
+    ))}
+  </div>
+</section>

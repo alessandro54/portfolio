@@ -1,0 +1,20 @@
+---
+const items = [
+  'System Architecture',
+  'Performance Engineering',
+  'Cloud Infrastructure',
+  'Real-time Systems',
+  'API Design',
+  'Graphics Programming',
+  'Distributed Systems',
+  'Technical Leadership',
+];
+---
+
+<div class="ticker">
+  <div class="ticker-track">
+    {[...items, ...items].map(item => (
+      <div class="tk"><span>{item}</span><div class="tk-dot"></div></div>
+    ))}
+  </div>
+</div>

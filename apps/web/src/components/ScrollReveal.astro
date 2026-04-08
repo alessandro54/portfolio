@@ -1,0 +1,17 @@
+<script>
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      const kids = e.target.querySelectorAll('.svc, .wk, .exp-row, .why-card, .why-feature');
+      kids.forEach((k: Element, i: number) => {
+        const el = k as HTMLElement;
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(14px)';
+        el.style.transition = `opacity .65s ${i * 0.07}s ease, transform .65s ${i * 0.07}s ease`;
+        setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'none'; }, 60 + i * 70);
+      });
+    });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.r').forEach(el => io.observe(el));
+</script>

@@ -1,0 +1,21 @@
+---
+const services = [
+  { icon: '⬡', title: 'System Architecture', text: 'Designing scalable, maintainable backend systems from the ground up. Distributed architecture, event-driven design, and long-term technical roadmaps.' },
+  { icon: '◈', title: 'Performance Engineering', text: 'Diagnosing and eliminating bottlenecks at every layer. From GPU pipelines to database queries — I make software measurably faster.' },
+  { icon: '◎', title: 'Technical Leadership', text: 'Acting as principal engineer or tech lead — setting standards, unblocking teams, reviewing code, and owning delivery end-to-end.' },
+];
+---
+
+<section id="services" class="section">
+  <div class="s-label">What I do</div>
+  <h2>Services <span class="soft">&amp; Expertise</span></h2>
+  <div class="grid-3 r">
+    {services.map(svc => (
+      <div class="svc">
+        <div class="svc-ico">{svc.icon}</div>
+        <div class="svc-ttl">{svc.title}</div>
+        <p class="svc-txt">{svc.text}</p>
+      </div>
+    ))}
+  </div>
+</section>

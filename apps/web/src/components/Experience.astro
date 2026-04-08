@@ -1,0 +1,26 @@
+---
+const jobs = [
+  { date: '2023 — Present', company: 'Acme Graphics Corp', role: 'Senior Software Engineer', desc: 'Technical lead for a real-time 3D visualisation product. Rebuilt the rendering pipeline, cut infrastructure costs by 35%, and scaled the team from 3 to 6 engineers.' },
+  { date: '2021 — 2023', company: 'Distributed Systems Co.', role: 'Software Engineer', desc: 'Owned the data ingestion platform handling 2M+ events/day. Delivered the streaming migration that became the foundation for three new product lines.' },
+  { date: '2019 — 2021', company: 'TechStart Labs', role: 'Software Developer', desc: 'Full-stack development for a SaaS analytics dashboard used by 10,000+ businesses across 30 countries.' },
+];
+---
+
+<section id="experience" class="section" style="padding-top:0">
+  <div class="s-label">Career</div>
+  <h2>Experience</h2>
+  <div class="exp-list r">
+    {jobs.map(job => (
+      <div class="exp-row">
+        <div class="exp-meta">
+          <div class="exp-date">{job.date}</div>
+          <div class="exp-co">{job.company}</div>
+        </div>
+        <div>
+          <div class="exp-role">{job.role}</div>
+          <p class="exp-desc">{job.desc}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

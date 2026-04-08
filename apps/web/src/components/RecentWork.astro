@@ -1,0 +1,25 @@
+---
+const projects = [
+  { num: '01', title: '3D Visualisation Platform', outcome: 'Rebuilt the rendering pipeline for a platform serving 50,000 daily users — cutting GPU load by 70% and load time from 8s to under 2s.', tags: ['Real-time rendering', 'C++', 'OpenGL'] },
+  { num: '02', title: 'Event-Driven Data Platform', outcome: 'Designed Kafka-based event streaming handling 2M+ events/day, reducing processing latency by 40%.', tags: ['Distributed systems', 'Go', 'Kafka'] },
+  { num: '03', title: 'Geospatial Terrain Engine', outcome: 'GPU-accelerated terrain at continent-scale, interactive framerates — powering a geospatial analytics product.', tags: ['GPU compute', 'Vulkan', 'Geospatial'] },
+  { num: '04', title: 'High-Performance API Server', outcome: '300k req/s async HTTP backbone powering a real-time analytics SaaS used by 10,000+ businesses in 30 countries.', tags: ['High throughput', 'Rust', 'SaaS'] },
+];
+---
+
+<section id="work" class="section" style="padding-top:0">
+  <div class="s-label">Selected projects</div>
+  <h2>Recent <span class="soft">work</span></h2>
+  <div class="grid-2 r">
+    {projects.map(p => (
+      <div class="wk">
+        <div class="wk-top"><span class="wk-num">{p.num}</span><span class="wk-arr">↗</span></div>
+        <div class="wk-ttl">{p.title}</div>
+        <p class="wk-out">{p.outcome}</p>
+        <div class="wk-tags">
+          {p.tags.map(tag => <span class="wtag">{tag}</span>)}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
