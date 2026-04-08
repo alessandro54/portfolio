@@ -1,18 +1,16 @@
 ---
 import '../styles/global.css';
+import { useTranslations } from '@i18n/translations';
 
 interface Props {
-  title?: string;
-  description?: string;
   locale?: string;
 }
 
-const {
-  title = 'Alessandro Chumpitaz — Senior Software Engineer',
-  description = 'Senior Software Engineer specialising in system architecture, performance engineering and technical leadership. Available for freelance and consulting.',
-  locale = 'en'
-} = Astro.props;
+const { locale = 'en' } = Astro.props;
+const ui = useTranslations(locale);
 
+const title = ui('meta_title');
+const description = ui('meta_description');
 const otherLocale = locale === 'en' ? 'es' : 'en';
 const canonical = `https://alessandro.chumpitaz.dev/${locale}/`;
 const alternate = `https://alessandro.chumpitaz.dev/${otherLocale}/`;
@@ -24,18 +22,32 @@ const alternate = `https://alessandro.chumpitaz.dev/${otherLocale}/`;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
 
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={locale === 'es' ? 'es_ES' : 'en_US'} />
+    <meta property="og:locale:alternate" content={locale === 'es' ? 'en_US' : 'es_ES'} />
+    <meta property="og:site_name" content="Alessandro Chumpitaz" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
     <!-- Canonical & hreflang -->
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang={locale} href={canonical} />
     <link rel="alternate" hreflang={otherLocale} href={alternate} />
     <link rel="alternate" hreflang="x-default" href="https://alessandro.chumpitaz.dev/en/" />
 
-    <!-- Preconnect for fonts (non-blocking) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
+    <!-- Self-hosted variable font (preloaded) -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/plus-jakarta-sans-var.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/plus-jakarta-sans-var-latin-ext.woff2" crossorigin />
+
+    <meta name="theme-color" content="#09080f" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f8f7fc" media="(prefers-color-scheme: light)" />
 
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

@@ -42,4 +42,6 @@ const { locale } = Astro.params;
 </Layout>
 
 <script src="../../scripts/scene.ts"></script>
-<script src="../../scripts/animations.ts"></script>
+<script>
+  requestIdleCallback(() => import('../../scripts/animations.ts'), { timeout: 1500 });
+</script>

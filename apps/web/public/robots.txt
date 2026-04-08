@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://alessandro.chumpitaz.dev/sitemap-index.xml

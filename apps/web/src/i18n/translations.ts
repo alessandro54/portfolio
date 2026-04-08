@@ -37,6 +37,10 @@ export const translations = {
     contact_linkedin: 'LinkedIn',
     contact_resume: 'Resume PDF',
 
+    // Meta
+    meta_title: 'Alessandro Chumpitaz — Senior Software Engineer',
+    meta_description: 'Senior Software Engineer specialising in system architecture, performance engineering and technical leadership. Available for freelance and consulting.',
+
     // Footer
     footer_role: 'Senior Software Engineer · Available now',
   },
@@ -77,6 +81,10 @@ export const translations = {
     contact_github: 'GitHub',
     contact_linkedin: 'LinkedIn',
     contact_resume: 'Currículum PDF',
+
+    // Meta
+    meta_title: 'Alessandro Chumpitaz — Ingeniero de Software Senior',
+    meta_description: 'Ingeniero de Software Senior especializado en arquitectura de sistemas, ingeniería de rendimiento y liderazgo técnico. Disponible para freelance y consultoría.',
 
     // Footer
     footer_role: 'Ingeniero de Software Senior · Disponible ahora',

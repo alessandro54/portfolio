@@ -1,0 +1,15 @@
+# Hashed assets — immutable forever (Astro/Vite adds content hash to filenames)
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Fonts — immutable (filename won't change, but content won't either)
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML pages — always revalidate (edge cache handles freshness)
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Favicon
+/favicon.*
+  Cache-Control: public, max-age=86400
