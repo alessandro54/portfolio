@@ -34,7 +34,7 @@
   --nav-bg:       rgba(9,8,15,0.70);
   --vig-rgb:      9,8,15;
   --gradient-end: #e879f9;
-  --h1-end:       #e879f9;
+  --h1-end:       #ffffff;
 }
 
 html[data-theme="light"] {
@@ -44,13 +44,13 @@ html[data-theme="light"] {
   --mid:          rgba(9,9,11,0.68);
   --dim:          rgba(9,9,11,0.50);
   --rule:         rgba(9,9,11,0.08);
-  --accent:        #8b5cf6;
-  --accent-lo:     rgba(139,92,246,0.08);
-  --accent-bd:     rgba(139,92,246,0.20);
+  --accent:        #7c3aed;
+  --accent-lo:     rgba(124,58,237,0.08);
+  --accent-bd:     rgba(124,58,237,0.20);
   --nav-bg:       rgba(255,255,255,0.85);
   --vig-rgb:      255,255,255;
-  --gradient-end: #a78bfa;
-  --h1-end:       #c084fc;
+  --gradient-end: #a855f7;
+  --h1-end:       #a855f7;
 }
 
 html { scroll-behavior: smooth; cursor: none; }
