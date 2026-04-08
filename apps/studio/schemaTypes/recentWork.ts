@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export const recentWork = defineType({
   name: 'recentWork',
@@ -32,13 +32,13 @@ export const recentWork = defineType({
     }),
   ],
   preview: {
-    select: {title: 'prTitle', subtitle: 'repo'},
+    select: { title: 'prTitle', subtitle: 'repo' },
   },
   orderings: [
     {
       title: 'Merged, newest',
       name: 'mergedAtDesc',
-      by: [{field: 'mergedAt', direction: 'desc'}],
+      by: [{ field: 'mergedAt', direction: 'desc' }],
     },
   ],
-})
+});

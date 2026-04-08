@@ -1,9 +1,9 @@
-import {defineConfig} from 'sanity'
-import {structureTool} from 'sanity/structure'
-import {visionTool} from '@sanity/vision'
-import {schemaTypes} from './schemaTypes'
+import { visionTool } from '@sanity/vision';
+import { defineConfig } from 'sanity';
+import { structureTool } from 'sanity/structure';
+import { schemaTypes } from './schemaTypes';
 
-const ABOUT_DOC_ID = 'singleton-about'
+const ABOUT_DOC_ID = 'singleton-about';
 
 export default defineConfig({
   name: 'default',
@@ -30,9 +30,7 @@ export default defineConfig({
                   .documentId(ABOUT_DOC_ID),
               ),
             S.divider(),
-            ...S.documentTypeListItems().filter(
-              (item) => item.getId() !== 'about',
-            ),
+            ...S.documentTypeListItems().filter((item) => item.getId() !== 'about'),
           ]),
     }),
     visionTool(),
@@ -41,4 +39,4 @@ export default defineConfig({
   schema: {
     types: schemaTypes,
   },
-})
+});

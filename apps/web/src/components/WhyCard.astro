@@ -1,0 +1,15 @@
+---
+interface Props {
+  n: string;
+  title: string;
+  text: string;
+}
+
+const { n, title, text } = Astro.props;
+---
+
+<div class="why-card bg-[var(--bg)] p-8 transition-colors duration-250 hover:bg-[var(--surface)]">
+  <div class="text-[0.58rem] tracking-[0.12em] text-[var(--dim)] mb-[0.9rem]">{n}</div>
+  <div class="text-[0.92rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.6rem]">{title}</div>
+  <p class="text-[0.79rem] leading-[1.8] text-[var(--mid)]">{text}</p>
+</div>

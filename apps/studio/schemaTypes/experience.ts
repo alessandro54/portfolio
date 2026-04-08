@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export const experience = defineType({
   name: 'experience',
@@ -33,17 +33,17 @@ export const experience = defineType({
       name: 'description',
       title: 'Description',
       type: 'array',
-      of: [{type: 'block'}],
+      of: [{ type: 'block' }],
     }),
   ],
   preview: {
-    select: {title: 'role', subtitle: 'company'},
+    select: { title: 'role', subtitle: 'company' },
   },
   orderings: [
     {
       title: 'Start Date, newest',
       name: 'startDateDesc',
-      by: [{field: 'startDate', direction: 'desc'}],
+      by: [{ field: 'startDate', direction: 'desc' }],
     },
   ],
-})
+});

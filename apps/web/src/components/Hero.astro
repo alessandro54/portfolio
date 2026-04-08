@@ -1,3 +1,20 @@
+---
+import StatCard from './StatCard.astro';
+
+interface Props {
+  stats?: { value: number; suffix?: string; label: string }[];
+}
+
+const {
+  stats = [
+    { value: 7, label: 'Years in industry' },
+    { value: 40, label: 'Projects delivered' },
+    { value: 50, suffix: 'k', label: 'Daily active users' },
+    { value: 3, label: 'Open-source libs' },
+  ],
+} = Astro.props;
+---
+
 <section id="hero" class="h-svh flex flex-col items-center justify-center text-center gap-6 px-8 pt-24 pb-12 relative max-[900px]:px-6 max-[900px]:pt-20">
   <div class="hero-badge inline-flex items-center gap-[0.55rem] text-[0.7rem] font-medium text-[var(--accent)] bg-[var(--accent-lo)] border border-[var(--accent-bd)] px-[0.9rem] py-[0.3rem] rounded-full mb-12 animate-[badge-pulse_2.5s_ease-in-out_infinite]">
     <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-[blink_2.4s_infinite] shrink-0"></span>
@@ -21,22 +38,7 @@
   </div>
 
   <div class="hero-stats flex items-center border border-[var(--rule)] rounded-xl overflow-hidden bg-[rgba(var(--vig-rgb),0.55)] backdrop-blur-[16px] max-[900px]:flex-wrap max-[900px]:rounded-[10px]">
-    <div class="px-10 py-5 border-r border-[var(--rule)] text-center max-[900px]:border-b max-[900px]:border-[var(--rule)]">
-      <div class="text-2xl font-extrabold tracking-[-0.04em] text-[var(--fg)] leading-none mb-2.5">7<em class="text-[var(--accent)] not-italic text-[1.1rem]">+</em></div>
-      <div class="text-[0.6rem] font-normal tracking-[0.08em] text-[var(--dim)] uppercase">Years in industry</div>
-    </div>
-    <div class="px-10 py-5 border-r border-[var(--rule)] text-center max-[900px]:border-b max-[900px]:border-[var(--rule)]">
-      <div class="text-2xl font-extrabold tracking-[-0.04em] text-[var(--fg)] leading-none mb-2.5">40<em class="text-[var(--accent)] not-italic text-[1.1rem]">+</em></div>
-      <div class="text-[0.6rem] font-normal tracking-[0.08em] text-[var(--dim)] uppercase">Projects delivered</div>
-    </div>
-    <div class="px-10 py-5 border-r border-[var(--rule)] text-center max-[900px]:border-b max-[900px]:border-[var(--rule)]">
-      <div class="text-2xl font-extrabold tracking-[-0.04em] text-[var(--fg)] leading-none mb-2.5">50k</div>
-      <div class="text-[0.6rem] font-normal tracking-[0.08em] text-[var(--dim)] uppercase">Daily active users</div>
-    </div>
-    <div class="px-10 py-5 text-center max-[900px]:border-b max-[900px]:border-[var(--rule)]">
-      <div class="text-2xl font-extrabold tracking-[-0.04em] text-[var(--fg)] leading-none mb-2.5">3</div>
-      <div class="text-[0.6rem] font-normal tracking-[0.08em] text-[var(--dim)] uppercase">Open-source libs</div>
-    </div>
+    {stats.map((stat, i) => <StatCard {...stat} border={i < stats.length - 1} />)}
   </div>
 
   <div class="scroll-cue absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
@@ -44,22 +46,3 @@
     <div class="w-px h-9 bg-[linear-gradient(to_bottom,var(--dim),transparent)] animate-[scrl_2s_infinite]"></div>
   </div>
 </section>
-
-<script>
-  const heroChildren = document.querySelectorAll('.hero-badge, #hero h1, .hero-sub, .hero-btns, .hero-stats');
-  heroChildren.forEach((k: Element, i: number) => {
-    const el = k as HTMLElement;
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(22px)';
-    el.style.transition = `opacity .9s ${0.15 + i * 0.11}s ease, transform .9s ${0.15 + i * 0.11}s ease`;
-    setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'none'; }, 200 + i * 110);
-  });
-
-  const scrollCue = document.querySelector('.scroll-cue') as HTMLElement;
-  if (scrollCue) {
-    scrollCue.style.transition = 'opacity .4s ease';
-    window.addEventListener('scroll', () => {
-      scrollCue.style.opacity = window.scrollY > 50 ? '0' : '1';
-    }, { passive: true });
-  }
-</script>

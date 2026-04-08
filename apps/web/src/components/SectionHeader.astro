@@ -1,0 +1,14 @@
+---
+interface Props {
+  label: string;
+  title: string;
+  soft?: string;
+}
+
+const { label, title, soft } = Astro.props;
+---
+
+<div class="s-label text-[0.62rem] font-medium tracking-[0.18em] uppercase text-[var(--accent)] mb-[0.55rem]">{label}</div>
+<h2 class="text-[clamp(1.5rem,2.4vw,2.1rem)] font-bold tracking-[-0.025em] text-[var(--fg)] mb-[2.8rem]">
+  {title}{soft && <Fragment> <span class="text-[var(--mid)] font-light">{soft}</span></Fragment>}
+</h2>

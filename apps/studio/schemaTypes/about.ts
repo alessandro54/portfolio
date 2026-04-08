@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export const about = defineType({
   name: 'about',
@@ -10,14 +10,14 @@ export const about = defineType({
       name: 'bio',
       title: 'Bio',
       type: 'array',
-      of: [{type: 'block'}],
+      of: [{ type: 'block' }],
       validation: (r) => r.required(),
     }),
     defineField({
       name: 'avatar',
       title: 'Avatar',
       type: 'image',
-      options: {hotspot: true},
+      options: { hotspot: true },
     }),
     defineField({
       name: 'location',
@@ -29,17 +29,17 @@ export const about = defineType({
       title: 'Socials',
       type: 'object',
       fields: [
-        defineField({name: 'github', title: 'GitHub', type: 'url'}),
-        defineField({name: 'linkedin', title: 'LinkedIn', type: 'url'}),
-        defineField({name: 'x', title: 'X (Twitter)', type: 'url'}),
-        defineField({name: 'email', title: 'Email', type: 'string'}),
+        defineField({ name: 'github', title: 'GitHub', type: 'url' }),
+        defineField({ name: 'linkedin', title: 'LinkedIn', type: 'url' }),
+        defineField({ name: 'x', title: 'X (Twitter)', type: 'url' }),
+        defineField({ name: 'email', title: 'Email', type: 'string' }),
       ],
     }),
   ],
   preview: {
-    select: {title: 'location', media: 'avatar'},
-    prepare({title, media}) {
-      return {title: 'About', subtitle: title, media}
+    select: { title: 'location', media: 'avatar' },
+    prepare({ title, media }) {
+      return { title: 'About', subtitle: title, media };
     },
   },
-})
+});

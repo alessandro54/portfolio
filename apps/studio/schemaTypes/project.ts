@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export const project = defineType({
   name: 'project',
@@ -15,7 +15,7 @@ export const project = defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: {source: 'title'},
+      options: { source: 'title' },
       validation: (r) => r.required(),
     }),
     defineField({
@@ -28,14 +28,14 @@ export const project = defineType({
       name: 'cover',
       title: 'Cover Image',
       type: 'image',
-      options: {hotspot: true},
+      options: { hotspot: true },
     }),
     defineField({
       name: 'stack',
       title: 'Stack',
       type: 'array',
-      of: [{type: 'string'}],
-      options: {layout: 'tags'},
+      of: [{ type: 'string' }],
+      options: { layout: 'tags' },
     }),
     defineField({
       name: 'liveUrl',
@@ -50,11 +50,21 @@ export const project = defineType({
         {
           type: 'object',
           fields: [
-            defineField({name: 'label', title: 'Label', type: 'string', description: 'e.g. frontend, backend, docs'}),
-            defineField({name: 'url', title: 'URL', type: 'url', validation: (r) => r.required()}),
+            defineField({
+              name: 'label',
+              title: 'Label',
+              type: 'string',
+              description: 'e.g. frontend, backend, docs',
+            }),
+            defineField({
+              name: 'url',
+              title: 'URL',
+              type: 'url',
+              validation: (r) => r.required(),
+            }),
           ],
           preview: {
-            select: {title: 'label', subtitle: 'url'},
+            select: { title: 'label', subtitle: 'url' },
           },
         },
       ],
@@ -67,6 +77,6 @@ export const project = defineType({
     }),
   ],
   preview: {
-    select: {title: 'title', media: 'cover'},
+    select: { title: 'title', media: 'cover' },
   },
-})
+});

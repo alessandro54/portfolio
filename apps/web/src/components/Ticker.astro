@@ -11,7 +11,7 @@ const items = [
 ];
 ---
 
-<div class="overflow-hidden border-y border-[var(--rule)] py-[0.85rem]">
+<div class="ticker-wrap overflow-hidden border-y border-[var(--rule)] py-[0.85rem]">
   <div class="inline-flex gap-12 animate-[tkr_26s_linear_infinite]">
     {[...items, ...items].map(item => (
       <div class="flex items-center gap-[1.2rem]"><span class="text-[0.67rem] font-normal tracking-[0.12em] uppercase text-[var(--dim)] whitespace-nowrap">{item}</span><div class="w-[3px] h-[3px] rounded-full bg-[var(--accent-bd)]"></div></div>

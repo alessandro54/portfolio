@@ -1,0 +1,21 @@
+---
+interface Props {
+  icon: string;
+  title: string;
+  text: string;
+}
+
+const { icon, title, text } = Astro.props;
+---
+
+<div class="flex flex-col gap-2.5 bg-[color-mix(in_srgb,var(--bg)_10%,transparent)] backdrop-blur-lg px-8 py-[2.2rem] transition-colors duration-250 hover:bg-[color-mix(in_srgb,var(--bg)_90%,transparent)]">
+  <div class="w-9.5 h-9.5 rounded-[9px] bg-[var(--accent-lo)] border border-[var(--accent-bd)] flex items-center justify-center text-base">
+    {icon}
+  </div>
+  <div class="text-[0.94rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.7rem]">
+    {title}
+  </div>
+  <p class="text-[0.79rem] font-normal leading-[1.8] text-[var(--mid)]">
+    {text}
+  </p>
+</div>

@@ -1,27 +1,35 @@
 ---
-const services = [
-  { icon: '⬡', title: 'System Architecture', text: 'Designing scalable, maintainable backend systems from the ground up. Distributed architecture, event-driven design, and long-term technical roadmaps.' },
-  { icon: '◈', title: 'Performance Engineering', text: 'Diagnosing and eliminating bottlenecks at every layer. From GPU pipelines to database queries — I make software measurably faster.' },
-  { icon: '◎', title: 'Technical Leadership', text: 'Acting as principal engineer or tech lead — setting standards, unblocking teams, reviewing code, and owning delivery end-to-end.' },
-];
+import SectionHeader from './SectionHeader.astro';
+import ServiceCard from './ServiceCard.astro';
+
+interface Props {
+  services?: { icon: string; title: string; text: string }[];
+}
+
+const {
+  services = [
+    {
+      icon: '⬡',
+      title: 'System Architecture',
+      text: 'Designing scalable, maintainable backend systems from the ground up. Distributed architecture, event-driven design, and long-term technical roadmaps.',
+    },
+    {
+      icon: '◈',
+      title: 'Performance Engineering',
+      text: 'Diagnosing and eliminating bottlenecks at every layer. From GPU pipelines to database queries — I make software measurably faster.',
+    },
+    {
+      icon: '◎',
+      title: 'Technical Leadership',
+      text: 'Acting as principal engineer or tech lead — setting standards, unblocking teams, reviewing code, and owning delivery end-to-end.',
+    },
+  ],
+} = Astro.props;
 ---
 
-<section id="services" class="px-12 pt-24 pb-24 max-[900px]:px-6 max-[900px]:pt-16 max-[900px]:pb-16">
-  <div class="text-[0.62rem] font-medium tracking-[0.18em] uppercase text-[var(--accent)] mb-[0.55rem]">What I do</div>
-  <h2 class="text-[clamp(1.5rem,2.4vw,2.1rem)] font-bold tracking-[-0.025em] text-[var(--fg)] mb-[2.8rem]">Services <span class="text-[var(--mid)] font-light">&amp; Expertise</span></h2>
-  <div class="grid grid-cols-3 gap-px border border-[var(--rule)] rounded-xl overflow-hidden max-[900px]:grid-cols-1 r">
-    {services.map(svc => (
-      <div class="bg-[color-mix(in_srgb,var(--bg)_10%,transparent)] backdrop-blur-lg px-8 py-[2.2rem] transition-colors duration-250 hover:bg-[color-mix(in_srgb,var(--bg)_90%,transparent)]">
-        <div class="w-9.5 h-9.5 rounded-[9px] bg-[var(--accent-lo)] border border-[var(--accent-bd)] flex items-center justify-center text-base mb-5">
-          {svc.icon}
-        </div>
-        <div class="text-[0.94rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.7rem]">
-          {svc.title}
-        </div>
-        <p class="text-[0.79rem] font-normal leading-[1.8] text-[var(--mid)]">
-          {svc.text}
-        </p>
-      </div>
-    ))}
+<section id="services" class="flex flex-col gap-2 px-12 pt-24 pb-24 max-[900px]:px-6 max-[900px]:pt-16 max-[900px]:pb-16">
+  <SectionHeader label="What I do" title="Services" soft="& Expertise" />
+  <div class="grid grid-cols-3 gap-px border border-[var(--rule)] rounded-xl overflow-hidden max-[900px]:grid-cols-1">
+    {services.map(svc => <ServiceCard {...svc} />)}
   </div>
 </section>

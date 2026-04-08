@@ -1,16 +1,40 @@
 ---
-const cards = [
-  { n: '01', title: 'End-to-end ownership', text: 'From architecture to deployment — I own the full lifecycle so your team stays focused on the product.' },
-  { n: '02', title: 'Fast time-to-value', text: 'I ramp up quickly, ask the right questions early, and ship working software in the first week.' },
-  { n: '03', title: 'Clear communication', text: 'Detailed status updates, early risk flags, and an honest picture of progress at every stage.' },
-  { n: '04', title: 'Long-term thinking', text: 'Systems I build are designed to outlast the engagement and grow with your needs.' },
-];
+import SectionHeader from './SectionHeader.astro';
+import WhyCard from './WhyCard.astro';
+
+interface Props {
+  cards?: { n: string; title: string; text: string }[];
+}
+
+const {
+  cards = [
+    {
+      n: '01',
+      title: 'End-to-end ownership',
+      text: 'From architecture to deployment — I own the full lifecycle so your team stays focused on the product.',
+    },
+    {
+      n: '02',
+      title: 'Fast time-to-value',
+      text: 'I ramp up quickly, ask the right questions early, and ship working software in the first week.',
+    },
+    {
+      n: '03',
+      title: 'Clear communication',
+      text: 'Detailed status updates, early risk flags, and an honest picture of progress at every stage.',
+    },
+    {
+      n: '04',
+      title: 'Long-term thinking',
+      text: 'Systems I build are designed to outlast the engagement and grow with your needs.',
+    },
+  ],
+} = Astro.props;
 ---
 
-<section class="px-12 pb-24 max-[900px]:px-6 max-[900px]:pb-16">
-  <div class="text-[0.62rem] font-medium tracking-[0.18em] uppercase text-[var(--accent)] mb-[0.55rem]">Why work with me</div>
-  <h2 class="text-[clamp(1.5rem,2.4vw,2.1rem)] font-bold tracking-[-0.025em] text-[var(--fg)] mb-[2.8rem]">What you <span class="text-[var(--mid)] font-light">can expect</span></h2>
-  <div class="grid grid-cols-2 gap-px bg-[var(--rule)] border border-[var(--rule)] rounded-xl overflow-hidden r max-[900px]:grid-cols-1">
+<section class="flex flex-col gap-2 px-12 pb-24 max-[900px]:px-6 max-[900px]:pb-16">
+  <SectionHeader label="Why work with me" title="What you" soft="can expect" />
+  <div class="why-grid grid grid-cols-2 gap-px bg-[var(--rule)] border border-[var(--rule)] rounded-xl overflow-hidden max-[900px]:grid-cols-1">
     <div class="why-feature col-span-2 bg-[var(--surface)] px-12 py-[2.8rem] grid grid-cols-2 gap-16 items-center max-[900px]:col-span-1 max-[900px]:grid-cols-1 max-[900px]:gap-6">
       <div class="text-[clamp(1.15rem,1.9vw,1.65rem)] font-bold tracking-[-0.025em] text-[var(--fg)] leading-[1.32]">
         I build software that performs under pressure,
@@ -21,12 +45,6 @@ const cards = [
         <p class="text-[0.81rem] leading-[1.85] text-[var(--mid)] mt-[0.9rem]">You'll always know where the project stands. I communicate clearly, document thoroughly, and treat deadlines as commitments.</p>
       </div>
     </div>
-    {cards.map(card => (
-      <div class="why-card bg-[var(--bg)] p-8 transition-colors duration-250 hover:bg-[var(--surface)]">
-        <div class="text-[0.58rem] tracking-[0.12em] text-[var(--dim)] mb-[0.9rem]">{card.n}</div>
-        <div class="text-[0.92rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.6rem]">{card.title}</div>
-        <p class="text-[0.79rem] leading-[1.8] text-[var(--mid)]">{card.text}</p>
-      </div>
-    ))}
+    {cards.map(card => <WhyCard {...card} />)}
   </div>
 </section>

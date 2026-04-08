@@ -1,7 +1,7 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 *, *::before, *::after { margin:0; box-sizing:border-box; }
+* { -webkit-user-select: none; user-select: none; }
 
 :root {
   --bg:           #09080f;
@@ -78,6 +78,13 @@ html[data-theme="light"] .nav-cta { color: #ffffff; }
 @keyframes tkr { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 @keyframes scrl { 0%,100%{opacity:0.3;} 50%{opacity:0.9;} }
 
-/* ── REVEAL ── */
-.r { opacity:0; transform:translateY(18px); transition: opacity .8s cubic-bezier(.4,0,.2,1), transform .8s cubic-bezier(.4,0,.2,1); }
-.r.in { opacity:1; transform:none; }
+/* GSAP initial state — prevent flash before JS runs */
+nav, .hero-badge, #hero h1 span, .hero-sub, .hero-btns a,
+.hero-stats, .scroll-cue, .ticker-wrap,
+.s-label, section h2,
+#services .grid, .why-grid, #work .grid,
+.exp-row, #contact h2, #contact p,
+#contact .flex.flex-col > a, footer {
+  visibility: hidden;
+}
+

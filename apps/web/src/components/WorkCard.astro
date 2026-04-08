@@ -1,0 +1,22 @@
+---
+interface Props {
+  num: string;
+  title: string;
+  outcome: string;
+  tags: string[];
+}
+
+const { num, title, outcome, tags } = Astro.props;
+---
+
+<div class="wk bg-[var(--bg)] p-8 flex flex-col gap-[0.9rem] transition-colors duration-250 cursor-default hover:bg-[var(--surface)] group">
+  <div class="flex justify-between">
+    <span class="text-[0.58rem] tracking-[0.1em] text-[var(--dim)]">{num}</span>
+    <span class="text-[0.75rem] text-[var(--dim)] transition-[transform,color] duration-250 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--accent)]">↗</span>
+  </div>
+  <div class="text-[0.93rem] font-semibold tracking-[-0.01em] text-[var(--fg)]">{title}</div>
+  <p class="text-[0.78rem] leading-[1.78] text-[var(--mid)] flex-1">{outcome}</p>
+  <div class="wk-tags flex flex-wrap gap-[0.3rem] pt-[0.7rem] border-t border-[var(--rule)]">
+    {tags.map(tag => <span class="text-[0.6rem] px-[0.52rem] py-[0.18rem] rounded bg-[var(--accent-lo)] text-[var(--dim)]">{tag}</span>)}
+  </div>
+</div>

@@ -8,7 +8,7 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     server: {
-      allowedHosts: ['communication-rich-handle-bass.trycloudflare.com']
+      allowedHosts: ['watts-private-minnesota-phantom.trycloudflare.com']
     }
   }
 });

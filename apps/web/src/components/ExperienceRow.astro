@@ -1,0 +1,22 @@
+---
+interface Props {
+  date: string;
+  company: string;
+  role: string;
+  desc: string;
+  first?: boolean;
+}
+
+const { date, company, role, desc, first = false } = Astro.props;
+---
+
+<div class={`exp-row grid grid-cols-[200px_1fr] gap-12 py-[2.2rem] border-b border-[var(--rule)] max-[900px]:grid-cols-1 max-[900px]:gap-2 ${first ? 'border-t' : ''}`}>
+  <div class="flex flex-col gap-[0.45rem]">
+    <div class="text-[0.7rem] text-[var(--dim)]">{date}</div>
+    <div class="text-[0.65rem] font-medium text-[var(--accent)] bg-[var(--accent-lo)] border border-[var(--accent-bd)] px-[0.6rem] py-[0.2rem] rounded w-fit">{company}</div>
+  </div>
+  <div>
+    <div class="text-[0.93rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.55rem]">{role}</div>
+    <p class="text-[0.79rem] leading-[1.8] text-[var(--mid)]">{desc}</p>
+  </div>
+</div>
