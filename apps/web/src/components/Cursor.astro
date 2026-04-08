@@ -1,0 +1,101 @@
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<style>
+  #cursor-dot, #cursor-ring {
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    will-change: transform;
+  }
+
+  #cursor-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--fg);
+    transition: width .2s, height .2s, background .2s;
+  }
+
+  #cursor-ring {
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid var(--amber);
+    opacity: 0.5;
+    transition: width .25s, height .25s, opacity .25s, border-color .25s;
+  }
+
+  #cursor-dot.hover {
+    width: 10px;
+    height: 10px;
+    background: var(--amber);
+  }
+
+  #cursor-ring.hover {
+    width: 52px;
+    height: 52px;
+    opacity: 0.8;
+  }
+
+  #cursor-dot.hidden, #cursor-ring.hidden {
+    opacity: 0;
+  }
+
+  @media (pointer: coarse) {
+    #cursor-dot, #cursor-ring { display: none; }
+  }
+</style>
+
+<script>
+  const dot = document.getElementById('cursor-dot') as HTMLElement;
+  const ring = document.getElementById('cursor-ring') as HTMLElement;
+
+  let mx = -100, my = -100;
+  let rx = -100, ry = -100;
+
+  document.addEventListener('mousemove', (e) => {
+    mx = e.clientX;
+    my = e.clientY;
+    dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+  });
+
+  function lerp(a: number, b: number, t: number) { return a + (b - a) * t; }
+
+  function tick() {
+    rx = lerp(rx, mx, 0.15);
+    ry = lerp(ry, my, 0.15);
+    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+    requestAnimationFrame(tick);
+  }
+  tick();
+
+  const interactives = 'a, button, [role="button"], input, textarea, select';
+
+  document.addEventListener('mouseover', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.closest(interactives)) {
+      dot.classList.add('hover');
+      ring.classList.add('hover');
+    }
+  });
+
+  document.addEventListener('mouseout', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.closest(interactives)) {
+      dot.classList.remove('hover');
+      ring.classList.remove('hover');
+    }
+  });
+
+  document.addEventListener('mouseleave', () => {
+    dot.classList.add('hidden');
+    ring.classList.add('hidden');
+  });
+
+  document.addEventListener('mouseenter', () => {
+    dot.classList.remove('hidden');
+    ring.classList.remove('hidden');
+  });
+</script>

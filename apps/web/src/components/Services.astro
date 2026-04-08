@@ -9,12 +9,18 @@ const services = [
 <section id="services" class="section">
   <div class="s-label">What I do</div>
   <h2>Services <span class="soft">&amp; Expertise</span></h2>
-  <div class="grid-3 r">
+  <div class="grid grid-cols-3 gap-px border border-[var(--rule)] rounded-xl overflow-hidden max-md:grid-cols-1 r">
     {services.map(svc => (
-      <div class="svc">
-        <div class="svc-ico">{svc.icon}</div>
-        <div class="svc-ttl">{svc.title}</div>
-        <p class="svc-txt">{svc.text}</p>
+      <div class="bg-[color-mix(in_srgb,var(--bg)_10%,transparent)] backdrop-blur-lg px-8 py-[2.2rem] transition-colors duration-250 hover:bg-[color-mix(in_srgb,var(--bg)_90%,transparent)]">
+        <div class="w-9.5 h-9.5 rounded-[9px] bg-[var(--amber-lo)] border border-[var(--amber-bd)] flex items-center justify-center text-base mb-[1.4rem] mb-5">
+          {svc.icon}
+        </div>
+        <div class="text-[0.94rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.7rem]">
+          {svc.title}
+        </div>
+        <p class="text-[0.79rem] font-normal leading-[1.8] text-[var(--mid)]">
+          {svc.text}
+        </p>
       </div>
     ))}
   </div>

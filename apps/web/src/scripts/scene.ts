@@ -96,13 +96,20 @@ declare const THREE: any;
   const mW = new THREE.Vector3();
   const yPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
 
+  let cursorActive = false;
   function setM(cx: number, cy: number) {
     mNDC.set((cx / innerWidth) * 2 - 1, -(cy / innerHeight) * 2 + 1);
+    cursorActive = true;
+  }
+  function clearM() {
+    cursorActive = false;
   }
   window.addEventListener('mousemove',  (e: MouseEvent) => setM(e.clientX, e.clientY));
-  window.addEventListener('mouseleave', () => mNDC.set(-9999, -9999));
+  window.addEventListener('mouseleave', clearM);
+  document.addEventListener('mouseleave', clearM);
+  window.addEventListener('blur', clearM);
   window.addEventListener('touchmove',  (e: TouchEvent) => setM(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
-  window.addEventListener('touchend',   () => mNDC.set(-9999, -9999));
+  window.addEventListener('touchend',   clearM);
 
   const PR = 5.5, PF = 1.2, SPR = 0.065, DP = 0.72, BIAS = 0.65;
 
@@ -135,18 +142,21 @@ declare const THREE: any;
     const sp = ease(Math.min(sSm, 1));
 
     vig.style.opacity = Math.max(0, 1 - sp * 3).toFixed(3);
+    canvas.style.filter = sp > 0.01 ? `blur(${(sp * 5).toFixed(1)}px)` : 'none';
 
-    ray.setFromCamera(mNDC, camera);
-    const hit = ray.ray.intersectPlane(yPlane, mW);
-    const mx = hit ? mW.x : 1e9, mz = hit ? mW.z : 1e9;
+    let mx = 1e9, mz = 1e9;
+    if (cursorActive) {
+      ray.setFromCamera(mNDC, camera);
+      const hit = ray.ray.intersectPlane(yPlane, mW);
+      if (hit) { mx = mW.x; mz = mW.z; }
+    }
 
-    const pushFade = Math.max(0, 1 - sp * 3.5);
+    const pushFade = cursorActive ? Math.max(0, 1 - sp * 3.5) : 0;
 
     const isLight = document.documentElement.dataset.theme === 'light';
-    // Dark: #a78bfa violet  Light: #6d28d9 deep violet
-    const baseR = isLight ? 0.427 : 0.655;
-    const baseG = isLight ? 0.157 : 0.545;
-    const baseB = isLight ? 0.851 : 0.980;
+    const baseR = isLight ? 0.0 : 0.655;
+    const baseG = isLight ? 0.0 : 0.545;
+    const baseB = isLight ? 0.0 : 0.980;
 
     let maxY = 0.001;
     for (let i = 0; i < N; i++) {
@@ -158,7 +168,7 @@ declare const THREE: any;
     for (let i = 0; i < N; i++) {
       const rx = restX[i], rz = restZ[i];
 
-      if (pushFade > 1e-3) {
+      if (cursorActive && pushFade > 1e-3) {
         const dx = curX[i] - mx, dz = curZ[i] - mz;
         const d2 = dx * dx + dz * dz;
         if (d2 < PR * PR && d2 > 1e-4) {
@@ -171,8 +181,15 @@ declare const THREE: any;
         velX[i] += (rx - curX[i]) * SPR; velX[i] *= DP; curX[i] += velX[i];
         velZ[i] += (rz - curZ[i]) * SPR; velZ[i] *= DP; curZ[i] += velZ[i];
       } else {
-        curX[i] += (rx - curX[i]) * .08;
-        curZ[i] += (rz - curZ[i]) * .08;
+        velX[i] *= .5;
+        velZ[i] *= .5;
+        velX[i] += (rx - curX[i]) * .12;
+        velZ[i] += (rz - curZ[i]) * .12;
+        curX[i] += velX[i];
+        curZ[i] += velZ[i];
+        if (Math.abs(rx - curX[i]) < 1e-3 && Math.abs(rz - curZ[i]) < 1e-3) {
+          curX[i] = rx; curZ[i] = rz; velX[i] = 0; velZ[i] = 0;
+        }
       }
 
       const I = i * 3;
@@ -184,20 +201,15 @@ declare const THREE: any;
       let wr: number, wg: number, wb: number;
       const ac = accentT[i];
       if (isLight) {
-        // Light: deep violets visible on white
+        // Light: black/dark grey tones
         if (ac === 1) {
-          // blue-violet accent
-          wr = .15 + wy_n * .25; wg = .10 + wy_n * .25; wb = .80 + wy_n * .18;
+          wr = .05 + wy_n * .12; wg = .05 + wy_n * .12; wb = .05 + wy_n * .12;
         } else if (ac === 2) {
-          // pink/rose accent
-          wr = .65 + wy_n * .22; wg = .05 + wy_n * .10; wb = .55 + wy_n * .28;
+          wr = .10 + wy_n * .15; wg = .10 + wy_n * .15; wb = .10 + wy_n * .15;
         } else if (ac === 3) {
-          // indigo accent
-          wr = .35 + wy_n * .28; wg = .08 + wy_n * .12; wb = .72 + wy_n * .20;
+          wr = .02 + wy_n * .10; wg = .02 + wy_n * .10; wb = .02 + wy_n * .10;
         } else {
-          const hi = Math.max(0, (wy_n - .25) / .75);
-          wr = .30 + hi * .20; wg = .05 + wy_n * .18; wb = .65 + wy_n * .28;
-          if (wr > 1) wr = 1; if (wg > 1) wg = 1; if (wb > 1) wb = 1;
+          wr = .07 + wy_n * .13; wg = .07 + wy_n * .13; wb = .07 + wy_n * .13;
         }
       } else {
         // Dark: bright violets / fuchsia on near-black
@@ -224,6 +236,7 @@ declare const THREE: any;
 
     posAttr.needsUpdate = true;
     colAttr.needsUpdate = true;
+    mat.blending = isLight ? THREE.NormalBlending : THREE.AdditiveBlending;
     mat.size = lerp(.15, .32, sp);
 
     vP.lerpVectors(C0pos, C1pos, sp);

@@ -46,8 +46,8 @@
 </section>
 
 <script>
-  const heroKids = document.querySelectorAll('.hero-badge, #hero h1, .hero-sub, .hero-btns, .hero-stats');
-  heroKids.forEach((k: Element, i: number) => {
+  const heroChildren = document.querySelectorAll('.hero-badge, #hero h1, .hero-sub, .hero-btns, .hero-stats');
+  heroChildren.forEach((k: Element, i: number) => {
     const el = k as HTMLElement;
     el.style.opacity = '0';
     el.style.transform = 'translateY(22px)';
