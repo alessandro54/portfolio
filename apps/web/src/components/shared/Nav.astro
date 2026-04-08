@@ -1,3 +1,14 @@
+---
+import ThemeDropdown from './ThemeDropdown.astro';
+import LangDropdown from './LangDropdown.astro';
+
+interface Props {
+  locale?: string;
+}
+
+const { locale = 'en' } = Astro.props;
+---
+
 <nav class="fixed inset-x-0 top-0 z-100 flex items-center justify-between px-12 py-[1.3rem] bg-[var(--nav-bg)] backdrop-blur-[20px] border-b border-[var(--rule)] transition-[background,border-color] duration-400 max-[900px]:px-6 max-[900px]:py-4">
   <div class="flex items-center gap-2.5 font-bold text-[0.9rem] tracking-[-0.01em] text-[var(--fg)]">
     <svg viewBox="0 0 100 100" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" class="w-5 h-5">
@@ -26,21 +37,8 @@
     <a href="#contact" class="text-[0.78rem] font-normal text-[var(--mid)] no-underline transition-colors duration-200 hover:text-[var(--fg)]">Contact</a>
   </div>
   <div class="flex items-center gap-3">
-    <button id="theme-toggle" class="bg-transparent border border-[var(--rule)] text-[var(--mid)] w-8 h-8 rounded-lg text-[0.9rem] leading-none flex items-center justify-center transition-[border-color,color] duration-200 hover:border-[var(--accent)] hover:text-[var(--accent)]" aria-label="Toggle theme">☀</button>
+    <ThemeDropdown />
+    <LangDropdown locale={locale} />
     <a href="#contact" class="nav-cta inline-flex items-center gap-[0.4rem] px-5 py-[0.52rem] rounded-[7px] bg-[var(--accent)] text-[#09080f] text-[0.76rem] font-semibold no-underline transition-[opacity,transform] duration-200 hover:opacity-88 hover:translate-y-[-1px]">Hire me →</a>
   </div>
 </nav>
-
-<script>
-  const btn = document.getElementById('theme-toggle') as HTMLButtonElement;
-  const html = document.documentElement;
-  function syncBtn() {
-    btn.textContent = html.dataset.theme === 'light' ? '☽' : '☀';
-  }
-  syncBtn();
-  btn.addEventListener('click', () => {
-    html.dataset.theme = html.dataset.theme === 'light' ? 'dark' : 'light';
-    localStorage.setItem('theme', html.dataset.theme);
-    syncBtn();
-  });
-</script>

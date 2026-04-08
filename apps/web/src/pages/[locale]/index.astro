@@ -1,0 +1,45 @@
+---
+import Cursor from '@components/shared/Cursor.astro';
+import Footer from '@components/shared/Footer.astro';
+import Nav from '@components/shared/Nav.astro';
+import Layout from '@layouts/Layout.astro';
+import Hero from '@sections/Hero.astro';
+import Ticker from '@sections/Ticker.astro';
+import WhatIDo from '@sections/WhatIDo.astro';
+import WhyMe from '@sections/WhyMe.astro';
+import SelectedProjects from '@sections/SelectedProjects.astro';
+import Career from '@sections/Career.astro';
+import Contact from '@sections/Contact.astro';
+
+export function getStaticPaths() {
+  return [
+    { params: { locale: 'en' } },
+    { params: { locale: 'es' } },
+  ];
+}
+
+const { locale } = Astro.params;
+---
+
+<Layout locale={locale}>
+  <canvas id="gl"></canvas>
+  <div id="vignette"></div>
+
+  <div class="site">
+    <Nav locale={locale} />
+    <Hero locale={locale} />
+    <Ticker locale={locale} />
+    <WhatIDo />
+    <WhyMe />
+    <SelectedProjects />
+    <Career />
+    <Contact />
+  </div>
+
+  <Footer />
+  <Cursor />
+</Layout>
+
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="../../scripts/scene.ts"></script>
+<script src="../../scripts/animations.ts"></script>

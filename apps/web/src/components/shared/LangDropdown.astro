@@ -1,0 +1,62 @@
+---
+interface Props {
+  locale: string;
+}
+
+const { locale } = Astro.props;
+
+const languages = [
+  { id: 'en', label: 'English' },
+  { id: 'es', label: 'Español' },
+];
+---
+
+<div class="lang-dropdown relative" data-dropdown>
+  <button
+    id="lang-trigger"
+    class="flex items-center justify-center gap-1 h-8 px-2.5 rounded-lg border border-[var(--rule)] text-[var(--mid)] text-[0.75rem] font-medium uppercase transition-[border-color,color] duration-200 hover:border-[var(--accent)] hover:text-[var(--accent)]"
+    aria-label="Language"
+    aria-haspopup="true"
+    aria-expanded="false"
+  >
+    {locale}
+    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+  </button>
+  <div class="dropdown-panel absolute right-0 top-full mt-2 min-w-[120px] rounded-lg border border-[var(--rule)] bg-[var(--surface)] backdrop-blur-[16px] py-1 shadow-lg opacity-0 invisible transition-[opacity,visibility] duration-150 z-50">
+    {languages.map(lang => (
+      <a
+        href={`/${lang.id}/`}
+        class:list={[
+          'flex items-center gap-2 px-3 py-1.5 text-[0.75rem] no-underline transition-colors duration-150',
+          lang.id === locale
+            ? 'text-[var(--accent)]'
+            : 'text-[var(--mid)] hover:text-[var(--fg)] hover:bg-[var(--rule)]',
+        ]}
+        data-astro-prefetch
+      >
+        {lang.label}
+      </a>
+    ))}
+  </div>
+</div>
+
+<script>
+  const trigger = document.getElementById('lang-trigger')!;
+  const panel = trigger.nextElementSibling as HTMLElement;
+
+  trigger.addEventListener('click', () => {
+    const open = panel.classList.toggle('open');
+    trigger.setAttribute('aria-expanded', String(open));
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!(e.target as Element).closest('.lang-dropdown')) {
+      panel.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+  });
+</script>
+
+<style>
+  .dropdown-panel.open { opacity: 1; visibility: visible; }
+</style>

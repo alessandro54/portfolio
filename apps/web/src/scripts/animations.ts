@@ -48,13 +48,48 @@ hero
     },
     '<0.25',
   )
-  .from(
+  .fromTo(
     '.hero-btns a',
+    { autoAlpha: 0, y: 40 },
     {
-      autoAlpha: 0,
-      y: 40,
+      autoAlpha: 1,
+      y: 0,
       stagger: 0.12,
       duration: 0.9,
+      onComplete: () => {
+        const cta = document.querySelector('.cta-primary');
+        if (!cta) return;
+
+        const pulse = gsap.to(cta, {
+          boxShadow: '0 0 20px rgba(167,139,250,0.5), 0 0 40px rgba(167,139,250,0.2)',
+          scale: 1.04,
+          duration: 1.2,
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1,
+        });
+
+        cta.addEventListener('mouseenter', () => {
+          pulse.pause();
+          gsap.to(cta, {
+            scale: 1.07,
+            y: -2,
+            boxShadow: '0 0 30px rgba(167,139,250,0.6), 0 0 60px rgba(167,139,250,0.3)',
+            duration: 0.25,
+            ease: 'power2.out',
+          });
+        });
+        cta.addEventListener('mouseleave', () => {
+          gsap.to(cta, {
+            scale: 1,
+            y: 0,
+            boxShadow: '0 0 0px rgba(167,139,250,0), 0 0 0px rgba(167,139,250,0)',
+            duration: 0.6,
+            ease: 'power2.inOut',
+            onComplete: () => pulse.resume(),
+          });
+        });
+      },
     },
     '<0.2',
   )

@@ -3,12 +3,14 @@ import '../styles/global.css';
 
 interface Props {
   title?: string;
+  locale?: string;
 }
 
-const { title = 'Alessandro — Software Engineer' } = Astro.props;
+const { title = 'Alessandro — Software Engineer', locale = 'en' } = Astro.props;
+const otherLocale = locale === 'en' ? 'es' : 'en';
 ---
 <!doctype html>
-<html lang="en">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,10 +20,20 @@ const { title = 'Alessandro — Software Engineer' } = Astro.props;
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="alternate" hreflang="en" href="/en/" />
+    <link rel="alternate" hreflang="es" href="/es/" />
+    <link rel="alternate" hreflang="x-default" href="/en/" />
     <script is:inline>
       (function(){
-        var t = localStorage.getItem('theme') || 'dark';
-        document.documentElement.dataset.theme = t;
+        var pref = localStorage.getItem('theme') || 'system';
+        var theme;
+        if (pref === 'system') {
+          theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        } else {
+          theme = pref;
+        }
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.dataset.themePref = pref;
       })();
     </script>
   </head>

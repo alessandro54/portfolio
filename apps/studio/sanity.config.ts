@@ -3,7 +3,8 @@ import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { schemaTypes } from './schemaTypes';
 
-const ABOUT_DOC_ID = 'singleton-about';
+const HERO_DOC_ID = 'singleton-hero';
+const TICKER_DOC_ID = 'singleton-ticker';
 
 export default defineConfig({
   name: 'default',
@@ -19,18 +20,29 @@ export default defineConfig({
           .title('Content')
           .items([
             S.listItem()
-              .title('About')
-              .id('about')
-              .schemaType('about')
+              .title('Hero')
+              .id('hero')
+              .schemaType('hero')
               .child(
                 S.document()
-                  .id('about')
-                  .title('About')
-                  .schemaType('about')
-                  .documentId(ABOUT_DOC_ID),
+                  .id('hero')
+                  .title('Hero')
+                  .schemaType('hero')
+                  .documentId(HERO_DOC_ID),
+              ),
+            S.listItem()
+              .title('Ticker')
+              .id('ticker')
+              .schemaType('ticker')
+              .child(
+                S.document()
+                  .id('ticker')
+                  .title('Ticker')
+                  .schemaType('ticker')
+                  .documentId(TICKER_DOC_ID),
               ),
             S.divider(),
-            ...S.documentTypeListItems().filter((item) => item.getId() !== 'about'),
+            ...S.documentTypeListItems().filter((item) => !['hero', 'ticker'].includes(item.getId() ?? '')),
           ]),
     }),
     visionTool(),

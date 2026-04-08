@@ -1,0 +1,102 @@
+---
+import StatCard from '@components/hero/StatCard.astro';
+import { sanityClient } from '@lib/sanity';
+
+interface Props {
+    locale?: string;
+}
+
+const { locale = "en" } = Astro.props;
+
+const hero = await sanityClient.fetch(
+    `*[_type == "hero"][0]{
+    badge,
+    headline,
+    subheadline,
+    description,
+    ctaLabel,
+    secondaryCtaLabel,
+    stats[]{ value, suffix, label }
+  }`,
+);
+
+const t = (field: Record<string, string> | null) =>
+    field?.[locale] || field?.en || "";
+
+const stats = (hero?.stats || []).map(
+    (s: { value: number; suffix?: string; label: Record<string, string> }) => ({
+        value: s.value,
+        suffix: s.suffix,
+        label: t(s.label),
+    }),
+);
+---
+
+<section
+    id="hero"
+    class="h-svh flex flex-col items-center justify-center text-center gap-6 px-8 pt-24 pb-12 relative max-[900px]:px-6 max-[900px]:pt-20"
+>
+    <div
+        class="hero-badge inline-flex items-center gap-[0.55rem] text-[0.7rem] font-medium text-[var(--accent)] bg-[var(--accent-lo)] border border-[var(--accent-bd)] px-[0.9rem] py-[0.3rem] rounded-full mb-12 animate-[badge-pulse_2.5s_ease-in-out_infinite]"
+    >
+        <span
+            class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-[blink_2.4s_infinite] shrink-0"
+        ></span>
+        {t(hero?.badge)}
+    </div>
+
+    <h1
+        class="text-[clamp(2.4rem,5.2vw,4.8rem)] font-extrabold leading-[1.07] tracking-[-0.035em] mb-10 max-w-[800px] max-[900px]:text-[2.4rem]"
+    >
+        <span
+            class="bg-[linear-gradient(100deg,var(--fg)_0%,var(--accent)_50%,var(--h1-end)_100%)] bg-clip-text [-webkit-text-fill-color:transparent]"
+            >{t(hero?.headline)}</span
+        ><br />
+        <span class="text-[var(--mid)] font-light">{t(hero?.subheadline)}</span>
+    </h1>
+
+    <p
+        class="hero-sub text-[clamp(0.88rem,1.35vw,1.02rem)] font-normal leading-[1.8] text-[var(--mid)] max-w-[460px] mx-auto mb-14"
+    >
+        {t(hero?.description)}
+    </p>
+
+    <div class="hero-btns flex gap-[0.8rem] justify-center mb-20">
+        <a
+            href="#contact"
+            class="cta-primary inline-flex items-center gap-[0.45rem] px-10 py-4 rounded-lg text-[0.88rem] font-medium no-underline bg-[var(--accent)] text-white dark:text-black border border-[var(--accent)]"
+            >{t(hero?.ctaLabel)}</a
+        >
+        <a
+            href="#work"
+            class="inline-flex items-center gap-[0.45rem] px-10 py-4 rounded-lg text-[0.88rem] font-medium no-underline bg-transparent backdrop-blur-[2px] border border-[var(--accent-bd)] text-[var(--mid)] transition-all duration-[220ms] hover:border-[var(--accent)] hover:text-[var(--fg)]"
+            >{t(hero?.secondaryCtaLabel) || "See my work"}</a
+        >
+    </div>
+
+    <div
+        class="hero-stats flex shrink-0 items-center border border-[var(--accent-bd)] rounded-xl overflow-hidden bg-transparent backdrop-blur-[2px] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] max-[900px]:flex-wrap max-[900px]:rounded-[10px]"
+    >
+        {
+            stats.map(
+                (
+                    stat: { value: number; suffix?: string; label: string },
+                    i: number,
+                ) => <StatCard {...stat} border={i < stats.length - 1} />,
+            )
+        }
+    </div>
+
+    <div
+        class="scroll-cue absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+    >
+        <span
+            class="text-[0.56rem] tracking-[0.22em] uppercase text-[var(--dim)]"
+            >Scroll</span
+        >
+        <div
+            class="w-px h-9 bg-[linear-gradient(to_bottom,var(--dim),transparent)] animate-[scrl_2s_infinite]"
+        >
+        </div>
+    </div>
+</section>
