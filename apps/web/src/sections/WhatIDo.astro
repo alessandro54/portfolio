@@ -1,34 +1,35 @@
 ---
 import SectionHeader from '@components/shared/SectionHeader.astro';
 import ServiceCard from '@components/what-i-do/ServiceCard.astro';
+import { sanityClient } from '@lib/sanity';
+import { useTranslations } from '@i18n/translations';
 
 interface Props {
-  services?: { icon: string; title: string; text: string }[];
+  locale?: string;
 }
 
-const {
-  services = [
-    {
-      icon: '⬡',
-      title: 'System Architecture',
-      text: 'Designing scalable, maintainable backend systems from the ground up. Distributed architecture, event-driven design, and long-term technical roadmaps.',
-    },
-    {
-      icon: '◈',
-      title: 'Performance Engineering',
-      text: 'Diagnosing and eliminating bottlenecks at every layer. From GPU pipelines to database queries — I make software measurably faster.',
-    },
-    {
-      icon: '◎',
-      title: 'Technical Leadership',
-      text: 'Acting as principal engineer or tech lead — setting standards, unblocking teams, reviewing code, and owning delivery end-to-end.',
-    },
-  ],
-} = Astro.props;
+const { locale = 'en' } = Astro.props;
+const ui = useTranslations(locale);
+
+const data = await sanityClient.fetch(
+  `*[_id == "singleton-whatIDo"][0]{ services[]{ _key, icon, title, text } }`
+);
+
+const t = (field: Record<string, string> | null) =>
+  field?.[locale] || field?.en || '';
+
+const services: { icon: string; title: string; text: string }[] =
+  (data?.services ?? []).slice(0, 3).map(
+    (s: { icon: string; title: Record<string, string>; text: Record<string, string> }) => ({
+      icon: s.icon,
+      title: t(s.title),
+      text: t(s.text),
+    })
+  );
 ---
 
 <section id="services" class="flex flex-col gap-2 px-12 pt-24 pb-24 max-[900px]:px-6 max-[900px]:pt-16 max-[900px]:pb-16">
-  <SectionHeader label="What I do" title="Services" soft="& Expertise" />
+  <SectionHeader label={ui('what_i_do_label')} title={ui('what_i_do_title')} soft={ui('what_i_do_soft')} />
   <div class="grid grid-cols-3 gap-px border border-[var(--rule)] rounded-xl overflow-hidden max-[900px]:grid-cols-1">
     {services.map(svc => <ServiceCard {...svc} />)}
   </div>

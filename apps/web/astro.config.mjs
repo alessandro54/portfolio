@@ -19,6 +19,7 @@ export default defineConfig({
         '@sections': path.resolve(__dirname, './src/sections'),
         '@lib': path.resolve(__dirname, './src/lib'),
         '@layouts': path.resolve(__dirname, './src/layouts'),
+        '@i18n': path.resolve(__dirname, './src/i18n'),
       },
     },
     server: {

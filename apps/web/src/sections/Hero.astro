@@ -1,12 +1,14 @@
 ---
 import StatCard from '@components/hero/StatCard.astro';
 import { sanityClient } from '@lib/sanity';
+import { useTranslations } from '@i18n/translations';
 
 interface Props {
     locale?: string;
 }
 
 const { locale = "en" } = Astro.props;
+const ui = useTranslations(locale);
 
 const hero = await sanityClient.fetch(
     `*[_type == "hero"][0]{
@@ -70,7 +72,7 @@ const stats = (hero?.stats || []).map(
         <a
             href="#work"
             class="inline-flex items-center gap-[0.45rem] px-10 py-4 rounded-lg text-[0.88rem] font-medium no-underline bg-transparent backdrop-blur-[2px] border border-[var(--accent-bd)] text-[var(--mid)] transition-all duration-[220ms] hover:border-[var(--accent)] hover:text-[var(--fg)]"
-            >{t(hero?.secondaryCtaLabel) || "See my work"}</a
+            >{t(hero?.secondaryCtaLabel) || ui('hero_see_work')}</
         >
     </div>
 
@@ -92,7 +94,7 @@ const stats = (hero?.stats || []).map(
     >
         <span
             class="text-[0.56rem] tracking-[0.22em] uppercase text-[var(--dim)]"
-            >Scroll</span
+            >{ui('hero_scroll')}</span
         >
         <div
             class="w-px h-9 bg-[linear-gradient(to_bottom,var(--dim),transparent)] animate-[scrl_2s_infinite]"

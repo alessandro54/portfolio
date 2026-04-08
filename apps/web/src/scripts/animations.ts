@@ -217,7 +217,7 @@ gsap.utils.toArray<HTMLElement>('.s-label').forEach((label) => {
 });
 
 // Section headings — fade up after label
-gsap.utils.toArray<HTMLElement>('section h2').forEach((h2) => {
+gsap.utils.toArray<HTMLElement>('section:not(#contact) h2').forEach((h2) => {
   gsap.from(h2, {
     autoAlpha: 0,
     y: 30,
@@ -387,26 +387,12 @@ ScrollTrigger.batch('.exp-row', {
 const contactTl = gsap.timeline({
   scrollTrigger: {
     trigger: '#contact',
-    start: 'top 75%',
+    start: 'top 95%',
     toggleActions: 'play none none none',
   },
 });
 
 contactTl
-  .from('#contact h2', {
-    autoAlpha: 0,
-    y: 60,
-    duration: 1,
-  })
-  .from(
-    '#contact p',
-    {
-      autoAlpha: 0,
-      y: 40,
-      duration: 0.9,
-    },
-    '<0.15',
-  )
   .from(
     '#contact .flex.flex-col > a',
     {
@@ -427,25 +413,11 @@ contactTl
     '<0.15',
   );
 
-// ══════════════════════════════════════
-// 12. FOOTER
-// ══════════════════════════════════════
-gsap.from('footer', {
-  autoAlpha: 0,
-  y: 20,
-  duration: 0.6,
-  ease: 'power2.out',
-  scrollTrigger: {
-    trigger: 'footer',
-    start: 'top 95%',
-    toggleActions: 'play none none none',
-  },
-});
 
 // ══════════════════════════════════════
 // 13. PARALLAX — SUBTLE Y-SHIFT ON SECTIONS
 // ══════════════════════════════════════
-gsap.utils.toArray<HTMLElement>('#services, #work, #experience, #contact').forEach((section) => {
+gsap.utils.toArray<HTMLElement>('#services, #work, #experience').forEach((section) => {
   gsap.to(section, {
     y: -40,
     ease: 'none',

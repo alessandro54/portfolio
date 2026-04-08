@@ -1,37 +1,36 @@
 ---
 import ExperienceRow from '@components/career/ExperienceRow.astro';
 import SectionHeader from '@components/shared/SectionHeader.astro';
+import { sanityClient } from '@lib/sanity';
+import { useTranslations } from '@i18n/translations';
 
 interface Props {
-  jobs?: { date: string; company: string; role: string; desc: string }[];
+  locale?: string;
 }
 
-const {
-  jobs = [
-    {
-      date: '2023 — Present',
-      company: 'Acme Graphics Corp',
-      role: 'Senior Software Engineer',
-      desc: 'Technical lead for a real-time 3D visualisation product. Rebuilt the rendering pipeline, cut infrastructure costs by 35%, and scaled the team from 3 to 6 engineers.',
-    },
-    {
-      date: '2021 — 2023',
-      company: 'Distributed Systems Co.',
-      role: 'Software Engineer',
-      desc: 'Owned the data ingestion platform handling 2M+ events/day. Delivered the streaming migration that became the foundation for three new product lines.',
-    },
-    {
-      date: '2019 — 2021',
-      company: 'TechStart Labs',
-      role: 'Software Developer',
-      desc: 'Full-stack development for a SaaS analytics dashboard used by 10,000+ businesses across 30 countries.',
-    },
-  ],
-} = Astro.props;
+const { locale = 'en' } = Astro.props;
+const ui = useTranslations(locale);
+
+const raw = await sanityClient.fetch(
+  `*[_type == "experience"] | order(startDate desc) { company, role, startDate, endDate, description }`
+);
+
+type Block = { children?: { text?: string }[] };
+
+const jobs = raw.map((e: { company: string; role: string; startDate: string; endDate?: string; description?: Block[] }) => {
+  const start = e.startDate?.slice(0, 4) ?? '';
+  const end = e.endDate ? e.endDate.slice(0, 4) : ui('career_present');
+  const date = `${start} — ${end}`;
+  const desc = (e.description ?? [])
+    .flatMap((b: Block) => b.children ?? [])
+    .map((s) => s.text ?? '')
+    .join('');
+  return { date, company: e.company, role: e.role, desc };
+});
 ---
 
 <section id="experience" class="flex flex-col gap-2 px-12 pb-24 max-[900px]:px-6 max-[900px]:pb-16">
-  <SectionHeader label="Career" title="Experience" />
+  <SectionHeader label={ui('career_label')} title={ui('career_title')} />
   <div class="flex flex-col">
     {jobs.map((job, i) => <ExperienceRow {...job} first={i === 0} />)}
   </div>

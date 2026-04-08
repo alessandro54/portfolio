@@ -1,12 +1,14 @@
 ---
 import ThemeDropdown from './ThemeDropdown.astro';
 import LangDropdown from './LangDropdown.astro';
+import { useTranslations } from '@i18n/translations';
 
 interface Props {
   locale?: string;
 }
 
 const { locale = 'en' } = Astro.props;
+const ui = useTranslations(locale);
 ---
 
 <nav class="fixed inset-x-0 top-0 z-100 flex items-center justify-between px-12 py-[1.3rem] bg-[var(--nav-bg)] backdrop-blur-[20px] border-b border-[var(--rule)] transition-[background,border-color] duration-400 max-[900px]:px-6 max-[900px]:py-4">
@@ -31,14 +33,14 @@ const { locale = 'en' } = Astro.props;
     Alessandro C.
   </div>
   <div class="flex gap-[2.6rem] max-[900px]:hidden">
-    <a href="#services" class="text-[0.78rem] font-normal text-[var(--mid)] no-underline transition-colors duration-200 hover:text-[var(--fg)]">Services</a>
-    <a href="#work" class="text-[0.78rem] font-normal text-[var(--mid)] no-underline transition-colors duration-200 hover:text-[var(--fg)]">Work</a>
-    <a href="#experience" class="text-[0.78rem] font-normal text-[var(--mid)] no-underline transition-colors duration-200 hover:text-[var(--fg)]">Experience</a>
-    <a href="#contact" class="text-[0.78rem] font-normal text-[var(--mid)] no-underline transition-colors duration-200 hover:text-[var(--fg)]">Contact</a>
+    <a href="#services" class="text-[0.78rem] font-normal text-[var(--mid)] no-underline transition-colors duration-200 hover:text-[var(--fg)]">{ui('nav_services')}</a>
+    <a href="#work" class="text-[0.78rem] font-normal text-[var(--mid)] no-underline transition-colors duration-200 hover:text-[var(--fg)]">{ui('nav_work')}</a>
+    <a href="#experience" class="text-[0.78rem] font-normal text-[var(--mid)] no-underline transition-colors duration-200 hover:text-[var(--fg)]">{ui('nav_experience')}</a>
+    <a href="#contact" class="text-[0.78rem] font-normal text-[var(--mid)] no-underline transition-colors duration-200 hover:text-[var(--fg)]">{ui('nav_contact')}</a>
   </div>
   <div class="flex items-center gap-3">
     <ThemeDropdown />
     <LangDropdown locale={locale} />
-    <a href="#contact" class="nav-cta inline-flex items-center gap-[0.4rem] px-5 py-[0.52rem] rounded-[7px] bg-[var(--accent)] text-[#09080f] text-[0.76rem] font-semibold no-underline transition-[opacity,transform] duration-200 hover:opacity-88 hover:translate-y-[-1px]">Hire me →</a>
+    <a href="#contact" class="nav-cta inline-flex items-center gap-[0.4rem] px-5 py-[0.52rem] rounded-[7px] bg-[var(--accent)] text-[#09080f] text-[0.76rem] font-semibold no-underline transition-[opacity,transform] duration-200 hover:opacity-88 hover:translate-y-[-1px]">{ui('nav_hire')}</a>
   </div>
 </nav>

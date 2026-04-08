@@ -1,21 +1,38 @@
-<section id="contact" class="border-t border-[var(--rule)] px-12 py-[5.5rem] max-[900px]:px-6">
-  <div class="grid grid-cols-2 gap-24 items-center max-[900px]:grid-cols-1 max-[900px]:gap-12">
+---
+import { useTranslations } from '@i18n/translations';
+
+interface Props {
+  locale?: string;
+}
+
+const { locale = 'en' } = Astro.props;
+const ui = useTranslations(locale);
+---
+
+<section id="contact" class="border-t border-[var(--rule)] px-12 py-[5.5rem] max-[900px]:px-6 relative z-10 bg-[color-mix(in_srgb,var(--bg)_10%,transparent)] backdrop-blur-lg transition-colors duration-250 hover:bg-[color-mix(in_srgb,var(--bg)_90%,transparent)]">
+  <div class="grid grid-cols-2 gap-24 items-start max-[900px]:grid-cols-1 max-[900px]:gap-12">
     <div>
-      <h2 class="text-[clamp(1.8rem,3vw,2.8rem)] font-bold tracking-[-0.03em] text-[var(--fg)] leading-[1.1] mb-4">Ready to build<br>something <em class="not-italic bg-[linear-gradient(100deg,var(--accent)_10%,var(--gradient-end)_80%)] bg-clip-text [-webkit-text-fill-color:transparent]">great?</em></h2>
-      <p class="text-[0.82rem] leading-[1.82] text-[var(--mid)]">Whether you need a senior engineer to lead a project, a technical partner for a product build, or an expert for a specific challenge — let's talk.</p>
+      <h2 class="text-[clamp(1.8rem,3vw,2.8rem)] font-bold tracking-[-0.03em] text-[var(--fg)] leading-[1.1] mb-4">{ui('contact_heading_pre')}<br>something <em class="not-italic bg-[linear-gradient(100deg,var(--accent)_10%,var(--gradient-end)_80%)] bg-clip-text [-webkit-text-fill-color:transparent]">{ui('contact_heading_em')}</em></h2>
+      <p class="text-[0.82rem] leading-[1.82] text-[var(--mid)]">{ui('contact_body')}</p>
     </div>
     <div class="flex flex-col gap-[1.2rem]">
-      <a href="mailto:par.214@gmail.com" class="flex items-center justify-between px-[1.3rem] py-[1.1rem] rounded-[10px] bg-[var(--surface)] border border-[var(--rule)] no-underline transition-[border-color] duration-200 hover:border-[var(--accent)]">
+      <a href="mailto:alessandro@chumpitaz.dev" class="flex items-center justify-between px-[1.3rem] py-[1.1rem] rounded-[10px] bg-[var(--surface)] border border-[var(--rule)] no-underline transition-[border-color] duration-200 hover:border-[var(--accent)]">
         <div>
-          <div class="text-[0.6rem] font-medium tracking-[0.1em] uppercase text-[var(--dim)] mb-[0.2rem]">Email me directly</div>
-          <div class="text-[0.86rem] font-medium text-[var(--fg)]">par.214@gmail.com</div>
+          <div class="text-[0.6rem] font-medium tracking-[0.1em] uppercase text-[var(--dim)] mb-[0.2rem]">{ui('contact_email_label')}</div>
+          <div class="text-[0.86rem] font-medium text-[var(--fg)]">alessandro@chumpitaz.dev</div>
         </div>
         <span class="text-[0.78rem] text-[var(--dim)]">→</span>
       </a>
       <div class="flex gap-[0.6rem]">
-        <a href="#" class="flex-1 py-[0.7rem] rounded-lg text-center bg-[var(--surface)] border border-[var(--rule)] text-[0.72rem] font-medium text-[var(--mid)] no-underline transition-[border-color,color] duration-200 hover:border-[var(--accent)] hover:text-[var(--fg)]">GitHub</a>
-        <a href="#" class="flex-1 py-[0.7rem] rounded-lg text-center bg-[var(--surface)] border border-[var(--rule)] text-[0.72rem] font-medium text-[var(--mid)] no-underline transition-[border-color,color] duration-200 hover:border-[var(--accent)] hover:text-[var(--fg)]">LinkedIn</a>
-        <a href="#" class="flex-1 py-[0.7rem] rounded-lg text-center bg-[var(--surface)] border border-[var(--rule)] text-[0.72rem] font-medium text-[var(--mid)] no-underline transition-[border-color,color] duration-200 hover:border-[var(--accent)] hover:text-[var(--fg)]">Resume PDF</a>
+        <a href="https://github.com/alessandro54" target="_blank" class="flex-1 py-[0.7rem] rounded-lg text-center bg-[var(--surface)] border border-[var(--rule)] text-[0.72rem] font-medium text-[var(--mid)] no-underline transition-[border-color,color] duration-200 hover:border-[var(--accent)] hover:text-[var(--fg)]">
+          {ui('contact_github')}
+        </a>
+        <a href="https://www.linkedin.com/in/alessandrochumpitaz/" target="_blank" class="flex-1 py-[0.7rem] rounded-lg text-center bg-[var(--surface)] border border-[var(--rule)] text-[0.72rem] font-medium text-[var(--mid)] no-underline transition-[border-color,color] duration-200 hover:border-[var(--accent)] hover:text-[var(--fg)]">
+          {ui('contact_linkedin')}
+        </a>
+        <a href="#" class="flex-1 py-[0.7rem] rounded-lg text-center bg-[var(--surface)] border border-[var(--rule)] text-[0.72rem] font-medium text-[var(--mid)] no-underline transition-[border-color,color] duration-200 hover:border-[var(--accent)] hover:text-[var(--fg)]">
+          {ui('contact_resume')}
+        </a>
       </div>
     </div>
   </div>

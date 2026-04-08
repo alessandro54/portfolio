@@ -81,10 +81,9 @@ html[data-theme="light"] .nav-cta { color: #ffffff; }
 /* GSAP initial state — prevent flash before JS runs */
 nav, .hero-badge, #hero h1 span, .hero-sub, .hero-btns a,
 .hero-stats, .scroll-cue, .ticker-wrap,
-.s-label, section h2,
+.s-label, section:not(#contact) h2,
 #services .grid, .why-grid, #work .grid,
-.exp-row, #contact h2, #contact p,
-#contact .flex.flex-col > a, footer {
+.exp-row, #contact .flex.flex-col > a {
   visibility: hidden;
 }
 

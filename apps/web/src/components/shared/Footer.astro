@@ -1,4 +1,15 @@
-<footer class="flex justify-between px-12 py-[1.2rem] border-t border-[var(--rule)] text-[0.6rem] text-[var(--dim)] max-[900px]:flex-col max-[900px]:gap-[0.4rem] max-[900px]:px-6 max-[900px]:py-4">
+---
+import { useTranslations } from '@i18n/translations';
+
+interface Props {
+  locale?: string;
+}
+
+const { locale = 'en' } = Astro.props;
+const ui = useTranslations(locale);
+---
+
+<footer class="flex justify-between px-12 py-[1.2rem] border-t border-[var(--rule)] text-[0.6rem] text-[var(--dim)] max-[900px]:flex-col max-[900px]:gap-[0.4rem] max-[900px]:px-6 max-[900px]:py-4 bg-[color-mix(in_srgb,var(--bg)_10%,transparent)] backdrop-blur-lg transition-colors duration-250 hover:bg-[color-mix(in_srgb,var(--bg)_90%,transparent)] -mt-px">
   <span>© 2026 Alessandro Chumpitaz</span>
-  <span>Senior Software Engineer · Available now</span>
+  <span>{ui('footer_role')}</span>
 </footer>

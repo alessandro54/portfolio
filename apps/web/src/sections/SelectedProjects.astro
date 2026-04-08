@@ -1,47 +1,34 @@
 ---
 import SectionHeader from '@components/shared/SectionHeader.astro';
 import WorkCard from '@components/selected-projects/WorkCard.astro';
+import { sanityClient } from '@lib/sanity';
+import { useTranslations } from '@i18n/translations';
 
 interface Props {
-  projects?: { num: string; title: string; outcome: string; tags: string[] }[];
+  locale?: string;
 }
 
-const {
-  projects = [
-    {
-      num: '01',
-      title: '3D Visualisation Platform',
-      outcome:
-        'Rebuilt the rendering pipeline for a platform serving 50,000 daily users — cutting GPU load by 70% and load time from 8s to under 2s.',
-      tags: ['Real-time rendering', 'C++', 'OpenGL'],
-    },
-    {
-      num: '02',
-      title: 'Event-Driven Data Platform',
-      outcome:
-        'Designed Kafka-based event streaming handling 2M+ events/day, reducing processing latency by 40%.',
-      tags: ['Distributed systems', 'Go', 'Kafka'],
-    },
-    {
-      num: '03',
-      title: 'Geospatial Terrain Engine',
-      outcome:
-        'GPU-accelerated terrain at continent-scale, interactive framerates — powering a geospatial analytics product.',
-      tags: ['GPU compute', 'Vulkan', 'Geospatial'],
-    },
-    {
-      num: '04',
-      title: 'High-Performance API Server',
-      outcome:
-        '300k req/s async HTTP backbone powering a real-time analytics SaaS used by 10,000+ businesses in 30 countries.',
-      tags: ['High throughput', 'Rust', 'SaaS'],
-    },
-  ],
-} = Astro.props;
+const { locale = 'en' } = Astro.props;
+const ui = useTranslations(locale);
+
+const data = await sanityClient.fetch(
+  `*[_id == "singleton-selectedProjects"][0]{ items[]{ _key, num, title, outcome, tags } }`
+);
+
+const t = (field: Record<string, string> | null) =>
+  field?.[locale] || field?.en || '';
+
+const projects: { num: string; title: string; outcome: string; tags: string[] }[] =
+  (data?.items ?? []).map((p: { num: string; title: Record<string, string>; outcome: Record<string, string>; tags: string[] }) => ({
+    num: p.num,
+    title: t(p.title),
+    outcome: t(p.outcome),
+    tags: p.tags ?? [],
+  }));
 ---
 
 <section id="work" class="flex flex-col gap-2 px-12 pb-24 max-[900px]:px-6 max-[900px]:pb-16">
-  <SectionHeader label="Selected projects" title="Recent" soft="work" />
+  <SectionHeader label={ui('projects_label')} title={ui('projects_title')} soft={ui('projects_soft')} />
   <div class="grid grid-cols-2 gap-px bg-[var(--rule)] border border-[var(--rule)] rounded-xl overflow-hidden max-[900px]:grid-cols-1">
     {projects.map(p => <WorkCard {...p} />)}
   </div>

@@ -1,48 +1,46 @@
 ---
 import SectionHeader from '@components/shared/SectionHeader.astro';
 import WhyCard from '@components/why-me/WhyCard.astro';
+import { sanityClient } from '@lib/sanity';
+import { useTranslations } from '@i18n/translations';
 
 interface Props {
-  cards?: { n: string; title: string; text: string }[];
+  locale?: string;
 }
 
-const {
-  cards = [
-    {
-      n: '01',
-      title: 'End-to-end ownership',
-      text: 'From architecture to deployment — I own the full lifecycle so your team stays focused on the product.',
-    },
-    {
-      n: '02',
-      title: 'Fast time-to-value',
-      text: 'I ramp up quickly, ask the right questions early, and ship working software in the first week.',
-    },
-    {
-      n: '03',
-      title: 'Clear communication',
-      text: 'Detailed status updates, early risk flags, and an honest picture of progress at every stage.',
-    },
-    {
-      n: '04',
-      title: 'Long-term thinking',
-      text: 'Systems I build are designed to outlast the engagement and grow with your needs.',
-    },
-  ],
-} = Astro.props;
+const { locale = 'en' } = Astro.props;
+const ui = useTranslations(locale);
+
+const data = await sanityClient.fetch(
+  `*[_id == "singleton-whyMe"][0]{
+    featureHeadlinePre, featureHeadlineEmphasis, featureHeadlinePost,
+    featureParagraph1, featureParagraph2,
+    cards[]{ _key, n, title, text }
+  }`
+);
+
+const t = (field: Record<string, string> | null) =>
+  field?.[locale] || field?.en || '';
+
+const cards: { n: string; title: string; text: string }[] =
+  (data?.cards ?? []).map((c: { n: string; title: Record<string, string>; text: Record<string, string> }) => ({
+    n: c.n,
+    title: t(c.title),
+    text: t(c.text),
+  }));
 ---
 
 <section class="flex flex-col gap-2 px-12 pb-24 max-[900px]:px-6 max-[900px]:pb-16">
-  <SectionHeader label="Why work with me" title="What you" soft="can expect" />
+  <SectionHeader label={ui('why_me_label')} title={ui('why_me_title')} soft={ui('why_me_soft')} />
   <div class="why-grid grid grid-cols-2 gap-px bg-[var(--rule)] border border-[var(--rule)] rounded-xl overflow-hidden max-[900px]:grid-cols-1">
     <div class="why-feature col-span-2 bg-[var(--surface)] px-12 py-[2.8rem] grid grid-cols-2 gap-16 items-center max-[900px]:col-span-1 max-[900px]:grid-cols-1 max-[900px]:gap-6">
       <div class="text-[clamp(1.15rem,1.9vw,1.65rem)] font-bold tracking-[-0.025em] text-[var(--fg)] leading-[1.32]">
-        I build software that performs under pressure,
-        <em class="not-italic bg-[linear-gradient(100deg,var(--accent)_10%,var(--gradient-end)_80%)] bg-clip-text [-webkit-text-fill-color:transparent]">scales with your growth,</em> and doesn't need to be rewritten in a year.
+        {t(data?.featureHeadlinePre)}
+        <em class="not-italic bg-[linear-gradient(100deg,var(--accent)_10%,var(--gradient-end)_80%)] bg-clip-text [-webkit-text-fill-color:transparent]"> {t(data?.featureHeadlineEmphasis)}</em> {t(data?.featureHeadlinePost)}
       </div>
       <div>
-        <p class="text-[0.81rem] leading-[1.85] text-[var(--mid)]">With 7 years across startups, scale-ups and enterprise teams, I've learned that the best code is the code that keeps working. I bring that hard-won perspective to every engagement.</p>
-        <p class="text-[0.81rem] leading-[1.85] text-[var(--mid)] mt-[0.9rem]">You'll always know where the project stands. I communicate clearly, document thoroughly, and treat deadlines as commitments.</p>
+        <p class="text-[0.81rem] leading-[1.85] text-[var(--mid)]">{t(data?.featureParagraph1)}</p>
+        <p class="text-[0.81rem] leading-[1.85] text-[var(--mid)] mt-[0.9rem]">{t(data?.featureParagraph2)}</p>
       </div>
     </div>
     {cards.map(card => <WhyCard {...card} />)}
