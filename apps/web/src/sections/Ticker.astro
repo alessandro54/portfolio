@@ -17,7 +17,7 @@ const items = (data?.items || []).map((item: { label: Record<string, string> }) 
 ---
 
 <div class="ticker-wrap overflow-hidden border-y border-[var(--accent-bd)] py-[0.85rem] bg-[rgba(var(--vig-rgb),0.15)] backdrop-blur-[6px]">
-  <div class="inline-flex gap-12 animate-[tkr_26s_linear_infinite]">
+  <div class="inline-flex gap-12 animate-[tkr_45s_linear_infinite]">
     {[...items, ...items].map(item => (
       <div class="flex items-center gap-[1.2rem]"><span class="text-[0.7rem] font-medium tracking-[0.12em] uppercase text-[var(--mid)] whitespace-nowrap">{item}</span><div class="w-[4px] h-[4px] rounded-full bg-[var(--accent)]"></div></div>
     ))}
