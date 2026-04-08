@@ -4,10 +4,11 @@ interface Props {
   company: string;
   role: string;
   desc: string;
+  techStack?: string[];
   first?: boolean;
 }
 
-const { date, company, role, desc, first = false } = Astro.props;
+const { date, company, role, desc, techStack = [], first = false } = Astro.props;
 ---
 
 <div class={`exp-row grid grid-cols-[200px_1fr] gap-12 py-[2.2rem] border-b border-[var(--rule)] max-[900px]:grid-cols-1 max-[900px]:gap-2 ${first ? 'border-t' : ''}`}>
@@ -18,5 +19,12 @@ const { date, company, role, desc, first = false } = Astro.props;
   <div>
     <div class="text-[0.93rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.55rem]">{role}</div>
     <p class="text-[0.79rem] leading-[1.8] text-[var(--mid)]">{desc}</p>
+    {techStack.length > 0 && (
+      <div class="flex flex-wrap gap-[0.35rem] mt-[1rem]">
+        {techStack.map((tag) => (
+          <span class="text-[0.6rem] font-medium tracking-[0.04em] text-[var(--accent)] bg-[var(--accent-lo)] border border-[var(--accent-bd)] px-[0.5rem] py-[0.15rem] rounded">{tag}</span>
+        ))}
+      </div>
+    )}
   </div>
 </div>

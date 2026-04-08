@@ -9,7 +9,7 @@ const { locale = 'en' } = Astro.props;
 const ui = useTranslations(locale);
 ---
 
-<section id="contact" class="border-t border-[var(--rule)] px-12 py-[5.5rem] max-[900px]:px-6 relative z-10 bg-[color-mix(in_srgb,var(--bg)_10%,transparent)] backdrop-blur-lg transition-colors duration-250 hover:bg-[color-mix(in_srgb,var(--bg)_90%,transparent)]">
+<section id="contact" class="border-t border-[var(--rule)] px-12 py-[5.5rem] max-[900px]:px-6 relative z-10 bg-[color-mix(in_srgb,var(--bg)_70%,transparent)] backdrop-blur-xl transition-colors duration-250 hover:bg-[color-mix(in_srgb,var(--bg)_90%,transparent)]">
   <div class="grid grid-cols-2 gap-24 items-start max-[900px]:grid-cols-1 max-[900px]:gap-12">
     <div>
       <h2 class="text-[clamp(1.8rem,3vw,2.8rem)] font-bold tracking-[-0.03em] text-[var(--fg)] leading-[1.1] mb-4">{ui('contact_heading_pre')}<br>something <em class="not-italic bg-[linear-gradient(100deg,var(--accent)_10%,var(--gradient-end)_80%)] bg-clip-text [-webkit-text-fill-color:transparent]">{ui('contact_heading_em')}</em></h2>

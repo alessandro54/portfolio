@@ -6,6 +6,13 @@ export const experience = defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'order',
+      title: 'Order',
+      type: 'number',
+      description: 'Display order (lower numbers appear first)',
+      validation: (r) => r.required().min(0).integer(),
+    }),
+    defineField({
       name: 'company',
       title: 'Company',
       type: 'string',
@@ -35,15 +42,25 @@ export const experience = defineType({
       type: 'array',
       of: [{ type: 'block' }],
     }),
+    defineField({
+      name: 'techStack',
+      title: 'Tech Stack',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: { layout: 'tags' },
+    }),
   ],
   preview: {
-    select: { title: 'role', subtitle: 'company' },
+    select: { title: 'role', subtitle: 'company', order: 'order' },
+    prepare({ title, subtitle, order }) {
+      return { title, subtitle: `#${order ?? '?'} — ${subtitle}` };
+    },
   },
   orderings: [
     {
-      title: 'Start Date, newest',
-      name: 'startDateDesc',
-      by: [{ field: 'startDate', direction: 'desc' }],
+      title: 'Display order',
+      name: 'orderAsc',
+      by: [{ field: 'order', direction: 'asc' }],
     },
   ],
 });

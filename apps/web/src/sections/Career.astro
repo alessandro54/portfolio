@@ -12,12 +12,12 @@ const { locale = 'en' } = Astro.props;
 const ui = useTranslations(locale);
 
 const raw = await sanityClient.fetch(
-  `*[_type == "experience"] | order(startDate desc) { company, role, startDate, endDate, description }`
+  `*[_type == "experience"] | order(order asc) { company, role, startDate, endDate, description, techStack }`
 );
 
 type Block = { children?: { text?: string }[] };
 
-const jobs = raw.map((e: { company: string; role: string; startDate: string; endDate?: string; description?: Block[] }) => {
+const jobs = raw.map((e: { company: string; role: string; startDate: string; endDate?: string; description?: Block[]; techStack?: string[] }) => {
   const start = e.startDate?.slice(0, 4) ?? '';
   const end = e.endDate ? e.endDate.slice(0, 4) : ui('career_present');
   const date = `${start} — ${end}`;
@@ -25,7 +25,7 @@ const jobs = raw.map((e: { company: string; role: string; startDate: string; end
     .flatMap((b: Block) => b.children ?? [])
     .map((s) => s.text ?? '')
     .join('');
-  return { date, company: e.company, role: e.role, desc };
+  return { date, company: e.company, role: e.role, desc, techStack: e.techStack ?? [] };
 });
 ---
 
