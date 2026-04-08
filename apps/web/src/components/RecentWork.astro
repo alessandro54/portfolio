@@ -7,17 +7,20 @@ const projects = [
 ];
 ---
 
-<section id="work" class="section" style="padding-top:0">
-  <div class="s-label">Selected projects</div>
-  <h2>Recent <span class="soft">work</span></h2>
-  <div class="grid-2 r">
+<section id="work" class="px-12 pb-24 max-[900px]:px-6 max-[900px]:pb-16">
+  <div class="text-[0.62rem] font-medium tracking-[0.18em] uppercase text-[var(--accent)] mb-[0.55rem]">Selected projects</div>
+  <h2 class="text-[clamp(1.5rem,2.4vw,2.1rem)] font-bold tracking-[-0.025em] text-[var(--fg)] mb-[2.8rem]">Recent <span class="text-[var(--mid)] font-light">work</span></h2>
+  <div class="grid grid-cols-2 gap-px bg-[var(--rule)] border border-[var(--rule)] rounded-xl overflow-hidden r max-[900px]:grid-cols-1">
     {projects.map(p => (
-      <div class="wk">
-        <div class="wk-top"><span class="wk-num">{p.num}</span><span class="wk-arr">↗</span></div>
-        <div class="wk-ttl">{p.title}</div>
-        <p class="wk-out">{p.outcome}</p>
-        <div class="wk-tags">
-          {p.tags.map(tag => <span class="wtag">{tag}</span>)}
+      <div class="wk bg-[var(--bg)] p-8 flex flex-col gap-[0.9rem] transition-colors duration-250 cursor-default hover:bg-[var(--surface)] group">
+        <div class="flex justify-between">
+          <span class="text-[0.58rem] tracking-[0.1em] text-[var(--dim)]">{p.num}</span>
+          <span class="text-[0.75rem] text-[var(--dim)] transition-[transform,color] duration-250 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--accent)]">↗</span>
+        </div>
+        <div class="text-[0.93rem] font-semibold tracking-[-0.01em] text-[var(--fg)]">{p.title}</div>
+        <p class="text-[0.78rem] leading-[1.78] text-[var(--mid)] flex-1">{p.outcome}</p>
+        <div class="flex flex-wrap gap-[0.3rem] pt-[0.7rem] border-t border-[var(--rule)]">
+          {p.tags.map(tag => <span class="text-[0.6rem] px-[0.52rem] py-[0.18rem] rounded bg-[var(--accent-lo)] text-[var(--dim)]">{tag}</span>)}
         </div>
       </div>
     ))}

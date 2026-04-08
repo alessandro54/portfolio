@@ -1,14 +1,14 @@
-<nav>
-  <div class="logo">Alessandro C.</div>
-  <div class="nav-links">
-    <a href="#services">Services</a>
-    <a href="#work">Work</a>
-    <a href="#experience">Experience</a>
-    <a href="#contact">Contact</a>
+<nav class="fixed inset-x-0 top-0 z-100 flex items-center justify-between px-12 py-[1.3rem] bg-[var(--nav-bg)] backdrop-blur-[20px] border-b border-[var(--rule)] transition-[background,border-color] duration-400 max-[900px]:px-6 max-[900px]:py-4">
+  <div class="font-bold text-[0.9rem] tracking-[-0.01em] text-[var(--fg)]">Alessandro C.</div>
+  <div class="flex gap-[2.6rem] max-[900px]:hidden">
+    <a href="#services" class="text-[0.78rem] font-normal text-[var(--mid)] no-underline transition-colors duration-200 hover:text-[var(--fg)]">Services</a>
+    <a href="#work" class="text-[0.78rem] font-normal text-[var(--mid)] no-underline transition-colors duration-200 hover:text-[var(--fg)]">Work</a>
+    <a href="#experience" class="text-[0.78rem] font-normal text-[var(--mid)] no-underline transition-colors duration-200 hover:text-[var(--fg)]">Experience</a>
+    <a href="#contact" class="text-[0.78rem] font-normal text-[var(--mid)] no-underline transition-colors duration-200 hover:text-[var(--fg)]">Contact</a>
   </div>
-  <div class="nav-right">
-    <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">☀</button>
-    <a href="#contact" class="nav-cta">Hire me →</a>
+  <div class="flex items-center gap-3">
+    <button id="theme-toggle" class="bg-transparent border border-[var(--rule)] text-[var(--mid)] w-8 h-8 rounded-lg text-[0.9rem] leading-none flex items-center justify-center transition-[border-color,color] duration-200 hover:border-[var(--accent)] hover:text-[var(--accent)]" aria-label="Toggle theme">☀</button>
+    <a href="#contact" class="nav-cta inline-flex items-center gap-[0.4rem] px-5 py-[0.52rem] rounded-[7px] bg-[var(--accent)] text-[#09080f] text-[0.76rem] font-semibold no-underline transition-[opacity,transform] duration-200 hover:opacity-88 hover:translate-y-[-1px]">Hire me →</a>
   </div>
 </nav>
 

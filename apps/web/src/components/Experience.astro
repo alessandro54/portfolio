@@ -6,19 +6,19 @@ const jobs = [
 ];
 ---
 
-<section id="experience" class="section" style="padding-top:0">
-  <div class="s-label">Career</div>
-  <h2>Experience</h2>
-  <div class="exp-list r">
-    {jobs.map(job => (
-      <div class="exp-row">
-        <div class="exp-meta">
-          <div class="exp-date">{job.date}</div>
-          <div class="exp-co">{job.company}</div>
+<section id="experience" class="px-12 pb-24 max-[900px]:px-6 max-[900px]:pb-16">
+  <div class="text-[0.62rem] font-medium tracking-[0.18em] uppercase text-[var(--accent)] mb-[0.55rem]">Career</div>
+  <h2 class="text-[clamp(1.5rem,2.4vw,2.1rem)] font-bold tracking-[-0.025em] text-[var(--fg)] mb-[2.8rem]">Experience</h2>
+  <div class="flex flex-col r">
+    {jobs.map((job, i) => (
+      <div class={`exp-row grid grid-cols-[200px_1fr] gap-12 py-[2.2rem] border-b border-[var(--rule)] max-[900px]:grid-cols-1 max-[900px]:gap-2 ${i === 0 ? 'border-t' : ''}`}>
+        <div class="flex flex-col gap-[0.45rem]">
+          <div class="text-[0.7rem] text-[var(--dim)]">{job.date}</div>
+          <div class="text-[0.65rem] font-medium text-[var(--accent)] bg-[var(--accent-lo)] border border-[var(--accent-bd)] px-[0.6rem] py-[0.2rem] rounded w-fit">{job.company}</div>
         </div>
         <div>
-          <div class="exp-role">{job.role}</div>
-          <p class="exp-desc">{job.desc}</p>
+          <div class="text-[0.93rem] font-semibold tracking-[-0.01em] text-[var(--fg)] mb-[0.55rem]">{job.role}</div>
+          <p class="text-[0.79rem] leading-[1.8] text-[var(--mid)]">{job.desc}</p>
         </div>
       </div>
     ))}

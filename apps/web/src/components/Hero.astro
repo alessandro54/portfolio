@@ -1,47 +1,47 @@
-<section id="hero">
-  <div class="hero-badge">
-    <span class="badge-dot"></span>
+<section id="hero" class="h-svh flex flex-col items-center justify-center text-center gap-6 px-8 pt-24 pb-12 relative max-[900px]:px-6 max-[900px]:pt-20">
+  <div class="hero-badge inline-flex items-center gap-[0.55rem] text-[0.7rem] font-medium text-[var(--accent)] bg-[var(--accent-lo)] border border-[var(--accent-bd)] px-[0.9rem] py-[0.3rem] rounded-full mb-12 animate-[badge-pulse_2.5s_ease-in-out_infinite]">
+    <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-[blink_2.4s_infinite] shrink-0"></span>
     Available for new engagements
   </div>
 
-  <h1>
-    Senior Software Engineer<br>
-    <span class="soft">for teams that ship.</span>
+  <h1 class="text-[clamp(2.4rem,5.2vw,4.8rem)] font-extrabold leading-[1.07] tracking-[-0.035em] mb-10 max-w-[800px] max-[900px]:text-[2.4rem]">
+    <span class="bg-[linear-gradient(100deg,var(--fg)_0%,var(--accent)_50%,var(--h1-end)_100%)] bg-clip-text [-webkit-text-fill-color:transparent]">Senior Software Engineer</span><br>
+    <span class="text-[var(--mid)] font-light">for teams that ship.</span>
   </h1>
 
-  <p class="hero-sub">
+  <p class="hero-sub text-[clamp(0.88rem,1.35vw,1.02rem)] font-normal leading-[1.8] text-[var(--mid)] max-w-[460px] mx-auto mb-14">
     I partner with startups and enterprises to architect and build
     high-performance systems — from concept to production.
     Fast, reliable, and built to last.
   </p>
 
-  <div class="hero-btns">
-    <a href="#contact" class="btn btn-solid">Get in touch →</a>
-    <a href="#work" class="btn btn-ghost">See my work</a>
+  <div class="hero-btns flex gap-[0.8rem] justify-center mb-20">
+    <a href="#contact" class="inline-flex items-center gap-[0.45rem] px-8 py-3.5 rounded-lg text-[0.82rem] font-medium no-underline bg-[var(--fg)] text-[var(--bg)] transition-all duration-[220ms] hover:opacity-88 hover:translate-y-[-1px]">Get in touch →</a>
+    <a href="#work" class="inline-flex items-center gap-[0.45rem] px-8 py-3.5 rounded-lg text-[0.82rem] font-medium no-underline bg-transparent border border-[var(--rule)] text-[var(--mid)] transition-all duration-[220ms] hover:border-[var(--accent-bd)] hover:text-[var(--fg)]">See my work</a>
   </div>
 
-  <div class="hero-stats">
-    <div class="hstat">
-      <div class="hstat-n">7<em>+</em></div>
-      <div class="hstat-l">Years in industry</div>
+  <div class="hero-stats flex items-center border border-[var(--rule)] rounded-xl overflow-hidden bg-[rgba(var(--vig-rgb),0.55)] backdrop-blur-[16px] max-[900px]:flex-wrap max-[900px]:rounded-[10px]">
+    <div class="px-10 py-5 border-r border-[var(--rule)] text-center max-[900px]:border-b max-[900px]:border-[var(--rule)]">
+      <div class="text-2xl font-extrabold tracking-[-0.04em] text-[var(--fg)] leading-none mb-2.5">7<em class="text-[var(--accent)] not-italic text-[1.1rem]">+</em></div>
+      <div class="text-[0.6rem] font-normal tracking-[0.08em] text-[var(--dim)] uppercase">Years in industry</div>
     </div>
-    <div class="hstat">
-      <div class="hstat-n">40<em>+</em></div>
-      <div class="hstat-l">Projects delivered</div>
+    <div class="px-10 py-5 border-r border-[var(--rule)] text-center max-[900px]:border-b max-[900px]:border-[var(--rule)]">
+      <div class="text-2xl font-extrabold tracking-[-0.04em] text-[var(--fg)] leading-none mb-2.5">40<em class="text-[var(--accent)] not-italic text-[1.1rem]">+</em></div>
+      <div class="text-[0.6rem] font-normal tracking-[0.08em] text-[var(--dim)] uppercase">Projects delivered</div>
     </div>
-    <div class="hstat">
-      <div class="hstat-n">50k</div>
-      <div class="hstat-l">Daily active users</div>
+    <div class="px-10 py-5 border-r border-[var(--rule)] text-center max-[900px]:border-b max-[900px]:border-[var(--rule)]">
+      <div class="text-2xl font-extrabold tracking-[-0.04em] text-[var(--fg)] leading-none mb-2.5">50k</div>
+      <div class="text-[0.6rem] font-normal tracking-[0.08em] text-[var(--dim)] uppercase">Daily active users</div>
     </div>
-    <div class="hstat">
-      <div class="hstat-n">3</div>
-      <div class="hstat-l">Open-source libs</div>
+    <div class="px-10 py-5 text-center max-[900px]:border-b max-[900px]:border-[var(--rule)]">
+      <div class="text-2xl font-extrabold tracking-[-0.04em] text-[var(--fg)] leading-none mb-2.5">3</div>
+      <div class="text-[0.6rem] font-normal tracking-[0.08em] text-[var(--dim)] uppercase">Open-source libs</div>
     </div>
   </div>
 
-  <div class="scroll-cue">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
+  <div class="scroll-cue absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+    <span class="text-[0.56rem] tracking-[0.22em] uppercase text-[var(--dim)]">Scroll</span>
+    <div class="w-px h-9 bg-[linear-gradient(to_bottom,var(--dim),transparent)] animate-[scrl_2s_infinite]"></div>
   </div>
 </section>
 
@@ -54,4 +54,12 @@
     el.style.transition = `opacity .9s ${0.15 + i * 0.11}s ease, transform .9s ${0.15 + i * 0.11}s ease`;
     setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'none'; }, 200 + i * 110);
   });
+
+  const scrollCue = document.querySelector('.scroll-cue') as HTMLElement;
+  if (scrollCue) {
+    scrollCue.style.transition = 'opacity .4s ease';
+    window.addEventListener('scroll', () => {
+      scrollCue.style.opacity = window.scrollY > 50 ? '0' : '1';
+    }, { passive: true });
+  }
 </script>
