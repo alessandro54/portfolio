@@ -1,160 +1,197 @@
-// Three.js dot grid + scroll wave morph
-// Hero: flat Archer-style grid, top-down camera, spring cursor push
-// Scroll: camera lerps to angled wave view, dots displace to 3D terrain
-
-declare const THREE: any;
+// Raw WebGL dot grid — replaces Three.js (~70 KB gzipped) with ~4 KB
+// Same visual: 70×42 dot grid, spring cursor push, scroll wave morph
 
 (() => {
   const canvas = document.getElementById('gl') as HTMLCanvasElement;
-  const renderer = new THREE.WebGLRenderer({
-    canvas,
+  const gl = canvas.getContext('webgl', {
     antialias: false,
     alpha: true,
+    premultipliedAlpha: false,
     powerPreference: 'high-performance',
   });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.setSize(innerWidth, innerHeight, false);
-  renderer.setClearColor(0x000000, 0);
+  if (!gl) return;
 
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(76, innerWidth / innerHeight, 0.1, 200);
+  // ── Shaders ──────────────────────────────────────────────────────────────
+  const VS = `
+    attribute vec3 aPos;
+    attribute vec3 aCol;
+    uniform mat4 uView;
+    uniform mat4 uProj;
+    uniform float uSize;
+    uniform float uScale;
+    varying vec3 vCol;
+    void main() {
+      vec4 mv = uView * vec4(aPos, 1.0);
+      gl_PointSize = max(1.0, uSize * uScale / -mv.z);
+      gl_Position = uProj * mv;
+      vCol = aCol;
+    }
+  `;
 
-  function makeDotTex() {
-    const sz = 64,
-      c = document.createElement('canvas');
-    c.width = c.height = sz;
-    const cx = c.getContext('2d')!,
-      r = sz * 0.5;
-    const g = cx.createRadialGradient(r, r, 0, r, r, r);
-    g.addColorStop(0, 'rgba(255,255,255,1.0)');
-    g.addColorStop(0.18, 'rgba(255,255,255,0.90)');
-    g.addColorStop(0.45, 'rgba(255,255,255,0.38)');
-    g.addColorStop(0.75, 'rgba(255,255,255,0.07)');
-    g.addColorStop(1, 'rgba(255,255,255,0.00)');
-    cx.fillStyle = g;
-    cx.fillRect(0, 0, sz, sz);
-    return new THREE.CanvasTexture(c);
+  // Radial gradient in the fragment shader — no texture needed
+  const FS = `
+    precision mediump float;
+    varying vec3 vCol;
+    void main() {
+      float d = length(gl_PointCoord - 0.5) * 2.0;
+      if (d > 1.0) discard;
+      float a;
+      if      (d < 0.18) a = mix(1.00, 0.90, d / 0.18);
+      else if (d < 0.45) a = mix(0.90, 0.38, (d - 0.18) / 0.27);
+      else if (d < 0.75) a = mix(0.38, 0.07, (d - 0.45) / 0.30);
+      else               a = mix(0.07, 0.00, (d - 0.75) / 0.25);
+      gl_FragColor = vec4(vCol, a);
+    }
+  `;
+
+  function compileShader(type: number, src: string) {
+    const s = gl!.createShader(type)!;
+    gl!.shaderSource(s, src);
+    gl!.compileShader(s);
+    return s;
   }
 
-  const COLS = 70,
-    ROWS = 42,
-    N = COLS * ROWS;
-  const PW = 69,
-    PH = 41;
-  const SX = PW / (COLS - 1),
-    SZ = PH / (ROWS - 1);
+  const prog = gl.createProgram()!;
+  gl.attachShader(prog, compileShader(gl.VERTEX_SHADER, VS));
+  gl.attachShader(prog, compileShader(gl.FRAGMENT_SHADER, FS));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
 
-  const restX = new Float32Array(N),
-    restZ = new Float32Array(N);
-  const velX = new Float32Array(N),
-    velZ = new Float32Array(N);
-  const curX = new Float32Array(N),
-    curZ = new Float32Array(N);
-  const accentT = new Uint8Array(N);
-  const hR = new Float32Array(N),
-    hG = new Float32Array(N),
-    hB = new Float32Array(N);
-  const wArr = new Float32Array(N);
+  const aPos  = gl.getAttribLocation(prog, 'aPos');
+  const aCol  = gl.getAttribLocation(prog, 'aCol');
+  const uView  = gl.getUniformLocation(prog, 'uView');
+  const uProj  = gl.getUniformLocation(prog, 'uProj');
+  const uSize  = gl.getUniformLocation(prog, 'uSize');
+  const uScale = gl.getUniformLocation(prog, 'uScale');
 
-  for (let row = 0, idx = 0; row < ROWS; row++) {
-    for (let col = 0; col < COLS; col++, idx++) {
-      const x = -PW * 0.5 + col * SX,
-        z = -PH * 0.5 + row * SZ;
-      restX[idx] = x;
-      restZ[idx] = z;
-      curX[idx] = x;
-      curZ[idx] = z;
-      const rnd = Math.random();
-      if (rnd < 0.05) accentT[idx] = 1;
-      else if (rnd < 0.08) accentT[idx] = 2;
-      else if (rnd < 0.095) accentT[idx] = 3;
-      hR[idx] = 0.655;
-      hG[idx] = 0.545;
-      hB[idx] = 0.98; // #a78bfa violet
+  // ── Grid data ─────────────────────────────────────────────────────────────
+  const COLS = 70, ROWS = 42, N = COLS * ROWS;
+  const PW = 69, PH = 41;
+  const SX = PW / (COLS - 1), SZ = PH / (ROWS - 1);
+
+  const restX  = new Float32Array(N);
+  const restZ  = new Float32Array(N);
+  const velX   = new Float32Array(N);
+  const velZ   = new Float32Array(N);
+  const curX   = new Float32Array(N);
+  const curZ   = new Float32Array(N);
+  const accent = new Uint8Array(N);
+  const wArr   = new Float32Array(N);
+  const posArr = new Float32Array(N * 3);
+  const colArr = new Float32Array(N * 3);
+
+  for (let row = 0, i = 0; row < ROWS; row++) {
+    for (let col = 0; col < COLS; col++, i++) {
+      const x = -PW * 0.5 + col * SX;
+      const z = -PH * 0.5 + row * SZ;
+      restX[i] = curX[i] = x;
+      restZ[i] = curZ[i] = z;
+      posArr[i * 3] = x; posArr[i * 3 + 2] = z;
+      const r = Math.random();
+      accent[i] = r < 0.05 ? 1 : r < 0.08 ? 2 : r < 0.095 ? 3 : 0;
+      colArr[i * 3] = 0.655; colArr[i * 3 + 1] = 0.545; colArr[i * 3 + 2] = 0.98;
     }
   }
 
-  const geo = new THREE.BufferGeometry();
-  const posArr = new Float32Array(N * 3),
-    colArr = new Float32Array(N * 3);
+  // ── GPU buffers ───────────────────────────────────────────────────────────
+  const posBuf = gl.createBuffer()!;
+  gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+  gl.bufferData(gl.ARRAY_BUFFER, posArr, gl.DYNAMIC_DRAW);
 
-  for (let i = 0; i < N; i++) {
-    posArr[i * 3] = curX[i];
-    posArr[i * 3 + 1] = 0;
-    posArr[i * 3 + 2] = curZ[i];
-    colArr[i * 3] = hR[i];
-    colArr[i * 3 + 1] = hG[i];
-    colArr[i * 3 + 2] = hB[i];
+  const colBuf = gl.createBuffer()!;
+  gl.bindBuffer(gl.ARRAY_BUFFER, colBuf);
+  gl.bufferData(gl.ARRAY_BUFFER, colArr, gl.DYNAMIC_DRAW);
+
+  // ── Math ──────────────────────────────────────────────────────────────────
+  type V3 = [number, number, number];
+
+  const dot3  = (a: V3, b: V3) => a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
+  const cross3 = (a: V3, b: V3): V3 => [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]];
+  const norm3  = (a: V3): V3 => { const l = Math.sqrt(dot3(a,a)); return [a[0]/l, a[1]/l, a[2]/l]; };
+  const sub3   = (a: V3, b: V3): V3 => [a[0]-b[0], a[1]-b[1], a[2]-b[2]];
+  const lerp3  = (a: V3, b: V3, t: number): V3 => [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t];
+
+  // Column-major 4×4 perspective matrix
+  function perspective(fovY: number, aspect: number, near: number, far: number): Float32Array {
+    const f = 1.0 / Math.tan(fovY * 0.5), nf = 1 / (near - far);
+    const m = new Float32Array(16);
+    m[0] = f / aspect; m[5] = f;
+    m[10] = (far + near) * nf; m[11] = -1;
+    m[14] = 2 * far * near * nf;
+    return m;
   }
 
-  const posAttr = new THREE.BufferAttribute(posArr, 3);
-  const colAttr = new THREE.BufferAttribute(colArr, 3);
-  posAttr.setUsage(THREE.DynamicDrawUsage);
-  colAttr.setUsage(THREE.DynamicDrawUsage);
-  geo.setAttribute('position', posAttr);
-  geo.setAttribute('color', colAttr);
+  // Column-major lookAt view matrix
+  function lookAt(eye: V3, center: V3, up: V3): Float32Array {
+    const f = norm3(sub3(center, eye));
+    const s = norm3(cross3(f, up));
+    const u = cross3(s, f);
+    const m = new Float32Array(16);
+    m[0]=s[0];  m[4]=s[1];  m[8]=s[2];   m[12]=-dot3(s, eye);
+    m[1]=u[0];  m[5]=u[1];  m[9]=u[2];   m[13]=-dot3(u, eye);
+    m[2]=-f[0]; m[6]=-f[1]; m[10]=-f[2]; m[14]= dot3(f, eye);
+    m[15]=1;
+    return m;
+  }
 
-  const mat = new THREE.PointsMaterial({
-    size: 0.15,
-    map: makeDotTex(),
-    vertexColors: true,
-    transparent: true,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-    sizeAttenuation: true,
-  });
-  scene.add(new THREE.Points(geo, mat));
+  // ── Camera ────────────────────────────────────────────────────────────────
+  const FOV = 76 * Math.PI / 180;
+  const C0pos: V3 = [0, 22, 0.001], C0at: V3 = [0, 0, 0],  C0up: V3 = [0, 0, -1];
+  const C1pos: V3 = [0, 8,  22],    C1at: V3 = [0, 0, -6],  C1up: V3 = [0, 1,  0];
 
-  const C0pos = new THREE.Vector3(0, 22, 0.001);
-  const C0at = new THREE.Vector3(0, 0, 0);
-  const C0up = new THREE.Vector3(0, 0, -1);
-  const C1pos = new THREE.Vector3(0, 8, 22);
-  const C1at = new THREE.Vector3(0, 0, -6);
-  const C1up = new THREE.Vector3(0, 1, 0);
+  let projMat = perspective(FOV, innerWidth / innerHeight, 0.1, 200);
 
-  camera.position.copy(C0pos);
-  camera.up.copy(C0up);
-  camera.lookAt(C0at);
+  function resize() {
+    const dpr = Math.min(devicePixelRatio, 2);
+    canvas.width  = innerWidth  * dpr;
+    canvas.height = innerHeight * dpr;
+    gl!.viewport(0, 0, canvas.width, canvas.height);
+    projMat = perspective(FOV, innerWidth / innerHeight, 0.1, 200);
+  }
+  resize();
+  window.addEventListener('resize', resize);
 
-  let sTgt = 0,
-    sSm = 0;
-  window.addEventListener(
-    'scroll',
-    () => {
-      sTgt = Math.min(1, Math.max(0, scrollY / innerHeight));
-    },
-    { passive: true },
-  );
+  // ── Scroll ────────────────────────────────────────────────────────────────
+  let sTgt = 0, sSm = 0;
+  window.addEventListener('scroll', () => {
+    sTgt = Math.min(1, Math.max(0, scrollY / innerHeight));
+  }, { passive: true });
 
-  const ray = new THREE.Raycaster();
-  const mNDC = new THREE.Vector2(-9999, -9999);
-  const mW = new THREE.Vector3();
-  const yPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+  // ── Cursor → world (ray–plane y=0) ───────────────────────────────────────
+  let _ndcX = -9999, _ndcY = -9999, cursorActive = false;
 
-  let cursorActive = false;
-  function setM(cx: number, cy: number) {
-    mNDC.set((cx / innerWidth) * 2 - 1, -(cy / innerHeight) * 2 + 1);
+  function rayHitY0(ndcX: number, ndcY: number, view: Float32Array, eye: V3): [number, number] | null {
+    // Unproject NDC to view-space direction, then rotate to world space
+    const vx = ndcX / projMat[0];
+    const vy = ndcY / projMat[5];
+    // Transpose of upper-left 3×3 of view matrix → world direction
+    const wx = view[0]*vx + view[1]*vy - view[2];
+    const wy = view[4]*vx + view[5]*vy - view[6];
+    const wz = view[8]*vx + view[9]*vy - view[10];
+    const len = Math.sqrt(wx*wx + wy*wy + wz*wz);
+    const rdy = wy / len;
+    if (Math.abs(rdy) < 1e-6) return null;
+    const t = -eye[1] / rdy;
+    if (t < 0) return null;
+    const rdx = wx / len, rdz = wz / len;
+    return [eye[0] + t * rdx, eye[2] + t * rdz];
+  }
+
+  const onMove = (cx: number, cy: number) => {
+    _ndcX = (cx / innerWidth) * 2 - 1;
+    _ndcY = -(cy / innerHeight) * 2 + 1;
     cursorActive = true;
-  }
-  function clearM() {
-    cursorActive = false;
-  }
-  window.addEventListener('mousemove', (e: MouseEvent) => setM(e.clientX, e.clientY));
-  window.addEventListener('mouseleave', clearM);
-  document.addEventListener('mouseleave', clearM);
-  window.addEventListener('blur', clearM);
-  window.addEventListener(
-    'touchmove',
-    (e: TouchEvent) => setM(e.touches[0].clientX, e.touches[0].clientY),
-    { passive: true },
-  );
-  window.addEventListener('touchend', clearM);
+  };
+  const onLeave = () => { cursorActive = false; };
+  window.addEventListener('mousemove', (e) => onMove(e.clientX, e.clientY));
+  window.addEventListener('mouseleave', onLeave);
+  document.addEventListener('mouseleave', onLeave);
+  window.addEventListener('blur', onLeave);
+  window.addEventListener('touchmove', (e) => onMove(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+  window.addEventListener('touchend', onLeave);
 
-  const PR = 5.5,
-    PF = 1.2,
-    SPR = 0.065,
-    DP = 0.72,
-    BIAS = 0.65;
+  // ── Physics & wave ────────────────────────────────────────────────────────
+  const PR = 5.5, PF = 1.2, SPR = 0.065, DP = 0.72, BIAS = 0.65;
 
   function waveY(x: number, z: number, t: number) {
     return (
@@ -165,25 +202,22 @@ declare const THREE: any;
     );
   }
 
-  const ease = (t: number) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
-  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+  const ease = (t: number) => t < 0.5 ? 2*t*t : -1 + (4 - 2*t)*t;
+  const lerp  = (a: number, b: number, t: number) => a + (b - a) * t;
+
+  // ── GL state ──────────────────────────────────────────────────────────────
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+  gl.clearColor(0, 0, 0, 0);
 
   const vig = document.getElementById('vignette') as HTMLElement;
+  const start = performance.now();
+  let mx = 1e9, mz = 1e9;
 
-  window.addEventListener('resize', () => {
-    renderer.setSize(innerWidth, innerHeight, false);
-    camera.aspect = innerWidth / innerHeight;
-    camera.updateProjectionMatrix();
-  });
-
-  const vP = new THREE.Vector3(),
-    vA = new THREE.Vector3(),
-    vU = new THREE.Vector3();
-  const clock = new THREE.Clock();
-
+  // ── Render loop ───────────────────────────────────────────────────────────
   function tick() {
     requestAnimationFrame(tick);
-    const t = clock.getElapsedTime();
+    const t = (performance.now() - start) / 1000;
 
     sSm += (sTgt - sSm) * 0.05;
     const sp = ease(Math.min(sSm, 1));
@@ -191,19 +225,19 @@ declare const THREE: any;
     vig.style.opacity = Math.max(0, 1 - sp * 3).toFixed(3);
     canvas.style.filter = sp > 0.01 ? `blur(${(sp * 5).toFixed(1)}px)` : 'none';
 
-    let mx = 1e9,
-      mz = 1e9;
+    // Camera
+    const eye    = lerp3(C0pos, C1pos, sp);
+    const target = lerp3(C0at,  C1at,  sp);
+    const up     = norm3(lerp3(C0up, C1up, sp));
+    const viewMat = lookAt(eye, target, up);
+
+    // Cursor world pos
     if (cursorActive) {
-      ray.setFromCamera(mNDC, camera);
-      const hit = ray.ray.intersectPlane(yPlane, mW);
-      if (hit) {
-        mx = mW.x;
-        mz = mW.z;
-      }
+      const hit = rayHitY0(_ndcX, _ndcY, viewMat, eye);
+      if (hit) { mx = hit[0]; mz = hit[1]; } else { mx = 1e9; mz = 1e9; }
     }
 
     const pushFade = cursorActive ? Math.max(0, 1 - sp * 3.5) : 0;
-
     const isLight = document.documentElement.dataset.theme === 'light';
     const baseR = isLight ? 0.0 : 0.655;
     const baseG = isLight ? 0.0 : 0.545;
@@ -213,120 +247,91 @@ declare const THREE: any;
     for (let i = 0; i < N; i++) {
       const wy = waveY(restX[i], restZ[i], t);
       wArr[i] = wy;
-      if (wy > maxY) maxY = wy;
-      else if (-wy > maxY) maxY = -wy;
+      if (Math.abs(wy) > maxY) maxY = Math.abs(wy);
     }
 
     for (let i = 0; i < N; i++) {
-      const rx = restX[i],
-        rz = restZ[i];
+      const rx = restX[i], rz = restZ[i];
 
       if (cursorActive && pushFade > 1e-3) {
-        const dx = curX[i] - mx,
-          dz = curZ[i] - mz;
-        const d2 = dx * dx + dz * dz;
-        if (d2 < PR * PR && d2 > 1e-4) {
-          const d = Math.sqrt(d2);
-          const str = (1 - d / PR) * PF * pushFade;
-          const nx = dx / d,
-            nz = dz / d;
-          velX[i] += nx * str * (1 - BIAS);
-          velZ[i] += nz * str * (1 - BIAS) + str * BIAS;
+        const dx = curX[i] - mx, dz = curZ[i] - mz;
+        const d2 = dx*dx + dz*dz;
+        if (d2 < PR*PR && d2 > 1e-4) {
+          const d = Math.sqrt(d2), str = (1 - d/PR) * PF * pushFade;
+          velX[i] += (dx/d) * str * (1 - BIAS);
+          velZ[i] += (dz/d) * str * (1 - BIAS) + str * BIAS;
         }
-        velX[i] += (rx - curX[i]) * SPR;
-        velX[i] *= DP;
-        curX[i] += velX[i];
-        velZ[i] += (rz - curZ[i]) * SPR;
-        velZ[i] *= DP;
-        curZ[i] += velZ[i];
+        velX[i] += (rx - curX[i]) * SPR; velX[i] *= DP; curX[i] += velX[i];
+        velZ[i] += (rz - curZ[i]) * SPR; velZ[i] *= DP; curZ[i] += velZ[i];
       } else {
-        velX[i] *= 0.5;
-        velZ[i] *= 0.5;
-        velX[i] += (rx - curX[i]) * 0.12;
-        velZ[i] += (rz - curZ[i]) * 0.12;
-        curX[i] += velX[i];
-        curZ[i] += velZ[i];
+        velX[i] *= 0.5; velZ[i] *= 0.5;
+        velX[i] += (rx - curX[i]) * 0.12; velZ[i] += (rz - curZ[i]) * 0.12;
+        curX[i] += velX[i]; curZ[i] += velZ[i];
         if (Math.abs(rx - curX[i]) < 1e-3 && Math.abs(rz - curZ[i]) < 1e-3) {
-          curX[i] = rx;
-          curZ[i] = rz;
-          velX[i] = 0;
-          velZ[i] = 0;
+          curX[i] = rx; curZ[i] = rz; velX[i] = 0; velZ[i] = 0;
         }
       }
 
       const I = i * 3;
-      posArr[I] = curX[i];
-      posArr[I + 1] = wArr[i] * sp;
-      posArr[I + 2] = curZ[i];
+      posArr[I]   = curX[i];
+      posArr[I+1] = wArr[i] * sp;
+      posArr[I+2] = curZ[i];
 
       const wy_n = (wArr[i] + maxY) / (2 * maxY);
       let wr: number, wg: number, wb: number;
-      const ac = accentT[i];
+      const ac = accent[i];
+
       if (isLight) {
-        // Light: black/dark grey tones
-        if (ac === 1) {
-          wr = 0.05 + wy_n * 0.12;
-          wg = 0.05 + wy_n * 0.12;
-          wb = 0.05 + wy_n * 0.12;
-        } else if (ac === 2) {
-          wr = 0.1 + wy_n * 0.15;
-          wg = 0.1 + wy_n * 0.15;
-          wb = 0.1 + wy_n * 0.15;
-        } else if (ac === 3) {
-          wr = 0.02 + wy_n * 0.1;
-          wg = 0.02 + wy_n * 0.1;
-          wb = 0.02 + wy_n * 0.1;
-        } else {
-          wr = 0.07 + wy_n * 0.13;
-          wg = 0.07 + wy_n * 0.13;
-          wb = 0.07 + wy_n * 0.13;
-        }
+        if      (ac === 1) { wr = wg = wb = 0.05 + wy_n * 0.12; }
+        else if (ac === 2) { wr = wg = wb = 0.10 + wy_n * 0.15; }
+        else if (ac === 3) { wr = wg = wb = 0.02 + wy_n * 0.10; }
+        else               { wr = wg = wb = 0.07 + wy_n * 0.13; }
       } else {
-        // Dark: bright violets / fuchsia on near-black
-        if (ac === 1) {
-          // electric blue-violet
-          wr = 0.22 + wy_n * 0.3;
-          wg = 0.42 + wy_n * 0.38;
-          wb = 0.98;
-        } else if (ac === 2) {
-          // fuchsia / pink
-          wr = 0.78 + wy_n * 0.18;
-          wg = 0.12 + wy_n * 0.28;
-          wb = 0.88 + wy_n * 0.1;
-        } else if (ac === 3) {
-          // lavender / soft violet
-          wr = 0.55 + wy_n * 0.35;
-          wg = 0.28 + wy_n * 0.35;
-          wb = 0.98;
-        } else {
+        if      (ac === 1) { wr = 0.22 + wy_n*0.30; wg = 0.42 + wy_n*0.38; wb = 0.98; }
+        else if (ac === 2) { wr = 0.78 + wy_n*0.18; wg = 0.12 + wy_n*0.28; wb = 0.88 + wy_n*0.10; }
+        else if (ac === 3) { wr = 0.55 + wy_n*0.35; wg = 0.28 + wy_n*0.35; wb = 0.98; }
+        else {
           const hi = Math.max(0, (wy_n - 0.25) / 0.75);
-          wr = 0.27 + hi * 0.25;
-          wg = 0.1 + wy_n * 0.22;
-          wb = 0.62 + wy_n * 0.34;
-          if (wr > 1) wr = 1;
-          if (wg > 1) wg = 1;
-          if (wb > 1) wb = 1;
+          wr = Math.min(1, 0.27 + hi*0.25);
+          wg = Math.min(1, 0.10 + wy_n*0.22);
+          wb = Math.min(1, 0.62 + wy_n*0.34);
         }
       }
 
-      colArr[I] = lerp(baseR, wr, sp);
-      colArr[I + 1] = lerp(baseG, wg, sp);
-      colArr[I + 2] = lerp(baseB, wb, sp);
+      colArr[I]   = lerp(baseR, wr, sp);
+      colArr[I+1] = lerp(baseG, wg, sp);
+      colArr[I+2] = lerp(baseB, wb, sp);
     }
 
-    posAttr.needsUpdate = true;
-    colAttr.needsUpdate = true;
-    mat.blending = isLight ? THREE.NormalBlending : THREE.AdditiveBlending;
-    mat.size = lerp(0.15, 0.32, sp);
+    // Upload to GPU
+    gl!.bindBuffer(gl!.ARRAY_BUFFER, posBuf);
+    gl!.bufferSubData(gl!.ARRAY_BUFFER, 0, posArr);
+    gl!.bindBuffer(gl!.ARRAY_BUFFER, colBuf);
+    gl!.bufferSubData(gl!.ARRAY_BUFFER, 0, colArr);
 
-    vP.lerpVectors(C0pos, C1pos, sp);
-    vA.lerpVectors(C0at, C1at, sp);
-    vU.lerpVectors(C0up, C1up, sp).normalize();
-    camera.position.copy(vP);
-    camera.up.copy(vU);
-    camera.lookAt(vA);
+    // Blending mode
+    if (isLight) gl!.blendFunc(gl!.SRC_ALPHA, gl!.ONE_MINUS_SRC_ALPHA);
+    else         gl!.blendFunc(gl!.SRC_ALPHA, gl!.ONE);
 
-    renderer.render(scene, camera);
+    // Uniforms
+    const ptSize = lerp(0.15, 0.32, sp);
+    const scale  = projMat[5] * 0.5 * canvas.height; // matches Three.js sizeAttenuation
+
+    gl!.clear(gl!.COLOR_BUFFER_BIT);
+    gl!.uniformMatrix4fv(uView,  false, viewMat);
+    gl!.uniformMatrix4fv(uProj,  false, projMat);
+    gl!.uniform1f(uSize,  ptSize);
+    gl!.uniform1f(uScale, scale);
+
+    gl!.bindBuffer(gl!.ARRAY_BUFFER, posBuf);
+    gl!.enableVertexAttribArray(aPos);
+    gl!.vertexAttribPointer(aPos, 3, gl!.FLOAT, false, 0, 0);
+
+    gl!.bindBuffer(gl!.ARRAY_BUFFER, colBuf);
+    gl!.enableVertexAttribArray(aCol);
+    gl!.vertexAttribPointer(aCol, 3, gl!.FLOAT, false, 0, 0);
+
+    gl!.drawArrays(gl!.POINTS, 0, N);
   }
 
   tick();
