@@ -7,8 +7,8 @@
   --bg:           #09080f;
   --surface:      #130f24;
   --fg:           #faf9ff;
-  --mid:          rgba(250,249,255,0.50);
-  --dim:          rgba(250,249,255,0.28);
+  --mid:          rgba(250,249,255,0.62);
+  --dim:          rgba(250,249,255,0.42);
   --rule:         rgba(250,249,255,0.07);
   --accent:        #a78bfa;
   --accent-lo:     rgba(167,139,250,0.10);
@@ -23,8 +23,8 @@ html[data-theme="light"] {
   --bg:           #ffffff;
   --surface:      #f5f3ff;
   --fg:           #09090b;
-  --mid:          rgba(9,9,11,0.55);
-  --dim:          rgba(9,9,11,0.35);
+  --mid:          rgba(9,9,11,0.68);
+  --dim:          rgba(9,9,11,0.50);
   --rule:         rgba(9,9,11,0.08);
   --accent:        #8b5cf6;
   --accent-lo:     rgba(139,92,246,0.08);

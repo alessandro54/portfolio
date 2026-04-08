@@ -1,43 +1,56 @@
-# Astro Starter Kit: Minimal
+# Alessandro Chumpitaz — Portfolio
 
-```sh
-pnpm create astro@latest -- --template minimal
+Personal portfolio website. Live at [alessandro.chumpitaz.dev](https://alessandro.chumpitaz.dev).
+
+## Stack
+
+- **Frontend** — Astro v6, Tailwind CSS v4, Three.js (CDN), GSAP
+- **CMS** — Sanity v5 (Studio + hosted dataset)
+- **Monorepo** — pnpm workspaces + Turborepo
+- **Deployment** — Cloudflare Pages via GitHub Actions
+
+## Structure
+
 ```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
 /
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
+├── apps/
+│   ├── web/          # Astro frontend
+│   └── studio/       # Sanity Studio
+├── .github/
+│   └── workflows/
+│       └── deploy.yml
 └── package.json
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Commands
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+All commands run from the **root**:
 
-Any static assets, like images, can be placed in the `public/` directory.
+| Command | Action |
+| --- | --- |
+| `pnpm install` | Install dependencies |
+| `pnpm dev` | Start web + studio dev servers |
+| `pnpm build` | Production build |
+| `pnpm preview` | Preview production build locally |
+| `pnpm sanity:deploy` | Deploy Sanity Studio |
+| `pnpm sanity:schema:deploy` | Deploy schema updates |
 
-## 🧞 Commands
+Web runs at `localhost:4321`, Studio at `localhost:3333`.
 
-All commands are run from the root of the project, from a terminal:
+## Environment Variables
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+Create `apps/web/.env` from `apps/web/.env.example`:
 
-## 👀 Want to learn more?
+```
+PUBLIC_SANITY_PROJECT_ID=sczvled1
+PUBLIC_SANITY_DATASET=production
+```
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## Deployment
+
+Pushes to `main` trigger the GitHub Actions pipeline which builds and deploys to Cloudflare Pages. Secrets required in the `production` GitHub environment:
+
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
+- `vars.PUBLIC_SANITY_PROJECT_ID`
+- `vars.PUBLIC_SANITY_DATASET`

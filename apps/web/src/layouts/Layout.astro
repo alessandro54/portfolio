@@ -3,26 +3,44 @@ import '../styles/global.css';
 
 interface Props {
   title?: string;
+  description?: string;
   locale?: string;
 }
 
-const { title = 'Alessandro — Software Engineer', locale = 'en' } = Astro.props;
+const {
+  title = 'Alessandro Chumpitaz — Senior Software Engineer',
+  description = 'Senior Software Engineer specialising in system architecture, performance engineering and technical leadership. Available for freelance and consulting.',
+  locale = 'en'
+} = Astro.props;
+
 const otherLocale = locale === 'en' ? 'es' : 'en';
+const canonical = `https://alessandro.chumpitaz.dev/${locale}/`;
+const alternate = `https://alessandro.chumpitaz.dev/${otherLocale}/`;
 ---
 <!doctype html>
 <html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+
+    <!-- Canonical & hreflang -->
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={locale} href={canonical} />
+    <link rel="alternate" hreflang={otherLocale} href={alternate} />
+    <link rel="alternate" hreflang="x-default" href="https://alessandro.chumpitaz.dev/en/" />
+
+    <!-- Preconnect for fonts (non-blocking) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
+
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="alternate" hreflang="en" href="/en/" />
-    <link rel="alternate" hreflang="es" href="/es/" />
-    <link rel="alternate" hreflang="x-default" href="/en/" />
+
     <script is:inline>
       (function(){
         var pref = localStorage.getItem('theme') || 'system';

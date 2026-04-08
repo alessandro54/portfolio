@@ -22,23 +22,25 @@ const { locale } = Astro.params;
 ---
 
 <Layout locale={locale}>
-  <canvas id="gl"></canvas>
-  <div id="vignette"></div>
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <div id="vignette" aria-hidden="true"></div>
 
   <div class="site">
     <Nav locale={locale} />
-    <Hero locale={locale} />
-    <Ticker locale={locale} />
-    <WhatIDo locale={locale} />
-    <WhyMe locale={locale} />
-    <SelectedProjects locale={locale} />
-    <Career locale={locale} />
-    <Contact locale={locale} />
+    <main>
+      <Hero locale={locale} />
+      <Ticker locale={locale} />
+      <WhatIDo locale={locale} />
+      <WhyMe locale={locale} />
+      <SelectedProjects locale={locale} />
+      <Career locale={locale} />
+      <Contact locale={locale} />
+    </main>
     <Footer locale={locale} />
   </div>
   <Cursor />
 </Layout>
 
-<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script is:inline defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="../../scripts/scene.ts"></script>
 <script src="../../scripts/animations.ts"></script>
