@@ -29,7 +29,7 @@ const jobs = raw.map((e: { company: string; role: string; startDate: string; end
 });
 ---
 
-<section id="experience" class="flex flex-col gap-2 px-12 pb-24 max-[900px]:px-6 max-[900px]:pb-16">
+<section id="experience" class="flex flex-col gap-2 px-12 pb-24 max-[900px]:px-8 max-[900px]:pb-16">
   <SectionHeader label={ui('career_label')} title={ui('career_title')} />
   <div class="flex flex-col">
     {jobs.map((job, i) => <ExperienceRow {...job} first={i === 0} />)}

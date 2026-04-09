@@ -19,7 +19,7 @@
 }
 
 *, *::before, *::after { margin:0; box-sizing:border-box; }
-* { -webkit-user-select: none; user-select: none; }
+button, a, img, canvas, [role="button"] { -webkit-user-select: none; user-select: none; }
 
 :root {
   --bg:           #09080f;
@@ -83,6 +83,7 @@ body {
 }
 
 .site { position: relative; z-index: 2; }
+.site main > :not(#hero):not(.ticker-wrap):not(#contact) { max-width: 1280px; margin-inline: auto; }
 
 /* Light theme nav-cta override */
 html[data-theme="light"] .nav-cta { color: #ffffff; }

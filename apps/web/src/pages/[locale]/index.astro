@@ -41,8 +41,14 @@ const { locale } = Astro.params;
   <Cursor />
 </Layout>
 
-<script src="../../scripts/scene.ts"></script>
 <script>
-  const load = () => import('../../scripts/animations.ts');
-  'requestIdleCallback' in window ? requestIdleCallback(load, { timeout: 1500 }) : setTimeout(load, 0);
+  const loadScene = () => import('../../scripts/scene.ts');
+  const loadAnims = () => import('../../scripts/animations.ts');
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(loadScene, { timeout: 200 });
+    requestIdleCallback(loadAnims, { timeout: 1500 });
+  } else {
+    setTimeout(loadScene, 0);
+    setTimeout(loadAnims, 100);
+  }
 </script>
