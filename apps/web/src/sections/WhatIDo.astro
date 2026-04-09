@@ -12,7 +12,7 @@ const { locale = 'en' } = Astro.props;
 const ui = useTranslations(locale);
 
 const data = await sanityClient.fetch(
-  `*[_id == "singleton-whatIDo"][0]{ "services": services[0...3]{ _key, icon, title, text } }`
+  `*[_id == "singleton-whatIDo"][0]{ services[]{ _key, icon, title, text } }`
 );
 
 const t = (field: Record<string, string> | null) =>
@@ -30,7 +30,7 @@ const services: { icon: string; title: string; text: string }[] =
 
 <section id="services" class="flex flex-col gap-2 px-12 pt-24 pb-24 max-[900px]:px-8 max-[900px]:pt-16 max-[900px]:pb-16">
   <SectionHeader label={ui('what_i_do_label')} title={ui('what_i_do_title')} soft={ui('what_i_do_soft')} />
-  <div class="grid grid-cols-3 gap-px border border-[var(--rule)] rounded-xl overflow-hidden max-[900px]:grid-cols-1">
+  <div class="grid grid-cols-2 gap-px border border-[var(--rule)] rounded-xl overflow-hidden max-[900px]:grid-cols-1">
     {services.map(svc => <ServiceCard {...svc} />)}
   </div>
 </section>

@@ -11,7 +11,7 @@ export const whatIDo = defineType({
       name: 'services',
       title: 'Services',
       type: 'array',
-      description: 'Exactly 3 service highlights',
+      description: 'Service highlights (2-6)',
       of: [
         {
           type: 'object',
@@ -34,7 +34,7 @@ export const whatIDo = defineType({
           },
         },
       ],
-      validation: (r) => r.required().min(3).max(3),
+      validation: (r) => r.required().min(2).max(6),
     }),
   ],
   preview: {

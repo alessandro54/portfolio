@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import { useTranslations } from '@i18n/translations';
+import { sanityClient } from '@lib/sanity';
+import imageUrlBuilder from '@sanity/image-url';
 
 interface Props {
   locale?: string;
@@ -8,12 +10,39 @@ interface Props {
 
 const { locale = 'en' } = Astro.props;
 const ui = useTranslations(locale);
-
-const title = ui('meta_title');
-const description = ui('meta_description');
 const otherLocale = locale === 'en' ? 'es' : 'en';
-const canonical = `https://alessandro.chumpitaz.dev/${locale}/`;
-const alternate = `https://alessandro.chumpitaz.dev/${otherLocale}/`;
+
+const seo = await sanityClient.fetch(
+  `*[_id == "singleton-seo"][0]{
+    metaTitle, metaDescription, siteName, siteUrl,
+    ogImage, twitterHandle, twitterCardType,
+    themeColorDark, themeColorLight,
+    appleTouchIcon, appleStatusBarStyle, appleMobileWebAppTitle,
+    robotsDirective, author, keywords
+  }`
+);
+
+const t = (field: Record<string, string> | null) => field?.[locale] || field?.en || '';
+
+const builder = imageUrlBuilder(sanityClient);
+const ogImageUrl = seo?.ogImage ? builder.image(seo.ogImage).width(1200).height(630).url() : null;
+const appleTouchIconUrl = seo?.appleTouchIcon ? builder.image(seo.appleTouchIcon).width(180).height(180).format('png').url() : null;
+
+const title = t(seo?.metaTitle) || ui('meta_title');
+const description = t(seo?.metaDescription) || ui('meta_description');
+const siteName = seo?.siteName || 'Alessandro Chumpitaz';
+const siteUrl = seo?.siteUrl || 'https://alessandro.chumpitaz.dev';
+const canonical = `${siteUrl}/${locale}/`;
+const alternate = `${siteUrl}/${otherLocale}/`;
+const keywords = t(seo?.keywords) || '';
+const author = seo?.author || '';
+const robots = seo?.robotsDirective || 'index, follow';
+const twitterCard = seo?.twitterCardType || 'summary_large_image';
+const twitterHandle = seo?.twitterHandle || '';
+const themeColorDark = seo?.themeColorDark || '#09080f';
+const themeColorLight = seo?.themeColorLight || '#f8f7fc';
+const statusBarStyle = seo?.appleStatusBarStyle || 'black-translucent';
+const appTitle = seo?.appleMobileWebAppTitle || siteName;
 ---
 <!doctype html>
 <html lang={locale}>
@@ -21,6 +50,9 @@ const alternate = `https://alessandro.chumpitaz.dev/${otherLocale}/`;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    {author && <meta name="author" content={author} />}
+    {keywords && <meta name="keywords" content={keywords} />}
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -29,23 +61,34 @@ const alternate = `https://alessandro.chumpitaz.dev/${otherLocale}/`;
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={locale === 'es' ? 'es_ES' : 'en_US'} />
     <meta property="og:locale:alternate" content={locale === 'es' ? 'en_US' : 'es_ES'} />
-    <meta property="og:site_name" content="Alessandro Chumpitaz" />
+    <meta property="og:site_name" content={siteName} />
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    {ogImageUrl && <meta property="og:image:width" content="1200" />}
+    {ogImageUrl && <meta property="og:image:height" content="630" />}
 
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content={twitterCard} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    {twitterHandle && <meta name="twitter:site" content={twitterHandle} />}
+    {twitterHandle && <meta name="twitter:creator" content={twitterHandle} />}
+    {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
 
     <!-- Canonical & hreflang -->
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang={locale} href={canonical} />
     <link rel="alternate" hreflang={otherLocale} href={alternate} />
-    <link rel="alternate" hreflang="x-default" href="https://alessandro.chumpitaz.dev/en/" />
+    <link rel="alternate" hreflang="x-default" href={`${siteUrl}/en/`} />
 
-    <!-- Heading font — loaded async via font-display: swap, body uses system-ui -->
+    <!-- Apple -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content={statusBarStyle} />
+    <meta name="apple-mobile-web-app-title" content={appTitle} />
+    {appleTouchIconUrl && <link rel="apple-touch-icon" href={appleTouchIconUrl} />}
 
-    <meta name="theme-color" content="#09080f" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#f8f7fc" media="(prefers-color-scheme: light)" />
+    <!-- Theme -->
+    <meta name="theme-color" content={themeColorDark} media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content={themeColorLight} media="(prefers-color-scheme: light)" />
 
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

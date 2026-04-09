@@ -12,15 +12,16 @@ const { locale = 'en' } = Astro.props;
 const ui = useTranslations(locale);
 
 const data = await sanityClient.fetch(
-  `*[_id == "singleton-selectedProjects"][0]{ items[]{ _key, num, title, outcome, tags, liveUrl, repos[]{ label, url } } }`
+  `*[_id == "singleton-selectedProjects"][0]{ items[]{ _key, num, kind, title, outcome, tags, liveUrl, repos[]{ label, url } } }`
 );
 
 const t = (field: Record<string, string> | null) =>
   field?.[locale] || field?.en || '';
 
 const projects = (data?.items ?? []).map(
-  (p: { num: string; title: Record<string, string>; outcome: Record<string, string>; tags: string[]; liveUrl?: string; repos?: { label: string; url: string }[] }) => ({
+  (p: { num: string; kind?: string; title: Record<string, string>; outcome: Record<string, string>; tags: string[]; liveUrl?: string; repos?: { label: string; url: string }[] }) => ({
     num: p.num,
+    kind: p.kind || 'project',
     title: t(p.title),
     outcome: t(p.outcome),
     tags: p.tags ?? [],
@@ -32,7 +33,18 @@ const projects = (data?.items ?? []).map(
 
 <section id="work" class="flex flex-col gap-2 px-12 pb-24 max-[900px]:px-8 max-[900px]:pb-16">
   <SectionHeader label={ui('projects_label')} title={ui('projects_title')} soft={ui('projects_soft')} />
-  <div class="grid grid-cols-2 gap-px bg-[var(--rule)] border border-[var(--rule)] rounded-xl overflow-hidden max-[900px]:grid-cols-1">
+  <div class="work-grid grid grid-cols-2 gap-px bg-[var(--rule)] border border-[var(--rule)] rounded-xl overflow-hidden max-[900px]:grid-cols-1">
     {projects.map(p => <WorkCard {...p} />)}
   </div>
 </section>
+
+<style is:global>
+  .work-grid > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+  @media (max-width: 900px) {
+    .work-grid > :last-child:nth-child(odd) {
+      grid-column: auto;
+    }
+  }
+</style>

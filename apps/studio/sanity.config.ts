@@ -9,6 +9,7 @@ const WHAT_I_DO_DOC_ID = 'singleton-whatIDo';
 const WHY_ME_DOC_ID = 'singleton-whyMe';
 const SELECTED_PROJECTS_DOC_ID = 'singleton-selectedProjects';
 const CONTACT_DOC_ID = 'singleton-contact';
+const SEO_DOC_ID = 'singleton-seo';
 
 export default defineConfig({
   name: 'default',
@@ -68,13 +69,13 @@ export default defineConfig({
                   .documentId(WHY_ME_DOC_ID),
               ),
             S.listItem()
-              .title('Selected Projects')
+              .title('Current Work')
               .id('selectedProjects')
               .schemaType('selectedProjects')
               .child(
                 S.document()
                   .id('selectedProjects')
-                  .title('Selected Projects')
+                  .title('Current Work')
                   .schemaType('selectedProjects')
                   .documentId(SELECTED_PROJECTS_DOC_ID),
               ),
@@ -90,8 +91,20 @@ export default defineConfig({
                   .documentId(CONTACT_DOC_ID),
               ),
             S.divider(),
+            S.listItem()
+              .title('SEO')
+              .id('seo')
+              .schemaType('seo')
+              .child(
+                S.document()
+                  .id('seo')
+                  .title('SEO')
+                  .schemaType('seo')
+                  .documentId(SEO_DOC_ID),
+              ),
+            S.divider(),
             S.documentTypeListItem('experience').title('Career'),
-            ...S.documentTypeListItems().filter((item) => !['hero', 'ticker', 'whatIDo', 'whyMe', 'selectedProjects', 'contact', 'experience'].includes(item.getId() ?? '')),
+            ...S.documentTypeListItems().filter((item) => !['hero', 'ticker', 'whatIDo', 'whyMe', 'selectedProjects', 'contact', 'seo', 'experience', 'recentWork'].includes(item.getId() ?? '')),
           ]),
     }),
     visionTool(),

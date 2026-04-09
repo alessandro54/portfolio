@@ -3,7 +3,7 @@ import { localeString, localeText } from './locale';
 
 export const selectedProjects = defineType({
   name: 'selectedProjects',
-  title: 'Selected Projects',
+  title: 'Current Work',
   type: 'document',
   __experimental_actions: ['update', 'publish'],
   fields: [
@@ -20,6 +20,20 @@ export const selectedProjects = defineType({
               title: 'Number',
               type: 'string',
               description: 'e.g. "01", "02"',
+              validation: (r) => r.required(),
+            }),
+            defineField({
+              name: 'kind',
+              title: 'Kind',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Project', value: 'project' },
+                  { title: 'OSS Contribution', value: 'oss' },
+                ],
+                layout: 'radio',
+              },
+              initialValue: 'project',
               validation: (r) => r.required(),
             }),
             localeString('title', 'Title'),
@@ -76,7 +90,7 @@ export const selectedProjects = defineType({
   ],
   preview: {
     prepare() {
-      return { title: 'Selected Projects' };
+      return { title: 'Current Work' };
     },
   },
 });

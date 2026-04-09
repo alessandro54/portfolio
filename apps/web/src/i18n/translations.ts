@@ -20,7 +20,7 @@ export const translations = {
     why_me_title: 'What you',
     why_me_soft: 'can expect',
 
-    projects_label: 'Selected projects',
+    projects_label: 'Current work',
     projects_title: 'Recent',
     projects_soft: 'work',
 
@@ -65,7 +65,7 @@ export const translations = {
     why_me_title: 'Qué puedes',
     why_me_soft: 'esperar',
 
-    projects_label: 'Proyectos seleccionados',
+    projects_label: 'Trabajo actual',
     projects_title: 'Trabajo',
     projects_soft: 'reciente',
 
