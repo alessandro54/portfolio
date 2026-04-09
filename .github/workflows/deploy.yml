@@ -56,6 +56,7 @@ jobs:
   lighthouse:
     name: Lighthouse Audit
     needs: build-and-deploy
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     environment: production
     steps:
