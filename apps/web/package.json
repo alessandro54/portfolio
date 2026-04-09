@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/subset-fonts.mjs",
+    "build": "astro build && node scripts/optimize.mjs",
     "preview": "astro preview"
   },
   "dependencies": {
@@ -16,6 +16,7 @@
     "tailwindcss": "^4.2.2"
   },
   "devDependencies": {
+    "html-minifier-terser": "^7.2.0",
     "subset-font": "^2.5.0"
   }
 }
