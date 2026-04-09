@@ -31,6 +31,38 @@ export const selectedProjects = defineType({
               of: [{ type: 'string' }],
               options: { layout: 'tags' },
             }),
+            defineField({
+              name: 'liveUrl',
+              title: 'Live URL',
+              type: 'url',
+            }),
+            defineField({
+              name: 'repos',
+              title: 'GitHub Repos',
+              type: 'array',
+              of: [
+                {
+                  type: 'object',
+                  fields: [
+                    defineField({
+                      name: 'label',
+                      title: 'Label',
+                      type: 'string',
+                      description: 'e.g. frontend, backend, docs',
+                    }),
+                    defineField({
+                      name: 'url',
+                      title: 'URL',
+                      type: 'url',
+                      validation: (r) => r.required(),
+                    }),
+                  ],
+                  preview: {
+                    select: { title: 'label', subtitle: 'url' },
+                  },
+                },
+              ],
+            }),
           ],
           preview: {
             select: { num: 'num', title: 'title.en' },

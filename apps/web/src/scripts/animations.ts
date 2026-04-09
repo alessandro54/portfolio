@@ -69,26 +69,37 @@ hero
           repeat: -1,
         });
 
-        cta.addEventListener('mouseenter', () => {
-          pulse.pause();
-          gsap.to(cta, {
-            scale: 1.07,
-            y: -2,
-            boxShadow: '0 0 30px rgba(167,139,250,0.6), 0 0 60px rgba(167,139,250,0.3)',
-            duration: 0.25,
-            ease: 'power2.out',
+        const hero = document.getElementById('hero');
+        if (hero) {
+          let hovering = false;
+          new IntersectionObserver(([entry]) => {
+            if (hovering) return;
+            entry.isIntersecting ? pulse.resume() : pulse.pause();
+          }, { threshold: 0.1 }).observe(hero);
+
+          cta.addEventListener('mouseenter', () => {
+            hovering = true;
+            pulse.pause();
+            gsap.to(cta, {
+              scale: 1.07,
+              y: -2,
+              boxShadow: '0 0 30px rgba(167,139,250,0.6), 0 0 60px rgba(167,139,250,0.3)',
+              duration: 0.25,
+              ease: 'power2.out',
+            });
           });
-        });
-        cta.addEventListener('mouseleave', () => {
-          gsap.to(cta, {
-            scale: 1,
-            y: 0,
-            boxShadow: '0 0 0px rgba(167,139,250,0), 0 0 0px rgba(167,139,250,0)',
-            duration: 0.6,
-            ease: 'power2.inOut',
-            onComplete: () => pulse.resume(),
+          cta.addEventListener('mouseleave', () => {
+            hovering = false;
+            gsap.to(cta, {
+              scale: 1,
+              y: 0,
+              boxShadow: '0 0 0px rgba(167,139,250,0), 0 0 0px rgba(167,139,250,0)',
+              duration: 0.6,
+              ease: 'power2.inOut',
+              onComplete: () => pulse.resume(),
+            });
           });
-        });
+        }
       },
     },
     '<0.2',

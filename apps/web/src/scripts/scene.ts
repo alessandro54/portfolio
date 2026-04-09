@@ -239,9 +239,9 @@
 
     const pushFade = cursorActive ? Math.max(0, 1 - sp * 3.5) : 0;
     const isLight = document.documentElement.dataset.theme === 'light';
-    const baseR = isLight ? 0.0 : 0.655;
-    const baseG = isLight ? 0.0 : 0.545;
-    const baseB = isLight ? 0.0 : 0.98;
+    const baseR = isLight ? 0.486 : 0.655;
+    const baseG = isLight ? 0.227 : 0.545;
+    const baseB = isLight ? 0.929 : 0.98;
 
     let maxY = 0.001;
     for (let i = 0; i < N; i++) {

@@ -8,6 +8,7 @@ const TICKER_DOC_ID = 'singleton-ticker';
 const WHAT_I_DO_DOC_ID = 'singleton-whatIDo';
 const WHY_ME_DOC_ID = 'singleton-whyMe';
 const SELECTED_PROJECTS_DOC_ID = 'singleton-selectedProjects';
+const CONTACT_DOC_ID = 'singleton-contact';
 
 export default defineConfig({
   name: 'default',
@@ -77,9 +78,20 @@ export default defineConfig({
                   .schemaType('selectedProjects')
                   .documentId(SELECTED_PROJECTS_DOC_ID),
               ),
+            S.listItem()
+              .title('Contact')
+              .id('contact')
+              .schemaType('contact')
+              .child(
+                S.document()
+                  .id('contact')
+                  .title('Contact')
+                  .schemaType('contact')
+                  .documentId(CONTACT_DOC_ID),
+              ),
             S.divider(),
             S.documentTypeListItem('experience').title('Career'),
-            ...S.documentTypeListItems().filter((item) => !['hero', 'ticker', 'whatIDo', 'whyMe', 'selectedProjects', 'experience'].includes(item.getId() ?? '')),
+            ...S.documentTypeListItems().filter((item) => !['hero', 'ticker', 'whatIDo', 'whyMe', 'selectedProjects', 'contact', 'experience'].includes(item.getId() ?? '')),
           ]),
     }),
     visionTool(),
