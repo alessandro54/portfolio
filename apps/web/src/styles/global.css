@@ -42,7 +42,7 @@ html[data-theme="light"] {
   --surface:      #f5f3ff;
   --fg:           #09090b;
   --mid:          rgba(9,9,11,0.68);
-  --dim:          rgba(9,9,11,0.50);
+  --dim:          rgba(9,9,11,0.62);
   --rule:         rgba(9,9,11,0.08);
   --accent:        #7c3aed;
   --accent-lo:     rgba(124,58,237,0.08);
