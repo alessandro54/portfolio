@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/subset-fonts.mjs",
     "preview": "astro preview"
   },
   "dependencies": {
@@ -13,7 +13,9 @@
     "@sanity/image-url": "^2.1.1",
     "@tailwindcss/vite": "^4.2.2",
     "astro": "^6.1.3",
-    "gsap": "^3.14.2",
     "tailwindcss": "^4.2.2"
+  },
+  "devDependencies": {
+    "subset-font": "^2.5.0"
   }
 }

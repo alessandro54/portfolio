@@ -56,7 +56,7 @@ importers:
         version: 3.7.2
       '@sanity/client':
         specifier: ^7.20.0
-        version: 7.20.0(debug@4.4.3)
+        version: 7.20.0
       '@sanity/image-url':
         specifier: ^2.1.1
         version: 2.1.1
@@ -66,12 +66,13 @@ importers:
       astro:
         specifier: ^6.1.3
         version: 6.1.4(@types/node@25.5.2)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.60.1)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.3)
-      gsap:
-        specifier: ^3.14.2
-        version: 3.14.2
       tailwindcss:
         specifier: ^4.2.2
         version: 4.2.2
+    devDependencies:
+      subset-font:
+        specifier: ^2.5.0
+        version: 2.5.0
 
 packages:
 
@@ -3621,6 +3622,9 @@ packages:
     resolution: {integrity: sha512-Wp1zXWPVUPBmfoa3Cqc9ctaKuzKAV6uLstRqlR56kSjplf5uAce+qeyYym7F+PHbGTk+tCEdkCW6RD7DX/gBZw==}
     engines: {node: '>=20'}
 
+  fontverter@2.0.0:
+    resolution: {integrity: sha512-DFVX5hvXuhi1Jven1tbpebYTCT9XYnvx6/Z+HFUPb7ZRMCW+pj2clU9VMhoTPgWKPhAs7JJDSk3CW1jNUvKCZQ==}
+
   for-each@0.3.5:
     resolution: {integrity: sha512-dKx12eRCVIzqCxFGplyFKJMPvLEWgmNtUrpTiJIR5u97zEhRG8ySrtboPHZXx7daLxQVrl643cTzbab2tkQjxg==}
     engines: {node: '>= 0.4'}
@@ -3753,15 +3757,15 @@ packages:
     resolution: {integrity: sha512-59XhBOC5pqNg4+3yPKerERkq2LS9qUCmBrPC2i2d5HwYK5FR+MGZb+1g7jBOUSenB2UIxBVwM537YVXr+lzDvQ==}
     engines: {node: '>=20.19 <22 || >=22.12'}
 
-  gsap@3.14.2:
-    resolution: {integrity: sha512-P8/mMxVLU7o4+55+1TCnQrPmgjPKnwkzkXOK1asnR9Jg2lna4tEY5qBJjMmAaOBDDZWtlRjBXjLa0w53G/uBLA==}
-
   gunzip-maybe@1.4.2:
     resolution: {integrity: sha512-4haO1M4mLO91PW57BMsDFf75UmwoRX0GkdD+Faw+Lr+r/OZrOCS0pIBwOL1xCKQqnQzbNFGgK2V2CpBUPeFNTw==}
     hasBin: true
 
   h3@1.15.11:
     resolution: {integrity: sha512-L3THSe2MPeBwgIZVSH5zLdBBU90TOxarvhK9d04IDY2AmVS8j2Jz2LIWtwsGOU3lu2I5jCN7FNvVfY2+XyF+mg==}
+
+  harfbuzzjs@0.10.3:
+    resolution: {integrity: sha512-GJnLUrgLMadlMYrBGEXwYEimObbysy3prWT4HyPpFQERvgTU/OZ+ReUlEPOum6w4RBtFXzXiCCmECOr4sz3qwQ==}
 
   has-bigints@1.1.0:
     resolution: {integrity: sha512-R3pbpkcIqv2Pm3dUwgjclDRVmWpTJW2DcMzcIhEXEx1oh/CEMObMm3KLmRJOdvhM7o4uQBnwr8pzRK2sJWIqfg==}
@@ -4858,6 +4862,9 @@ packages:
   pako@0.2.9:
     resolution: {integrity: sha512-NUcwaKxUxWrZLpDG+z/xZaCgQITkA/Dv4V/T6bw7VON6l1Xz/VnrBqrYjZQ12TamKHzITTfOEIYUj48y2KXImA==}
 
+  pako@1.0.11:
+    resolution: {integrity: sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==}
+
   parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
     engines: {node: '>=6'}
@@ -5576,6 +5583,9 @@ packages:
   stylis@4.3.6:
     resolution: {integrity: sha512-yQ3rwFWRfwNUY7H5vpU0wfdkNSnvnJinhF9830Swlaxl03zsOjCfmX0ugac+3LtK0lYSgwL/KXc8oYL3mG4YFQ==}
 
+  subset-font@2.5.0:
+    resolution: {integrity: sha512-Vsa8ngQ/ohhUj0an7on49y9jLZ2rK5U+T1FzPM4/ZQY0xUy5mLis6BfFtPGzecTjFgYXQlvY7FlsJF4t3R/6Ug==}
+
   supports-color@7.2.0:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
     engines: {node: '>=8'}
@@ -6110,6 +6120,10 @@ packages:
     resolution: {integrity: sha512-o8qghlI8NZHU1lLPrpi2+Uq7abh4GGPpYANlalzWxyWteJOCsr/P+oPBA49TOLu5FTZO4d3F9MnWJfiMo4BkmA==}
     engines: {node: '>=18'}
 
+  wawoff2@2.0.1:
+    resolution: {integrity: sha512-r0CEmvpH63r4T15ebFqeOjGqU4+EgTx4I510NtK35EMciSdcTxCw3Byy3JnBonz7iyIFZ0AbVo0bbFpEVuhCYA==}
+    hasBin: true
+
   web-namespaces@2.0.1:
     resolution: {integrity: sha512-bKr1DkiNa2krS7qxNtdrtHAmzuYGFQLiQ13TsorsdT6ULTkPLKuu5+GsFpDlg6JFjUTwX2DyhMPG2be8uPrqsQ==}
 
@@ -6186,6 +6200,9 @@ packages:
   widest-line@5.0.0:
     resolution: {integrity: sha512-c9bZp7b5YtRj2wOe6dlj32MK+Bx/M/d+9VB2SHM1OtsUHR0aV0tdP6DWh/iMt0kWi1t5g1Iudu6hQRNd1A4PVA==}
     engines: {node: '>=18'}
+
+  woff2sfnt-sfnt2woff@1.0.0:
+    resolution: {integrity: sha512-edK4COc1c1EpRfMqCZO1xJOvdUtM5dbVb9iz97rScvnTevqEB3GllnLWCmMVp1MfQBdF1DFg/11I0rSyAdS4qQ==}
 
   word-wrap@1.2.5:
     resolution: {integrity: sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==}
@@ -6449,7 +6466,7 @@ snapshots:
   '@astrojs/telemetry@3.3.0':
     dependencies:
       ci-info: 4.4.0
-      debug: 4.4.3(supports-color@8.1.1)
+      debug: 4.4.3
       dlv: 1.1.3
       dset: 3.1.4
       is-docker: 3.0.0
@@ -8494,6 +8511,15 @@ snapshots:
       - utf-8-validate
       - xstate
 
+  '@sanity/client@7.20.0':
+    dependencies:
+      '@sanity/eventsource': 5.0.2
+      get-it: 8.7.0
+      nanoid: 3.3.11
+      rxjs: 7.8.2
+    transitivePeerDependencies:
+      - debug
+
   '@sanity/client@7.20.0(debug@4.4.3)':
     dependencies:
       '@sanity/eventsource': 5.0.2
@@ -9977,6 +10003,10 @@ snapshots:
 
   debounce@1.2.1: {}
 
+  debug@4.4.3:
+    dependencies:
+      ms: 2.1.3
+
   debug@4.4.3(supports-color@8.1.1):
     dependencies:
       ms: 2.1.3
@@ -10529,6 +10559,8 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
+  follow-redirects@1.15.11: {}
+
   follow-redirects@1.15.11(debug@4.4.3):
     optionalDependencies:
       debug: 4.4.3(supports-color@8.1.1)
@@ -10540,6 +10572,11 @@ snapshots:
   fontkitten@1.0.3:
     dependencies:
       tiny-inflate: 1.0.3
+
+  fontverter@2.0.0:
+    dependencies:
+      wawoff2: 2.0.1
+      woff2sfnt-sfnt2woff: 1.0.0
 
   for-each@0.3.5:
     dependencies:
@@ -10597,6 +10634,17 @@ snapshots:
       has-symbols: 1.1.0
       hasown: 2.0.2
       math-intrinsics: 1.1.0
+
+  get-it@8.7.0:
+    dependencies:
+      '@types/follow-redirects': 1.14.4
+      decompress-response: 7.0.0
+      follow-redirects: 1.15.11
+      is-retry-allowed: 2.2.0
+      through2: 4.0.2
+      tunnel-agent: 0.6.0
+    transitivePeerDependencies:
+      - debug
 
   get-it@8.7.0(debug@4.4.3):
     dependencies:
@@ -10688,8 +10736,6 @@ snapshots:
 
   groq@5.19.0: {}
 
-  gsap@3.14.2: {}
-
   gunzip-maybe@1.4.2:
     dependencies:
       browserify-zlib: 0.1.4
@@ -10710,6 +10756,8 @@ snapshots:
       radix3: 1.1.2
       ufo: 1.6.3
       uncrypto: 0.1.3
+
+  harfbuzzjs@0.10.3: {}
 
   has-bigints@1.1.0: {}
 
@@ -11753,7 +11801,7 @@ snapshots:
   micromark@4.0.2:
     dependencies:
       '@types/debug': 4.1.13
-      debug: 4.4.3(supports-color@8.1.1)
+      debug: 4.4.3
       decode-named-character-reference: 1.3.0
       devlop: 1.1.0
       micromark-core-commonmark: 2.0.3
@@ -12030,6 +12078,8 @@ snapshots:
   package-manager-detector@1.6.0: {}
 
   pako@0.2.9: {}
+
+  pako@1.0.11: {}
 
   parent-module@1.0.1:
     dependencies:
@@ -13035,6 +13085,13 @@ snapshots:
 
   stylis@4.3.6: {}
 
+  subset-font@2.5.0:
+    dependencies:
+      fontverter: 2.0.0
+      harfbuzzjs: 0.10.3
+      lodash: 4.18.1
+      p-limit: 3.1.0
+
   supports-color@7.2.0:
     dependencies:
       has-flag: 4.0.0
@@ -13544,6 +13601,10 @@ snapshots:
     dependencies:
       xml-name-validator: 5.0.0
 
+  wawoff2@2.0.1:
+    dependencies:
+      argparse: 2.0.1
+
   web-namespaces@2.0.1: {}
 
   web-vitals@5.2.0: {}
@@ -13635,6 +13696,10 @@ snapshots:
   widest-line@5.0.0:
     dependencies:
       string-width: 7.2.0
+
+  woff2sfnt-sfnt2woff@1.0.0:
+    dependencies:
+      pako: 1.0.11
 
   word-wrap@1.2.5: {}
 

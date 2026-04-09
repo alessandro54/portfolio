@@ -1,461 +1,416 @@
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+// ══════════════════════════════════════
+// Native animation engine — zero dependencies
+// Web Animations API + IntersectionObserver
+// ══════════════════════════════════════
 
-gsap.registerPlugin(ScrollTrigger);
+const $ = (s: string) => document.querySelector<HTMLElement>(s);
+const $$ = (s: string) => [...document.querySelectorAll<HTMLElement>(s)];
 
-gsap.defaults({ ease: 'power3.out' });
+// Easing curves
+const EASE = {
+  out: 'cubic-bezier(0.33, 1, 0.68, 1)',
+  outStrong: 'cubic-bezier(0.25, 1, 0.5, 1)',
+  back: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+  inOut: 'cubic-bezier(0.65, 0, 0.35, 1)',
+};
+
+/** Reveal an element and animate it */
+function anim(el: HTMLElement | null, keyframes: Keyframe[], opts: KeyframeAnimationOptions = {}) {
+  if (!el) return null;
+  el.style.visibility = 'visible';
+  return el.animate(keyframes, { fill: 'both', ...opts });
+}
+
+/** Animate multiple elements with stagger */
+function stagger(els: HTMLElement[], keyframes: Keyframe[], opts: KeyframeAnimationOptions = {}, gap = 120) {
+  return els.map((el, i) => anim(el, keyframes, { ...opts, delay: ((opts.delay as number) || 0) + i * gap }));
+}
+
+/** Trigger once when element enters viewport */
+function onVisible(selector: string, fn: (el: HTMLElement) => void, margin = '0px 0px -15% 0px') {
+  const observer = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) {
+        fn(e.target as HTMLElement);
+        observer.unobserve(e.target);
+      }
+    }
+  }, { rootMargin: margin });
+  $$(selector).forEach((el) => observer.observe(el));
+}
+
+/** Reveal a grid: show container, animate children, fade borders */
+function revealGrid(
+  gridSel: string,
+  childSel: string,
+  childKF: Keyframe[],
+  childOpts: KeyframeAnimationOptions,
+  childGap: number,
+  fadeBg = false,
+) {
+  onVisible(gridSel, (grid) => {
+    const children = $$(childSel);
+    children.forEach((c) => { c.style.opacity = '0'; });
+    grid.style.visibility = 'visible';
+    grid.style.borderColor = 'transparent';
+    grid.style.backgroundColor = 'transparent';
+
+    stagger(children, childKF, childOpts, childGap);
+
+    const borderDelay = childGap * Math.min(children.length, 3);
+    grid.animate(
+      [{ borderColor: 'transparent' }, { borderColor: 'var(--rule)' }],
+      { duration: 600, delay: borderDelay, fill: 'forwards', easing: EASE.inOut },
+    );
+    if (fadeBg) {
+      grid.animate(
+        [{ backgroundColor: 'transparent' }, { backgroundColor: 'var(--rule)' }],
+        { duration: 600, delay: borderDelay, fill: 'forwards', easing: EASE.inOut },
+      );
+    }
+  }, '0px 0px -20% 0px');
+}
 
 // ══════════════════════════════════════
 // 1. NAV — SLIDE DOWN
 // ══════════════════════════════════════
-gsap.from('nav', {
-  y: -100,
-  autoAlpha: 0,
-  duration: 1,
-  ease: 'power4.out',
-  delay: 0.1,
-});
+anim($('nav'), [
+  { transform: 'translateY(-100px)', opacity: 0 },
+  { transform: 'none', opacity: 1 },
+], { duration: 1000, easing: EASE.outStrong, delay: 100 });
 
 // ══════════════════════════════════════
-// 2. HERO ENTRANCE TIMELINE
+// 2. HERO ENTRANCE SEQUENCE
 // ══════════════════════════════════════
-const hero = gsap.timeline({ delay: 0.3 });
+anim($('.hero-badge'), [
+  { opacity: 0, transform: 'translateY(40px) scale(0.9)' },
+  { opacity: 1, transform: 'none' },
+], { duration: 900, easing: EASE.out, delay: 300 });
 
-hero
-  .from('.hero-badge', {
-    autoAlpha: 0,
-    y: 40,
-    scale: 0.9,
-    duration: 0.9,
-  })
-  .from(
-    '#hero h1 span',
-    {
-      autoAlpha: 0,
-      y: 80,
-      stagger: 0.15,
-      duration: 1.2,
-      ease: 'power4.out',
-    },
-    '<0.15',
-  )
-  .from(
-    '.hero-sub',
-    {
-      autoAlpha: 0,
-      y: 50,
-      duration: 1,
-    },
-    '<0.25',
-  )
-  .fromTo(
-    '.hero-btns a',
-    { autoAlpha: 0, y: 40 },
-    {
-      autoAlpha: 1,
-      y: 0,
-      stagger: 0.12,
-      duration: 0.9,
-      onComplete: () => {
-        const cta = document.querySelector('.cta-primary');
-        if (!cta) return;
+stagger($$('#hero h1 span'), [
+  { opacity: 0, transform: 'translateY(80px)' },
+  { opacity: 1, transform: 'none' },
+], { duration: 1200, easing: EASE.outStrong, delay: 450 }, 150);
 
-        const pulse = gsap.to(cta, {
-          boxShadow: '0 0 20px rgba(167,139,250,0.5), 0 0 40px rgba(167,139,250,0.2)',
-          scale: 1.04,
-          duration: 1.2,
-          ease: 'sine.inOut',
-          yoyo: true,
-          repeat: -1,
-        });
+anim($('.hero-sub'), [
+  { opacity: 0, transform: 'translateY(50px)' },
+  { opacity: 1, transform: 'none' },
+], { duration: 1000, easing: EASE.out, delay: 700 });
 
-        const hero = document.getElementById('hero');
-        if (hero) {
-          let hovering = false;
-          new IntersectionObserver(([entry]) => {
-            if (hovering) return;
-            entry.isIntersecting ? pulse.resume() : pulse.pause();
-          }, { threshold: 0.1 }).observe(hero);
+const btnAnims = stagger($$('.hero-btns a'), [
+  { opacity: 0, transform: 'translateY(40px)' },
+  { opacity: 1, transform: 'none' },
+], { duration: 900, easing: EASE.out, delay: 900 }, 120);
 
-          cta.addEventListener('mouseenter', () => {
-            hovering = true;
-            pulse.pause();
-            gsap.to(cta, {
-              scale: 1.07,
-              y: -2,
-              boxShadow: '0 0 30px rgba(167,139,250,0.6), 0 0 60px rgba(167,139,250,0.3)',
-              duration: 0.25,
-              ease: 'power2.out',
-            });
-          });
-          cta.addEventListener('mouseleave', () => {
-            hovering = false;
-            gsap.to(cta, {
-              scale: 1,
-              y: 0,
-              boxShadow: '0 0 0px rgba(167,139,250,0), 0 0 0px rgba(167,139,250,0)',
-              duration: 0.6,
-              ease: 'power2.inOut',
-              onComplete: () => pulse.resume(),
-            });
-          });
-        }
-      },
-    },
-    '<0.2',
-  )
-  .from(
-    '.hero-stats',
-    {
-      autoAlpha: 0,
-      y: 50,
-      scale: 0.92,
-      duration: 1.1,
-      ease: 'power2.out',
-    },
-    '<0.15',
-  )
-  .from(
-    '.scroll-cue',
-    {
-      autoAlpha: 0,
-      y: 20,
-      duration: 0.8,
-    },
-    '<0.5',
-  );
+// CTA pulse — starts after hero buttons finish
+const cta = $('.cta-primary');
+if (cta && btnAnims.length) {
+  const last = btnAnims[btnAnims.length - 1];
+  last?.finished.then(() => {
+    const pulse = cta.animate([
+      { boxShadow: 'none', transform: 'scale(1)' },
+      { boxShadow: '0 0 20px rgba(167,139,250,0.5), 0 0 40px rgba(167,139,250,0.2)', transform: 'scale(1.04)' },
+    ], { duration: 1200, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' });
+
+    const hero = $('#hero');
+    if (hero) {
+      let hovering = false;
+      new IntersectionObserver(([e]) => {
+        if (hovering) return;
+        e.isIntersecting ? pulse.play() : pulse.pause();
+      }, { threshold: 0.1 }).observe(hero);
+
+      cta.addEventListener('mouseenter', () => {
+        hovering = true;
+        pulse.pause();
+        cta.animate(
+          [{ transform: 'scale(1.07) translateY(-2px)', boxShadow: '0 0 30px rgba(167,139,250,0.6), 0 0 60px rgba(167,139,250,0.3)' }],
+          { duration: 250, fill: 'forwards', easing: EASE.out },
+        );
+      });
+      cta.addEventListener('mouseleave', () => {
+        hovering = false;
+        const a = cta.animate(
+          [{ transform: 'scale(1)', boxShadow: 'none' }],
+          { duration: 600, fill: 'forwards', easing: EASE.inOut },
+        );
+        a.finished.then(() => pulse.play());
+      });
+    }
+  });
+}
+
+anim($('.hero-stats'), [
+  { opacity: 0, transform: 'translateY(50px) scale(0.92)' },
+  { opacity: 1, transform: 'none' },
+], { duration: 1100, easing: EASE.out, delay: 1050 });
+
+anim($('.scroll-cue'), [
+  { opacity: 0, transform: 'translateY(20px)' },
+  { opacity: 1, transform: 'none' },
+], { duration: 800, easing: EASE.out, delay: 1550 });
 
 // ══════════════════════════════════════
 // 3. STAT COUNTER ANIMATION
 // ══════════════════════════════════════
-document.querySelectorAll<HTMLElement>('.stat-num').forEach((el) => {
+$$<HTMLElement>('.stat-num').forEach((el) => {
   const target = parseInt(el.dataset.target || '0', 10);
   const suffix = el.dataset.suffix || '';
-  const obj = { val: 0 };
+  const start = performance.now() + 1050;
+  const dur = 1800;
 
-  hero.to(
-    obj,
-    {
-      val: target,
-      duration: 1.8,
-      ease: 'power2.out',
-      onUpdate: () => {
-        el.textContent = Math.round(obj.val) + suffix;
-      },
-    },
-    // start when hero-stats begins
-    '<',
-  );
+  function tick(now: number) {
+    const t = now - start;
+    if (t < 0) { requestAnimationFrame(tick); return; }
+    const p = Math.min(t / dur, 1);
+    const eased = 1 - (1 - p) * (1 - p); // power2.out
+    el.textContent = Math.round(target * eased) + suffix;
+    if (p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 });
 
 // ══════════════════════════════════════
 // 4. SCROLL CUE — FADE ON SCROLL
 // ══════════════════════════════════════
-gsap.to('.scroll-cue', {
-  autoAlpha: 0,
-  scrollTrigger: {
-    trigger: '#hero',
-    start: 'top top',
-    end: '+=120',
-    scrub: true,
-  },
-});
+const scrollCue = $('.scroll-cue');
 
 // ══════════════════════════════════════
 // 5. TICKER — REVEAL + SCROLL SPEED
 // ══════════════════════════════════════
-gsap.from('.ticker-wrap', {
-  autoAlpha: 0,
-  y: 20,
-  duration: 0.8,
-  scrollTrigger: {
-    trigger: '.ticker-wrap',
-    start: 'top 90%',
-    toggleActions: 'play none none none',
-  },
-});
+onVisible('.ticker-wrap', (el) => {
+  anim(el, [
+    { opacity: 0, transform: 'translateY(20px)' },
+    { opacity: 1, transform: 'none' },
+  ], { duration: 800, easing: EASE.out });
+}, '0px 0px -10% 0px');
 
-// Speed up ticker on scroll
-const tickerTrack = document.querySelector<HTMLElement>('.ticker-wrap .inline-flex');
+const tickerTrack = $('.ticker-wrap .inline-flex');
+let tkSpeed = 1;
+let tkTarget = 1;
+let tkX = 0;
+let tkTotal = 0;
+let tkInView = false;
+
 if (tickerTrack) {
-  let currentSpeed = 1;
-  let targetSpeed = 1;
-
-  // Override the CSS animation with GSAP for dynamic speed control
   tickerTrack.style.animation = 'none';
-  let xPos = 0;
-  const totalWidth = tickerTrack.scrollWidth / 2;
+  tkTotal = tickerTrack.scrollWidth / 2;
 
-  gsap.ticker.add(() => {
-    currentSpeed += (targetSpeed - currentSpeed) * 0.05;
-    xPos -= 0.5 * currentSpeed;
-    if (xPos <= -totalWidth) xPos += totalWidth;
-    gsap.set(tickerTrack, { x: xPos });
-  });
-
-  ScrollTrigger.create({
-    trigger: '.ticker-wrap',
-    start: 'top bottom',
-    end: 'bottom top',
-    onUpdate: (self) => {
-      targetSpeed = 1 + Math.abs(self.getVelocity()) / 600;
-      targetSpeed = Math.min(targetSpeed, 5);
-    },
-    onLeave: () => {
-      targetSpeed = 1;
-    },
-    onLeaveBack: () => {
-      targetSpeed = 1;
-    },
-  });
+  new IntersectionObserver(([e]) => {
+    tkInView = e.isIntersecting;
+    if (!tkInView) tkTarget = 1;
+  }).observe($('.ticker-wrap')!);
 }
 
 // ══════════════════════════════════════
 // 6. SECTION LABELS — CLIP IN FROM LEFT
 // ══════════════════════════════════════
-gsap.utils.toArray<HTMLElement>('.s-label').forEach((label) => {
-  gsap.from(label, {
-    autoAlpha: 0,
-    x: -40,
-    duration: 0.7,
-    ease: 'power3.out',
-    scrollTrigger: {
-      trigger: label,
-      start: 'top 88%',
-      toggleActions: 'play none none none',
-    },
-  });
-});
-
-// Section headings — fade up after label
-gsap.utils.toArray<HTMLElement>('section:not(#contact) h2').forEach((h2) => {
-  gsap.from(h2, {
-    autoAlpha: 0,
-    y: 30,
-    duration: 0.9,
-    ease: 'power3.out',
-    scrollTrigger: {
-      trigger: h2,
-      start: 'top 85%',
-      toggleActions: 'play none none none',
-    },
-  });
-});
+onVisible('.s-label', (el) => {
+  anim(el, [
+    { opacity: 0, transform: 'translateX(-40px)' },
+    { opacity: 1, transform: 'none' },
+  ], { duration: 700, easing: EASE.out });
+}, '0px 0px -12% 0px');
 
 // ══════════════════════════════════════
-// 7. SERVICES
+// 7. SECTION HEADINGS — FADE UP
 // ══════════════════════════════════════
-gsap.set('#services .grid', {
-  visibility: 'inherit',
-  borderColor: 'transparent',
-  backgroundColor: 'transparent',
-});
-
-const svcTl = gsap.timeline({
-  scrollTrigger: {
-    trigger: '#services .grid',
-    start: 'top 80%',
-    toggleActions: 'play none none none',
-  },
-});
-
-svcTl
-  .from('#services .grid > div', {
-    autoAlpha: 0,
-    y: 60,
-    scale: 0.93,
-    stagger: 0.12,
-    duration: 0.9,
-    ease: 'back.out(1.2)',
-  })
-  .to(
-    '#services .grid',
-    {
-      borderColor: 'var(--rule)',
-      duration: 0.6,
-      ease: 'power2.inOut',
-    },
-    '<0.3',
-  );
+onVisible('section:not(#contact) h2', (el) => {
+  anim(el, [
+    { opacity: 0, transform: 'translateY(30px)' },
+    { opacity: 1, transform: 'none' },
+  ], { duration: 900, easing: EASE.out });
+}, '0px 0px -15% 0px');
 
 // ══════════════════════════════════════
-// 8. WHY ME
+// 8. SERVICES
 // ══════════════════════════════════════
-// Set wrapper visible but transparent — border/bg hidden
-gsap.set('.why-grid', {
-  visibility: 'inherit',
-  borderColor: 'transparent',
-  backgroundColor: 'transparent',
-  boxShadow: 'none',
-});
-
-const whyTl = gsap.timeline({
-  scrollTrigger: {
-    trigger: '.why-grid',
-    start: 'top 80%',
-    toggleActions: 'play none none none',
-  },
-});
-
-whyTl
-  .from('.why-feature > div', {
-    autoAlpha: 0,
-    y: 50,
-    stagger: 0.15,
-    duration: 0.9,
-  })
-  .from(
-    '.why-card',
-    {
-      autoAlpha: 0,
-      y: 50,
-      scale: 0.93,
-      stagger: 0.1,
-      duration: 0.8,
-      ease: 'back.out(1.4)',
-    },
-    '<0.2',
-  )
-  .to(
-    '.why-grid',
-    {
-      borderColor: 'var(--rule)',
-      backgroundColor: 'var(--rule)',
-      duration: 0.6,
-      ease: 'power2.inOut',
-    },
-    '<0.3',
-  );
+revealGrid(
+  '#services .grid',
+  '#services .grid > div',
+  [{ opacity: 0, transform: 'translateY(60px) scale(0.93)' }, { opacity: 1, transform: 'none' }],
+  { duration: 900, easing: EASE.back },
+  120,
+);
 
 // ══════════════════════════════════════
-// 9. RECENT WORK + TAG STAGGER
+// 9. WHY ME
 // ══════════════════════════════════════
-gsap.set('#work .grid', {
-  visibility: 'inherit',
-  borderColor: 'transparent',
-  backgroundColor: 'transparent',
-});
+onVisible('.why-grid', (grid) => {
+  // Feature columns
+  const featureDivs = $$('.why-feature > div');
+  featureDivs.forEach((c) => { c.style.opacity = '0'; });
+  grid.style.visibility = 'visible';
+  grid.style.borderColor = 'transparent';
+  grid.style.backgroundColor = 'transparent';
 
-const workTl = gsap.timeline({
-  scrollTrigger: {
-    trigger: '#work .grid',
-    start: 'top 80%',
-    toggleActions: 'play none none none',
-  },
-});
+  stagger(featureDivs, [
+    { opacity: 0, transform: 'translateY(50px)' },
+    { opacity: 1, transform: 'none' },
+  ], { duration: 900, easing: EASE.out }, 150);
 
-workTl
-  .from('.wk', {
-    autoAlpha: 0,
-    y: 70,
-    scale: 0.9,
-    stagger: 0.15,
-    duration: 1,
-  })
-  .from(
-    '.wk-tags span',
-    {
-      autoAlpha: 0,
-      y: 15,
-      scale: 0.8,
-      stagger: 0.04,
-      duration: 0.5,
-      ease: 'back.out(1.7)',
-    },
-    '<0.5',
-  )
-  .to(
-    '#work .grid',
-    {
-      borderColor: 'var(--rule)',
-      backgroundColor: 'var(--rule)',
-      duration: 0.6,
-      ease: 'power2.inOut',
-    },
-    '<0.3',
-  );
+  // Cards
+  const cards = $$('.why-card');
+  cards.forEach((c) => { c.style.opacity = '0'; });
+  stagger(cards, [
+    { opacity: 0, transform: 'translateY(50px) scale(0.93)' },
+    { opacity: 1, transform: 'none' },
+  ], { duration: 800, easing: EASE.back, delay: 200 }, 100);
+
+  // Border + bg
+  const d = 300;
+  grid.animate([{ borderColor: 'transparent' }, { borderColor: 'var(--rule)' }], { duration: 600, delay: d, fill: 'forwards', easing: EASE.inOut });
+  grid.animate([{ backgroundColor: 'transparent' }, { backgroundColor: 'var(--rule)' }], { duration: 600, delay: d, fill: 'forwards', easing: EASE.inOut });
+}, '0px 0px -20% 0px');
 
 // ══════════════════════════════════════
-// 10. EXPERIENCE
+// 10. RECENT WORK + TAG STAGGER
 // ══════════════════════════════════════
-ScrollTrigger.batch('.exp-row', {
-  onEnter: (elements) => {
-    gsap.from(elements, {
-      autoAlpha: 0,
-      x: -80,
-      duration: 1,
-      ease: 'power3.out',
-      stagger: 0.12,
-    });
-  },
-  start: 'top 85%',
-  once: true,
-});
+onVisible('#work .grid', (grid) => {
+  const wks = $$('.wk');
+  wks.forEach((c) => { c.style.opacity = '0'; });
+  grid.style.visibility = 'visible';
+  grid.style.borderColor = 'transparent';
+  grid.style.backgroundColor = 'transparent';
+
+  stagger(wks, [
+    { opacity: 0, transform: 'translateY(70px) scale(0.9)' },
+    { opacity: 1, transform: 'none' },
+  ], { duration: 1000, easing: EASE.out }, 150);
+
+  // Tags stagger
+  const tags = $$('.wk-tags span');
+  tags.forEach((c) => { c.style.opacity = '0'; });
+  stagger(tags, [
+    { opacity: 0, transform: 'translateY(15px) scale(0.8)' },
+    { opacity: 1, transform: 'none' },
+  ], { duration: 500, easing: EASE.back, delay: 500 }, 40);
+
+  // Border + bg
+  const d = 300;
+  grid.animate([{ borderColor: 'transparent' }, { borderColor: 'var(--rule)' }], { duration: 600, delay: d, fill: 'forwards', easing: EASE.inOut });
+  grid.animate([{ backgroundColor: 'transparent' }, { backgroundColor: 'var(--rule)' }], { duration: 600, delay: d, fill: 'forwards', easing: EASE.inOut });
+}, '0px 0px -20% 0px');
 
 // ══════════════════════════════════════
-// 11. CONTACT
+// 11. EXPERIENCE
 // ══════════════════════════════════════
-const contactTl = gsap.timeline({
-  scrollTrigger: {
-    trigger: '#contact',
-    start: 'top 95%',
-    toggleActions: 'play none none none',
-  },
-});
-
-contactTl
-  .from(
-    '#contact .flex.flex-col > a',
-    {
-      autoAlpha: 0,
-      y: 40,
-      duration: 0.8,
-    },
-    '<0.2',
-  )
-  .from(
-    '#contact .flex.gap-\\[0\\.6rem\\] a',
-    {
-      autoAlpha: 0,
-      y: 30,
-      stagger: 0.08,
-      duration: 0.7,
-    },
-    '<0.15',
-  );
-
+let expIdx = 0;
+onVisible('.exp-row', (el) => {
+  anim(el, [
+    { opacity: 0, transform: 'translateX(-80px)' },
+    { opacity: 1, transform: 'none' },
+  ], { duration: 1000, easing: EASE.out, delay: expIdx * 120 });
+  expIdx++;
+  // Reset counter after a pause so next batch staggers fresh
+  setTimeout(() => { expIdx = 0; }, 300);
+}, '0px 0px -15% 0px');
 
 // ══════════════════════════════════════
-// 13. PARALLAX — SUBTLE Y-SHIFT ON SECTIONS
+// 12. CONTACT
 // ══════════════════════════════════════
-gsap.utils.toArray<HTMLElement>('#services, #work, #experience').forEach((section) => {
-  gsap.to(section, {
-    y: -40,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: section,
-      start: 'top bottom',
-      end: 'bottom top',
-      scrub: true,
-    },
-  });
-});
+onVisible('#contact', (section) => {
+  const emailLink = section.querySelector<HTMLElement>('.flex.flex-col > a');
+  if (emailLink) {
+    anim(emailLink, [
+      { opacity: 0, transform: 'translateY(40px)' },
+      { opacity: 1, transform: 'none' },
+    ], { duration: 800, easing: EASE.out, delay: 200 });
+  }
+
+  const socials = [...section.querySelectorAll<HTMLElement>('.flex.gap-\\[0\\.6rem\\] a')];
+  socials.forEach((c) => { c.style.opacity = '0'; });
+  stagger(socials, [
+    { opacity: 0, transform: 'translateY(30px)' },
+    { opacity: 1, transform: 'none' },
+  ], { duration: 700, easing: EASE.out, delay: 350 }, 80);
+}, '0px 0px -5% 0px');
 
 // ══════════════════════════════════════
-// 14. BACKGROUND PARALLAX — SUBTLE DRIFT
+// 13-14. SCROLL-DRIVEN EFFECTS
 // ══════════════════════════════════════
-const gl = document.getElementById('gl');
-const vignette = document.getElementById('vignette');
 
-if (gl && vignette) {
-  gsap.to([gl, vignette], {
-    y: () => document.documentElement.scrollHeight * 0.08,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: 'body',
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 0.5,
-    },
+// Cache section positions for parallax
+const parallaxSections: { el: HTMLElement; top: number; height: number }[] = [];
+function cacheOffsets() {
+  parallaxSections.length = 0;
+  $$('#services, #work, #experience').forEach((el) => {
+    const rect = el.getBoundingClientRect();
+    parallaxSections.push({ el, top: rect.top + window.scrollY, height: rect.height });
   });
 }
+cacheOffsets();
+window.addEventListener('resize', cacheOffsets, { passive: true });
+
+const gl = $('#gl');
+const vignette = $('#vignette');
+
+// Scroll state
+let scrollY = 0;
+let lastScrollY = 0;
+let lastScrollTime = 0;
+
+window.addEventListener('scroll', () => {
+  scrollY = window.scrollY;
+
+  // Ticker velocity
+  if (tkInView) {
+    const now = performance.now();
+    if (lastScrollTime) {
+      const vel = Math.abs(scrollY - lastScrollY) / (now - lastScrollTime) * 1000;
+      tkTarget = Math.min(1 + vel / 600, 5);
+    }
+    lastScrollY = scrollY;
+    lastScrollTime = now;
+  }
+}, { passive: true });
+
+// Background parallax lerp state
+let bgY = 0;
+
+// Main animation loop
+function tick() {
+  // Scroll-cue fade (0 → 120px scroll)
+  if (scrollCue) {
+    const p = Math.min(scrollY / 120, 1);
+    scrollCue.style.opacity = String(1 - p);
+    if (p >= 1) scrollCue.style.visibility = 'hidden';
+  }
+
+  // Ticker
+  if (tickerTrack && tkTotal) {
+    tkSpeed += (tkTarget - tkSpeed) * 0.05;
+    tkX -= 0.5 * tkSpeed;
+    if (tkX <= -tkTotal) tkX += tkTotal;
+    tickerTrack.style.transform = `translateX(${tkX}px)`;
+
+    // Decay target speed toward 1
+    if (!tkInView || Math.abs(scrollY - lastScrollY) < 1) {
+      tkTarget += (1 - tkTarget) * 0.02;
+    }
+  }
+
+  // Section parallax
+  const vh = window.innerHeight;
+  for (const s of parallaxSections) {
+    const sTop = s.top - scrollY;
+    if (sTop < vh && sTop + s.height > 0) {
+      const progress = 1 - (sTop + s.height) / (vh + s.height);
+      s.el.style.transform = `translateY(${-40 * progress}px)`;
+    }
+  }
+
+  // Background parallax (lerped)
+  if (gl && vignette) {
+    const maxScroll = document.documentElement.scrollHeight - vh;
+    const maxShift = document.documentElement.scrollHeight * 0.08;
+    const targetY = maxScroll > 0 ? (scrollY / maxScroll) * maxShift : 0;
+    bgY += (targetY - bgY) * 0.08;
+    const t = `translateY(${bgY}px)`;
+    gl.style.transform = t;
+    vignette.style.transform = t;
+  }
+
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
