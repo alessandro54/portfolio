@@ -42,8 +42,7 @@ const alternate = `https://alessandro.chumpitaz.dev/${otherLocale}/`;
     <link rel="alternate" hreflang={otherLocale} href={alternate} />
     <link rel="alternate" hreflang="x-default" href="https://alessandro.chumpitaz.dev/en/" />
 
-    <!-- Self-hosted variable font (preloaded) -->
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/plus-jakarta-sans-var.woff2" crossorigin />
+    <!-- Heading font — loaded async via font-display: swap, body uses system-ui -->
 
     <meta name="theme-color" content="#09080f" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#f8f7fc" media="(prefers-color-scheme: light)" />
@@ -57,7 +56,7 @@ const alternate = `https://alessandro.chumpitaz.dev/${otherLocale}/`;
       :root{--bg:#09080f;--surface:#130f24;--fg:#faf9ff;--mid:rgba(250,249,255,0.62);--dim:rgba(250,249,255,0.42);--rule:rgba(250,249,255,0.07);--accent:#a78bfa;--accent-lo:rgba(167,139,250,0.10);--accent-bd:rgba(167,139,250,0.22);--nav-bg:rgba(9,8,15,0.70);--vig-rgb:9,8,15;--gradient-end:#e879f9;--h1-end:#fff}
       html[data-theme="light"]{--bg:#fff;--surface:#f5f3ff;--fg:#09090b;--mid:rgba(9,9,11,0.68);--dim:rgba(9,9,11,0.62);--rule:rgba(9,9,11,0.08);--accent:#7c3aed;--accent-lo:rgba(124,58,237,0.08);--accent-bd:rgba(124,58,237,0.20);--nav-bg:rgba(255,255,255,0.85);--vig-rgb:255,255,255;--gradient-end:#a855f7;--h1-end:#a855f7}
       *,*::before,*::after{margin:0;box-sizing:border-box}
-      body{background:var(--bg);color:var(--fg);font-family:'Plus Jakarta Sans',system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+      body{background:var(--bg);color:var(--fg);font-family:'Jakarta Heading',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
       #gl{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block}
       #vignette{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 65% 65% at 50% 50%,rgba(var(--vig-rgb),0.55) 0%,rgba(var(--vig-rgb),0.30) 40%,transparent 70%)}
       nav,.hero-badge,#hero h1 span,.hero-sub,.hero-btns a,.hero-stats,.scroll-cue,.ticker-wrap,.s-label,section:not(#contact) h2,#services .grid,.why-grid,#work .grid,.exp-row,#contact .flex.flex-col>a{visibility:hidden}

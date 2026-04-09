@@ -80,26 +80,18 @@ jobs:
           a11y=$(echo "$manifest" | jq '.[0].summary.accessibility * 100 | floor')
           bp=$(echo "$manifest" | jq '.[0].summary."best-practices" * 100 | floor')
           seo=$(echo "$manifest" | jq '.[0].summary.seo * 100 | floor')
-          size=$(echo "$manifest" | jq '.[0].summary' | node -e "
-            const lhr = require(JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')).jsonPath || '');
-          " 2>/dev/null || echo "")
-          echo "performance=$perf" >> "$GITHUB_OUTPUT"
-          echo "accessibility=$a11y" >> "$GITHUB_OUTPUT"
-          echo "best-practices=$bp" >> "$GITHUB_OUTPUT"
-          echo "seo=$seo" >> "$GITHUB_OUTPUT"
-
-      - name: Get page size
-        id: size
-        run: |
-          manifest='${{ steps.lh.outputs.manifest }}'
           json_path=$(echo "$manifest" | jq -r '.[0].jsonPath')
           if [ -f "$json_path" ]; then
             bytes=$(jq '.audits["total-byte-weight"].numericValue // 0 | floor' "$json_path")
             kb=$(echo "scale=0; $bytes / 1024" | bc)
-            echo "total=${kb} KiB" >> "$GITHUB_OUTPUT"
+            echo "page_size=${kb} KiB" >> "$GITHUB_OUTPUT"
           else
-            echo "total=N/A" >> "$GITHUB_OUTPUT"
+            echo "page_size=N/A" >> "$GITHUB_OUTPUT"
           fi
+          echo "performance=$perf" >> "$GITHUB_OUTPUT"
+          echo "accessibility=$a11y" >> "$GITHUB_OUTPUT"
+          echo "best-practices=$bp" >> "$GITHUB_OUTPUT"
+          echo "seo=$seo" >> "$GITHUB_OUTPUT"
 
       - name: Update Performance badge
         uses: schneegans/dynamic-badges-action@v1.7.0
@@ -164,7 +156,7 @@ jobs:
           gistID: ${{ vars.LIGHTHOUSE_GIST_ID }}
           filename: lighthouse_page_size.json
           label: Page Weight
-          message: ${{ steps.size.outputs.total }}
+          message: ${{ steps.scores.outputs.page_size }}
           color: brightgreen
           namedLogo: cloudflare
           logoColor: white

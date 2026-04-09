@@ -62,7 +62,10 @@ const fontFiles = readdirSync(FONTS_DIR).filter((f) => f.endsWith('.woff2'));
 for (const file of fontFiles) {
   const fontPath = join(FONTS_DIR, file);
   const original = readFileSync(fontPath);
-  const subset = await subsetFont(original, text, { targetFormat: 'woff2' });
+  const subset = await subsetFont(original, text, {
+    targetFormat: 'woff2',
+    variationAxes: { wght: { min: 600, max: 800 } },
+  });
   writeFileSync(fontPath, subset);
   console.log(`[optimize] ${file}: ${original.length} → ${subset.length} bytes (−${((original.length - subset.length) / original.length * 100).toFixed(0)}%)`);
 }
