@@ -61,6 +61,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Lighthouse audit
+        id: lh
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
@@ -69,3 +70,100 @@ jobs:
           configPath: .github/lighthouse/config.json
           budgetPath: .github/lighthouse/budget.json
           uploadArtifacts: true
+
+      - name: Extract scores
+        id: scores
+        run: |
+          manifest='${{ steps.lh.outputs.manifest }}'
+          perf=$(echo "$manifest" | jq '.[0].summary.performance * 100 | floor')
+          a11y=$(echo "$manifest" | jq '.[0].summary.accessibility * 100 | floor')
+          bp=$(echo "$manifest" | jq '.[0].summary."best-practices" * 100 | floor')
+          seo=$(echo "$manifest" | jq '.[0].summary.seo * 100 | floor')
+          size=$(echo "$manifest" | jq '.[0].summary' | node -e "
+            const lhr = require(JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')).jsonPath || '');
+          " 2>/dev/null || echo "")
+          echo "performance=$perf" >> "$GITHUB_OUTPUT"
+          echo "accessibility=$a11y" >> "$GITHUB_OUTPUT"
+          echo "best-practices=$bp" >> "$GITHUB_OUTPUT"
+          echo "seo=$seo" >> "$GITHUB_OUTPUT"
+
+      - name: Get page size
+        id: size
+        run: |
+          manifest='${{ steps.lh.outputs.manifest }}'
+          json_path=$(echo "$manifest" | jq -r '.[0].jsonPath')
+          if [ -f "$json_path" ]; then
+            bytes=$(jq '.audits["total-byte-weight"].numericValue // 0 | floor' "$json_path")
+            kb=$(echo "scale=0; $bytes / 1024" | bc)
+            echo "total=${kb} KiB" >> "$GITHUB_OUTPUT"
+          else
+            echo "total=N/A" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update Performance badge
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ${{ vars.LIGHTHOUSE_GIST_ID }}
+          filename: lighthouse_performance.json
+          label: Performance
+          message: ${{ steps.scores.outputs.performance }}
+          valColorRange: ${{ steps.scores.outputs.performance }}
+          minColorRange: 0
+          maxColorRange: 100
+          namedLogo: lighthouse
+          logoColor: white
+
+      - name: Update Accessibility badge
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ${{ vars.LIGHTHOUSE_GIST_ID }}
+          filename: lighthouse_accessibility.json
+          label: Accessibility
+          message: ${{ steps.scores.outputs.accessibility }}
+          valColorRange: ${{ steps.scores.outputs.accessibility }}
+          minColorRange: 0
+          maxColorRange: 100
+          namedLogo: lighthouse
+          logoColor: white
+
+      - name: Update Best Practices badge
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ${{ vars.LIGHTHOUSE_GIST_ID }}
+          filename: lighthouse_best_practices.json
+          label: Best Practices
+          message: ${{ steps.scores.outputs.best-practices }}
+          valColorRange: ${{ steps.scores.outputs.best-practices }}
+          minColorRange: 0
+          maxColorRange: 100
+          namedLogo: lighthouse
+          logoColor: white
+
+      - name: Update SEO badge
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ${{ vars.LIGHTHOUSE_GIST_ID }}
+          filename: lighthouse_seo.json
+          label: SEO
+          message: ${{ steps.scores.outputs.seo }}
+          valColorRange: ${{ steps.scores.outputs.seo }}
+          minColorRange: 0
+          maxColorRange: 100
+          namedLogo: lighthouse
+          logoColor: white
+
+      - name: Update Page Size badge
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ${{ vars.LIGHTHOUSE_GIST_ID }}
+          filename: lighthouse_page_size.json
+          label: Page Weight
+          message: ${{ steps.size.outputs.total }}
+          color: brightgreen
+          namedLogo: cloudflare
+          logoColor: white
