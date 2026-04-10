@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import { useTranslations } from '@i18n/translations';
 import { sanityClient } from '@lib/sanity';
-import imageUrlBuilder from '@sanity/image-url';
+import { createImageUrlBuilder } from '@sanity/image-url';
 
 interface Props {
   locale?: string;
@@ -24,7 +24,7 @@ const seo = await sanityClient.fetch(
 
 const t = (field: Record<string, string> | null) => field?.[locale] || field?.en || '';
 
-const builder = imageUrlBuilder(sanityClient);
+const builder = createImageUrlBuilder({ projectId: 'sczvled1', dataset: 'production' });
 const ogImageUrl = seo?.ogImage ? builder.image(seo.ogImage).width(1200).height(630).url() : null;
 const appleTouchIconUrl = seo?.appleTouchIcon ? builder.image(seo.appleTouchIcon).width(180).height(180).format('png').url() : null;
 
