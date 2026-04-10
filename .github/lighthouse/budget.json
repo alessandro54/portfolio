@@ -3,16 +3,16 @@
     "path": "/*",
     "resourceSizes": [
       { "resourceType": "script", "budget": 40 },
-      { "resourceType": "stylesheet", "budget": 15 },
+      { "resourceType": "stylesheet", "budget": 5 },
       { "resourceType": "font", "budget": 30 },
-      { "resourceType": "document", "budget": 15 },
-      { "resourceType": "total", "budget": 120 }
+      { "resourceType": "document", "budget": 25 },
+      { "resourceType": "total", "budget": 100 }
     ],
     "resourceCounts": [
       { "resourceType": "script", "budget": 8 },
-      { "resourceType": "stylesheet", "budget": 2 },
+      { "resourceType": "stylesheet", "budget": 1 },
       { "resourceType": "font", "budget": 3 },
-      { "resourceType": "total", "budget": 20 }
+      { "resourceType": "total", "budget": 15 }
     ],
     "timings": [
       { "metric": "first-contentful-paint", "budget": 1500 },
