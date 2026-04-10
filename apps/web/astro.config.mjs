@@ -11,6 +11,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // https://astro.build/config
 export default defineConfig({
   site: 'https://alessandro.chumpitaz.dev',
+  build: { inlineStylesheets: 'always' },
   integrations: [sitemap({ i18n: { defaultLocale: 'en', locales: { en: 'en', es: 'es' } } })],
   prefetch: { defaultStrategy: 'hover' },
   vite: {
