@@ -42,7 +42,10 @@ const content = await getPageContent(locale);
 
 <script>
   const loadScene = () => import('../../scripts/scene.ts');
-  const loadAnims = () => import('../../scripts/animations.ts');
+  const loadAnims = () =>
+    import('../../scripts/animations.ts').finally(() =>
+      document.documentElement.classList.remove('animations-pending'),
+    );
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if ('requestIdleCallback' in window) {
     if (!reducedMotion) requestIdleCallback(loadScene, { timeout: 200 });

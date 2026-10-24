@@ -63,6 +63,24 @@ html[data-theme="light"] .nav-cta,
 html[data-theme="light"] .cta-primary { color: #fff; }
 html[data-theme="light"] .oss-chip { color: #fff; }
 
+html.animations-pending nav,
+html.animations-pending .hero-badge,
+html.animations-pending #hero h1 span,
+html.animations-pending .hero-sub,
+html.animations-pending .hero-btns a,
+html.animations-pending .hero-stats,
+html.animations-pending .scroll-cue,
+html.animations-pending .ticker-wrap,
+html.animations-pending .s-label,
+html.animations-pending section:not(#contact) h2,
+html.animations-pending #services .grid,
+html.animations-pending .why-grid,
+html.animations-pending #work .grid,
+html.animations-pending .exp-row,
+html.animations-pending #contact {
+  visibility: hidden;
+}
+
 #contact {
   background-image: radial-gradient(ellipse 65% 80% at 12% 10%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 72%);
 }

@@ -77,6 +77,11 @@ const appTitle = seo?.appleMobileWebAppTitle || siteName;
 <!doctype html>
 <html lang={locale}>
   <head>
+    <script is:inline>
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('animations-pending');
+      }
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
