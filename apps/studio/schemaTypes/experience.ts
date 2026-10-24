@@ -43,6 +43,12 @@ export const experience = defineType({
       of: [{ type: 'block' }],
     }),
     defineField({
+      name: 'descriptionEs',
+      title: 'Descripción en español',
+      type: 'array',
+      of: [{ type: 'block' }],
+    }),
+    defineField({
       name: 'techStack',
       title: 'Tech Stack',
       type: 'array',

@@ -44,11 +44,12 @@ const { locale } = Astro.params;
 <script>
   const loadScene = () => import('../../scripts/scene.ts');
   const loadAnims = () => import('../../scripts/animations.ts');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if ('requestIdleCallback' in window) {
-    requestIdleCallback(loadScene, { timeout: 200 });
+    if (!reducedMotion) requestIdleCallback(loadScene, { timeout: 200 });
     requestIdleCallback(loadAnims, { timeout: 1500 });
   } else {
-    setTimeout(loadScene, 0);
+    if (!reducedMotion) setTimeout(loadScene, 0);
     setTimeout(loadAnims, 100);
   }
 </script>

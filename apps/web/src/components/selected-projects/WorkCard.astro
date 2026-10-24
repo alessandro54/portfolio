@@ -1,4 +1,6 @@
 ---
+import { useTranslations } from '@i18n/translations';
+
 interface Props {
   num: string;
   kind?: string;
@@ -7,15 +9,17 @@ interface Props {
   tags: string[];
   liveUrl?: string;
   repos?: { label: string; url: string }[];
+  locale?: string;
 }
 
-const { num, kind = 'project', title, outcome, tags, liveUrl, repos = [] } = Astro.props;
+const { num, kind = 'project', title, outcome, tags, liveUrl, repos = [], locale = 'en' } = Astro.props;
 const isOss = kind === 'oss';
 const href = isOss ? repos[0]?.url : liveUrl || repos[0]?.url;
+const ui = useTranslations(locale);
 
 function prLabel(url: string): string {
   const match = url.match(/\/pull\/(\d+)/);
-  return match ? `PR #${match[1]}` : 'View PR';
+  return match ? `PR #${match[1]}` : ui('project_view_pr');
 }
 ---
 
@@ -23,7 +27,7 @@ function prLabel(url: string): string {
   <div class="flex justify-between items-center">
     <div class="flex items-center gap-2">
       <span class="text-[0.58rem] tracking-[0.1em] text-[var(--dim)]">{num}</span>
-      {isOss && <span class="text-[0.55rem] font-bold tracking-[0.1em] uppercase px-[0.5rem] py-[0.15rem] rounded-[5px] text-white bg-[var(--accent)]">OSS Contrib</span>}
+      {isOss && <span class="oss-chip text-[0.55rem] font-bold tracking-[0.1em] uppercase px-[0.5rem] py-[0.15rem] rounded-[5px] text-[#09080f] bg-[var(--accent)]">{ui('project_oss_label')}</span>}
     </div>
     {!isOss && href && (
       <a href={href} target="_blank" class="text-[0.75rem] text-[var(--dim)] transition-[transform,color] duration-250 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--accent)] no-underline">↗</a>

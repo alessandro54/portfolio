@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
-import { join } from 'path';
+import { join, relative } from 'path';
 import subsetFont from 'subset-font';
 import { minify } from 'html-minifier-terser';
 
@@ -84,20 +84,30 @@ function dirSize(dir, ext) {
 const jsSize = dirSize(join(DIST, '_astro'), '.js');
 const cssSize = dirSize(join(DIST, '_astro'), '.css');
 const fontSize = dirSize(join(DIST, 'fonts'), '.woff2');
-const htmlSize = findHTML(DIST).reduce((s, f) => s + statSync(f).size, 0);
+const sharedSize = jsSize + cssSize + fontSize;
+const pages = findHTML(DIST)
+  .filter((file) => relative(DIST, file) !== '404.html')
+  .map((file) => ({
+    route: relative(DIST, file),
+    htmlSize: statSync(file).size,
+    totalSize: sharedSize + statSync(file).size,
+  }));
 
-const total = jsSize + cssSize + fontSize + htmlSize;
+if (pages.length === 0) throw new Error('No page HTML found for the build size budget.');
+
 console.log(`\n[optimize] ═══ BUILD REPORT ═══`);
-console.log(`  JS:    ${(jsSize / 1024).toFixed(1)} KiB`);
-console.log(`  CSS:   ${(cssSize / 1024).toFixed(1)} KiB`);
-console.log(`  Fonts: ${(fontSize / 1024).toFixed(1)} KiB`);
-console.log(`  HTML:  ${(htmlSize / 1024).toFixed(1)} KiB`);
-console.log(`  TOTAL: ${(total / 1024).toFixed(1)} KiB raw`);
-
+console.log(`  Shared JS:    ${(jsSize / 1024).toFixed(1)} KiB`);
+console.log(`  Shared CSS:   ${(cssSize / 1024).toFixed(1)} KiB`);
+console.log(`  Shared fonts: ${(fontSize / 1024).toFixed(1)} KiB`);
+for (const page of pages) {
+  console.log(`  ${page.route}: ${(page.totalSize / 1024).toFixed(1)} KiB raw (${(page.htmlSize / 1024).toFixed(1)} KiB HTML)`);
+}
 // Budget check
-const BUDGET = 200 * 1024; // 200 KiB raw budget (compresses to ~40 KiB)
-if (total > BUDGET) {
-  console.log(`  ⚠️  OVER BUDGET by ${((total - BUDGET) / 1024).toFixed(1)} KiB`);
+const BUDGET = 200 * 1024; // Maximum raw page weight, including shared assets.
+const largestPage = pages.reduce((largest, page) => page.totalSize > largest.totalSize ? page : largest);
+if (largestPage.totalSize > BUDGET) {
+  console.error(`  ✗ ${largestPage.route} is over budget by ${((largestPage.totalSize - BUDGET) / 1024).toFixed(1)} KiB`);
+  process.exitCode = 1;
 } else {
-  console.log(`  ✓  Under budget (${((BUDGET - total) / 1024).toFixed(1)} KiB headroom)`);
+  console.log(`  ✓  Largest page is under budget (${((BUDGET - largestPage.totalSize) / 1024).toFixed(1)} KiB headroom)`);
 }

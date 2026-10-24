@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-deploy:
-    name: Build & Deploy
+    name: Build, audit & deploy
     runs-on: ubuntu-latest
     environment:
       name: production
@@ -46,29 +46,24 @@ jobs:
           PUBLIC_SANITY_PROJECT_ID: ${{ vars.PUBLIC_SANITY_PROJECT_ID }}
           PUBLIC_SANITY_DATASET: ${{ vars.PUBLIC_SANITY_DATASET }}
 
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy apps/web/dist --project-name=portfolio --branch=main --commit-dirty=true
-
-  lighthouse:
-    name: Lighthouse Audit
-    needs: build-and-deploy
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Serve the built site for Lighthouse
+        run: |
+          python3 -m http.server 4173 --directory apps/web/dist >/tmp/portfolio-preview.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/en/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/portfolio-preview.log
+          exit 1
 
       - name: Lighthouse audit
         id: lh
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
-            https://alessandro.chumpitaz.dev/en/
+            http://127.0.0.1:4173/en/
           runs: 3
           configPath: .github/lighthouse/config.json
           budgetPath: .github/lighthouse/budget.json
@@ -95,7 +90,15 @@ jobs:
           echo "best-practices=$bp" >> "$GITHUB_OUTPUT"
           echo "seo=$seo" >> "$GITHUB_OUTPUT"
 
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy apps/web/dist --project-name=portfolio --branch=main --commit-dirty=true
+
       - name: Update Performance badge
+        if: github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
         with:
           auth: ${{ secrets.GIST_TOKEN }}
@@ -110,6 +113,7 @@ jobs:
           logoColor: white
 
       - name: Update Accessibility badge
+        if: github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
         with:
           auth: ${{ secrets.GIST_TOKEN }}
@@ -124,6 +128,7 @@ jobs:
           logoColor: white
 
       - name: Update Best Practices badge
+        if: github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
         with:
           auth: ${{ secrets.GIST_TOKEN }}
@@ -138,6 +143,7 @@ jobs:
           logoColor: white
 
       - name: Update SEO badge
+        if: github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
         with:
           auth: ${{ secrets.GIST_TOKEN }}
@@ -152,6 +158,7 @@ jobs:
           logoColor: white
 
       - name: Update Page Size badge
+        if: github.event_name == 'push'
         uses: schneegans/dynamic-badges-action@v1.7.0
         with:
           auth: ${{ secrets.GIST_TOKEN }}

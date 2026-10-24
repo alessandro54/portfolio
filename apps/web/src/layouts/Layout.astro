@@ -39,6 +39,31 @@ const author = seo?.author || '';
 const robots = seo?.robotsDirective || 'index, follow';
 const twitterCard = seo?.twitterCardType || 'summary_large_image';
 const twitterHandle = seo?.twitterHandle || '';
+const profileData = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  '@id': canonical,
+  url: canonical,
+  inLanguage: locale,
+  mainEntity: {
+    '@type': 'Person',
+    '@id': `${siteUrl}/#person`,
+    name: 'Alessandro Chumpitaz',
+    jobTitle: locale === 'es' ? 'Ingeniero Full Stack' : 'Full Stack Engineer',
+    description,
+    url: `${siteUrl}/en/`,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Lima',
+      addressCountry: 'PE',
+    },
+    knowsAbout: ['Python', 'TypeScript', 'Ruby on Rails', 'Django', 'Applied AI'],
+    sameAs: [
+      'https://www.linkedin.com/in/alessandrochumpitaz/',
+      'https://github.com/alessandro54',
+    ],
+  },
+}).replace(/</g, '\\u003c');
 const themeColorDark = seo?.themeColorDark || '#09080f';
 const themeColorLight = seo?.themeColorLight || '#f8f7fc';
 const statusBarStyle = seo?.appleStatusBarStyle || 'black-translucent';
@@ -92,7 +117,7 @@ const appTitle = seo?.appleMobileWebAppTitle || siteName;
 
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <script type="application/ld+json" set:html={profileData} />
 
     <!-- Critical CSS — paint without waiting for external stylesheet -->
     <style is:inline>
@@ -102,7 +127,6 @@ const appTitle = seo?.appleMobileWebAppTitle || siteName;
       body{background:var(--bg);color:var(--fg);font-family:'Jakarta Heading',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
       #gl{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block}
       #vignette{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 65% 65% at 50% 50%,rgba(var(--vig-rgb),0.55) 0%,rgba(var(--vig-rgb),0.30) 40%,transparent 70%)}
-      nav,.hero-badge,#hero h1 span,.hero-sub,.hero-btns a,.hero-stats,.scroll-cue,.ticker-wrap,.s-label,section:not(#contact) h2,#services .grid,.why-grid,#work .grid,.exp-row,#contact .flex.flex-col>a{visibility:hidden}
     </style>
     <script is:inline>
       (function(){

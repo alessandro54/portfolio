@@ -36,7 +36,7 @@ const stats = (hero?.stats || []).map(
 
 <section
     id="hero"
-    class="h-svh flex flex-col items-center justify-center text-center gap-6 px-8 pt-24 pb-12 relative max-[900px]:px-6 max-[900px]:pt-20"
+    class="hero-section h-svh flex flex-col items-center justify-center text-center gap-6 px-8 pt-24 pb-12 relative max-[900px]:px-6 max-[900px]:pt-20"
 >
     <div
         class="hero-badge inline-flex items-center gap-[0.55rem] text-[0.7rem] font-medium text-[var(--accent)] bg-[var(--accent-lo)] border border-[var(--accent-bd)] px-[0.9rem] py-[0.3rem] rounded-full mb-12 animate-[badge-pulse_2.5s_ease-in-out_infinite]"
@@ -48,10 +48,10 @@ const stats = (hero?.stats || []).map(
     </div>
 
     <h1
-        class="text-[clamp(2.4rem,5.2vw,4.8rem)] font-extrabold leading-[1.07] tracking-[-0.035em] mb-10 max-w-[800px] max-[900px]:text-[2.4rem]"
+        class="hero-title text-[clamp(2.4rem,5.2vw,4.8rem)] font-extrabold leading-[1.07] tracking-[-0.035em] mb-10 max-w-[800px] max-[900px]:text-[2.4rem]"
     >
         <span
-            class="bg-[linear-gradient(100deg,var(--accent)_0%,var(--h1-end)_100%)] bg-clip-text [-webkit-text-fill-color:transparent]"
+            class="animated-gradient bg-[linear-gradient(100deg,var(--accent)_0%,var(--h1-end)_100%)] bg-clip-text [-webkit-text-fill-color:transparent]"
             >{t(hero?.headline)}</span
         ><br />
         <span class="text-[var(--mid)] font-light">{t(hero?.subheadline)}</span>
@@ -66,12 +66,12 @@ const stats = (hero?.stats || []).map(
     <div class="hero-btns flex gap-[0.8rem] justify-center mb-20">
         <a
             href="#contact"
-            class="cta-primary inline-flex items-center gap-[0.45rem] px-10 py-4 rounded-lg text-[0.88rem] font-medium no-underline bg-[var(--accent)] text-white dark:text-black border border-[var(--accent)]"
+            class="cta-primary inline-flex items-center justify-center gap-[0.45rem] px-10 py-4 rounded-lg text-[0.88rem] font-medium no-underline bg-[var(--accent)] text-[#09080f] border border-[var(--accent)]"
             >{t(hero?.ctaLabel)}</a
         >
         <a
             href="#work"
-            class="inline-flex items-center gap-[0.45rem] px-10 py-4 rounded-lg text-[0.88rem] font-medium no-underline bg-transparent backdrop-blur-[2px] border border-[var(--accent-bd)] text-[var(--mid)] transition-[border-color,color] duration-[220ms] hover:border-[var(--accent)] hover:text-[var(--fg)]"
+            class="inline-flex items-center justify-center gap-[0.45rem] px-10 py-4 rounded-lg text-[0.88rem] font-medium no-underline bg-transparent backdrop-blur-[2px] border border-[var(--accent-bd)] text-[var(--mid)] transition-[border-color,color] duration-[220ms] hover:border-[var(--accent)] hover:text-[var(--fg)]"
             >{t(hero?.secondaryCtaLabel) || ui('hero_see_work')}</
         >
     </div>

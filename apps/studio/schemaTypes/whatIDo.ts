@@ -20,7 +20,14 @@ export const whatIDo = defineType({
               name: 'icon',
               title: 'Icon',
               type: 'string',
-              description: 'A unicode symbol or emoji',
+              options: {
+                list: [
+                  { title: 'APIs & integrations', value: 'backend' },
+                  { title: 'Performance & reliability', value: 'performance' },
+                  { title: 'Product development', value: 'product' },
+                  { title: 'AI workflows', value: 'ai' },
+                ],
+              },
               validation: (r) => r.required(),
             }),
             localeString('title', 'Title'),

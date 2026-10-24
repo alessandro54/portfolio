@@ -15,7 +15,7 @@ const languages = [
   <button
     id="lang-trigger"
     class="flex items-center justify-center gap-1 h-8 px-2.5 rounded-lg border border-[var(--rule)] text-[var(--mid)] text-[0.75rem] font-medium uppercase transition-[border-color,color] duration-200 hover:border-[var(--accent)] hover:text-[var(--accent)]"
-    aria-label="Language"
+    aria-label={locale === 'es' ? 'Idioma' : 'Language'}
     aria-haspopup="true"
     aria-expanded="false"
   >

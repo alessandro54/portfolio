@@ -5,6 +5,7 @@
 
 const $ = (s: string) => document.querySelector<HTMLElement>(s);
 const $$ = (s: string) => [...document.querySelectorAll<HTMLElement>(s)];
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // Easing curves
 const EASE = {
@@ -18,7 +19,7 @@ const EASE = {
 function anim(el: HTMLElement | null, keyframes: Keyframe[], opts: KeyframeAnimationOptions = {}) {
   if (!el) return null;
   el.style.visibility = 'visible';
-  return el.animate(keyframes, { fill: 'both', ...opts });
+  return reducedMotion ? null : el.animate(keyframes, { fill: 'both', ...opts });
 }
 
 /** Animate multiple elements with stagger */
@@ -28,6 +29,7 @@ function stagger(els: HTMLElement[], keyframes: Keyframe[], opts: KeyframeAnimat
 
 /** Trigger once when element enters viewport */
 function onVisible(selector: string, fn: (el: HTMLElement) => void, margin = '0px 0px -15% 0px') {
+  if (reducedMotion) return;
   const observer = new IntersectionObserver((entries) => {
     for (const e of entries) {
       if (e.isIntersecting) {
@@ -156,6 +158,7 @@ anim($('.scroll-cue'), [
 $$<HTMLElement>('.stat-num').forEach((el) => {
   const target = parseInt(el.dataset.target || '0', 10);
   const suffix = el.dataset.suffix || '';
+  if (reducedMotion) { el.textContent = target + suffix; return; }
   const start = performance.now() + 1050;
   const dur = 1800;
 
@@ -192,8 +195,8 @@ let tkX = 0;
 let tkTotal = 0;
 let tkInView = false;
 
-if (tickerTrack) {
-  tickerTrack.style.animation = 'none';
+if (tickerTrack) tickerTrack.style.animation = 'none';
+if (tickerTrack && !reducedMotion) {
   tkTotal = tickerTrack.scrollWidth / 2;
 
   new IntersectionObserver(([e]) => {
@@ -413,4 +416,4 @@ function tick() {
 
   requestAnimationFrame(tick);
 }
-requestAnimationFrame(tick);
+if (!reducedMotion) requestAnimationFrame(tick);

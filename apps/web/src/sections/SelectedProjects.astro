@@ -21,6 +21,7 @@ const t = (field: Record<string, string> | null) =>
 const projects = (data?.items ?? []).map(
   (p: { num: string; kind?: string; title: Record<string, string>; outcome: Record<string, string>; tags: string[]; liveUrl?: string; repos?: { label: string; url: string }[] }) => ({
     num: p.num,
+    locale,
     kind: p.kind || 'project',
     title: t(p.title),
     outcome: t(p.outcome),

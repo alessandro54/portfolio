@@ -36,7 +36,7 @@ const cards: { n: string; title: string; text: string }[] =
     <div class="why-feature col-span-2 bg-[var(--surface)] px-12 py-[2.8rem] grid grid-cols-2 gap-16 items-center max-[900px]:col-span-1 max-[900px]:grid-cols-1 max-[900px]:gap-6">
       <div class="text-[clamp(1.15rem,1.9vw,1.65rem)] font-bold tracking-[-0.025em] text-[var(--fg)] leading-[1.32]">
         {t(data?.featureHeadlinePre)}
-        <em class="not-italic bg-[linear-gradient(100deg,var(--accent)_10%,var(--gradient-end)_80%)] bg-clip-text [-webkit-text-fill-color:transparent]"> {t(data?.featureHeadlineEmphasis)}</em> {t(data?.featureHeadlinePost)}
+        <em class="animated-gradient not-italic bg-[linear-gradient(100deg,var(--accent)_10%,var(--gradient-end)_80%)] bg-clip-text [-webkit-text-fill-color:transparent]"> {t(data?.featureHeadlineEmphasis)}</em> {t(data?.featureHeadlinePost)}
       </div>
       <div>
         <p class="text-[0.81rem] leading-[1.85] text-[var(--mid)]">{t(data?.featureParagraph1)}</p>
