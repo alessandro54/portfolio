@@ -48,7 +48,7 @@ jobs:
 
       - name: Serve the built site for Lighthouse
         run: |
-          python3 -m http.server 4173 --directory apps/web/dist >/tmp/portfolio-preview.log 2>&1 &
+          python3 .github/scripts/serve-gzip.py apps/web/dist 4173 >/tmp/portfolio-preview.log 2>&1 &
           for attempt in $(seq 1 30); do
             if curl --fail --silent http://127.0.0.1:4173/en/ >/dev/null; then
               exit 0
