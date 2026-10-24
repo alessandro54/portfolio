@@ -7,7 +7,6 @@
     antialias: false,
     alpha: true,
     premultipliedAlpha: false,
-    powerPreference: 'high-performance',
   });
   if (!gl) return;
 
@@ -233,13 +232,12 @@
     cursorActive = false;
   };
   window.addEventListener('mousemove', (e) => onMove(e.clientX, e.clientY));
+  window.addEventListener('mouseenter', (e) => onMove(e.clientX, e.clientY));
   window.addEventListener('mouseleave', onLeave);
   document.addEventListener('mouseleave', onLeave);
-  window.addEventListener('blur', onLeave);
   window.addEventListener('touchmove', (e) => onMove(e.touches[0].clientX, e.touches[0].clientY), {
     passive: true,
   });
-  window.addEventListener('touchend', onLeave);
 
   // ── Physics & wave ────────────────────────────────────────────────────────
   const PR = 5.5,
@@ -266,14 +264,20 @@
   gl.clearColor(0, 0, 0, 0);
 
   const vig = document.getElementById('vignette') as HTMLElement;
-  const start = performance.now();
+  let lastFrame = performance.now();
+  let sceneTime = 0;
+  let frame = 0;
   let mx = 1e9,
     mz = 1e9;
 
   // ── Render loop ───────────────────────────────────────────────────────────
-  function tick() {
-    requestAnimationFrame(tick);
-    const t = (performance.now() - start) / 1000;
+  function tick(now: number) {
+    frame = 0;
+    if (document.hidden) return;
+    const dt = Math.min((now - lastFrame) / (1000 / 60), 2);
+    lastFrame = now;
+    sceneTime += dt / 60;
+    const t = sceneTime;
 
     sSm += (sTgt - sSm) * 0.05;
     const sp = ease(Math.min(sSm, 1));
@@ -299,7 +303,7 @@
       }
     }
 
-    const pushFade = cursorActive ? Math.max(0, 1 - sp * 3.5) : 0;
+    const pushFade = cursorActive ? Math.max(0.35, 1 - sp * 0.65) : 0;
     const isLight = document.documentElement.dataset.theme === 'light';
     const baseR = isLight ? 0.486 : 0.655;
     const baseG = isLight ? 0.227 : 0.545;
@@ -323,22 +327,22 @@
         if (d2 < PR * PR && d2 > 1e-4) {
           const d = Math.sqrt(d2),
             str = (1 - d / PR) * PF * pushFade;
-          velX[i] += (dx / d) * str * (1 - BIAS);
-          velZ[i] += (dz / d) * str * (1 - BIAS) + str * BIAS;
+          velX[i] += (dx / d) * str * (1 - BIAS) * dt;
+          velZ[i] += ((dz / d) * str * (1 - BIAS) + str * BIAS) * dt;
         }
-        velX[i] += (rx - curX[i]) * SPR;
-        velX[i] *= DP;
-        curX[i] += velX[i];
-        velZ[i] += (rz - curZ[i]) * SPR;
-        velZ[i] *= DP;
-        curZ[i] += velZ[i];
+        velX[i] += (rx - curX[i]) * SPR * dt;
+        velX[i] *= DP ** dt;
+        curX[i] += velX[i] * dt;
+        velZ[i] += (rz - curZ[i]) * SPR * dt;
+        velZ[i] *= DP ** dt;
+        curZ[i] += velZ[i] * dt;
       } else {
-        velX[i] *= 0.5;
-        velZ[i] *= 0.5;
-        velX[i] += (rx - curX[i]) * 0.12;
-        velZ[i] += (rz - curZ[i]) * 0.12;
-        curX[i] += velX[i];
-        curZ[i] += velZ[i];
+        velX[i] *= 0.5 ** dt;
+        velZ[i] *= 0.5 ** dt;
+        velX[i] += (rx - curX[i]) * 0.12 * dt;
+        velZ[i] += (rz - curZ[i]) * 0.12 * dt;
+        curX[i] += velX[i] * dt;
+        curZ[i] += velZ[i] * dt;
         if (Math.abs(rx - curX[i]) < 1e-3 && Math.abs(rz - curZ[i]) < 1e-3) {
           curX[i] = rx;
           curZ[i] = rz;
@@ -421,7 +425,14 @@
     gl!.vertexAttribPointer(aCol, 3, gl!.FLOAT, false, 0, 0);
 
     gl!.drawArrays(gl!.POINTS, 0, N);
+    frame = requestAnimationFrame(tick);
   }
 
-  tick();
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      cancelAnimationFrame(frame);
+      frame = 0;
+    } else if (!frame) frame = requestAnimationFrame(tick);
+  });
+  frame = requestAnimationFrame(tick);
 })();

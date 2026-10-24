@@ -2,26 +2,33 @@
 import '../styles/global.css';
 import { useTranslations } from '@i18n/translations';
 import { getLocalizedValue } from '@lib/localized';
-import { sanityClient, sanityConfig } from '@lib/sanity';
+import { sanityConfig } from '@lib/sanity';
 import { createImageUrlBuilder } from '@sanity/image-url';
 
 interface Props {
   locale?: string;
+  seo: {
+    metaTitle?: Record<string, string>;
+    metaDescription?: Record<string, string>;
+    siteName?: string;
+    siteUrl?: string;
+    ogImage?: unknown;
+    twitterHandle?: string;
+    twitterCardType?: string;
+    themeColorDark?: string;
+    themeColorLight?: string;
+    appleTouchIcon?: unknown;
+    appleStatusBarStyle?: string;
+    appleMobileWebAppTitle?: string;
+    robotsDirective?: string;
+    author?: string;
+    keywords?: Record<string, string>;
+  } | null;
 }
 
-const { locale = 'en' } = Astro.props;
+const { locale = 'en', seo } = Astro.props;
 const ui = useTranslations(locale);
 const otherLocale = locale === 'en' ? 'es' : 'en';
-
-const seo = await sanityClient.fetch(
-  `*[_id == "singleton-seo"][0]{
-    metaTitle, metaDescription, siteName, siteUrl,
-    ogImage, twitterHandle, twitterCardType,
-    themeColorDark, themeColorLight,
-    appleTouchIcon, appleStatusBarStyle, appleMobileWebAppTitle,
-    robotsDirective, author, keywords
-  }`,
-);
 
 const builder = createImageUrlBuilder(sanityConfig);
 const ogImageUrl = seo?.ogImage ? builder.image(seo.ogImage).width(1200).height(630).url() : null;

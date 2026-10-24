@@ -3,6 +3,7 @@ import Cursor from '@components/shared/Cursor.astro';
 import Footer from '@components/shared/Footer.astro';
 import Nav from '@components/shared/Nav.astro';
 import Layout from '@layouts/Layout.astro';
+import { getPageContent } from '@lib/page-content';
 import Career from '@sections/Career.astro';
 import Contact from '@sections/Contact.astro';
 import Hero from '@sections/Hero.astro';
@@ -16,22 +17,23 @@ export function getStaticPaths() {
 }
 
 const { locale } = Astro.params;
+const content = await getPageContent(locale);
 ---
 
-<Layout locale={locale}>
+<Layout locale={locale} seo={content.seo}>
   <canvas id="gl" aria-hidden="true"></canvas>
   <div id="vignette" aria-hidden="true"></div>
 
   <div class="site">
     <Nav locale={locale} />
     <main>
-      <Hero locale={locale} />
-      <Ticker locale={locale} />
-      <WhatIDo locale={locale} />
-      <WhyMe locale={locale} />
-      <SelectedProjects locale={locale} />
-      <Career locale={locale} />
-      <Contact locale={locale} />
+      <Hero data={content.hero} ui={content.ui} />
+      <Ticker items={content.ticker} />
+      <WhatIDo services={content.services} ui={content.ui} />
+      <WhyMe data={content.why} ui={content.ui} />
+      <SelectedProjects projects={content.projects} ui={content.ui} />
+      <Career jobs={content.jobs} ui={content.ui} />
+      <Contact data={content.contact} ui={content.ui} />
     </main>
     <Footer locale={locale} />
   </div>

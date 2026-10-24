@@ -1,28 +1,12 @@
 ---
 import SectionHeader from '@components/shared/SectionHeader.astro';
 import ServiceCard from '@components/what-i-do/ServiceCard.astro';
-import { useTranslations } from '@i18n/translations';
-import { getLocalizedValue } from '@lib/localized';
-import { sanityClient } from '@lib/sanity';
 
 interface Props {
-  locale?: string;
+  services: { icon: string; title: string; text: string }[];
+  ui: (key: import('@i18n/translations').TranslationKey) => string;
 }
-
-const { locale = 'en' } = Astro.props;
-const ui = useTranslations(locale);
-
-const data = await sanityClient.fetch(
-  `*[_id == "singleton-whatIDo"][0]{ services[]{ _key, icon, title, text } }`,
-);
-
-const services: { icon: string; title: string; text: string }[] = (data?.services ?? []).map(
-  (s: { icon: string; title: Record<string, string>; text: Record<string, string> }) => ({
-    icon: s.icon,
-    title: getLocalizedValue(s.title, locale),
-    text: getLocalizedValue(s.text, locale),
-  }),
-);
+const { services, ui } = Astro.props;
 ---
 
 <section id="services" class="flex flex-col gap-2 px-12 pt-24 pb-24 max-[900px]:px-8 max-[900px]:pt-16 max-[900px]:pb-16">

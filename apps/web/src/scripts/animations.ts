@@ -514,18 +514,6 @@ onVisible(
 // 13-14. SCROLL-DRIVEN EFFECTS
 // ══════════════════════════════════════
 
-// Cache section positions for parallax
-const parallaxSections: { el: HTMLElement; top: number; height: number }[] = [];
-function cacheOffsets() {
-  parallaxSections.length = 0;
-  $$('#services, #work, #experience').forEach((el) => {
-    const rect = el.getBoundingClientRect();
-    parallaxSections.push({ el, top: rect.top + window.scrollY, height: rect.height });
-  });
-}
-cacheOffsets();
-window.addEventListener('resize', cacheOffsets, { passive: true });
-
 const gl = $('#gl');
 const vignette = $('#vignette');
 
@@ -578,18 +566,9 @@ function tick() {
     }
   }
 
-  // Section parallax
-  const vh = window.innerHeight;
-  for (const s of parallaxSections) {
-    const sTop = s.top - scrollY;
-    if (sTop < vh && sTop + s.height > 0) {
-      const progress = 1 - (sTop + s.height) / (vh + s.height);
-      s.el.style.transform = `translateY(${-40 * progress}px)`;
-    }
-  }
-
   // Background parallax (lerped)
   if (gl && vignette) {
+    const vh = window.innerHeight;
     const maxScroll = document.documentElement.scrollHeight - vh;
     const maxShift = document.documentElement.scrollHeight * 0.08;
     const targetY = maxScroll > 0 ? (scrollY / maxScroll) * maxShift : 0;

@@ -1,18 +1,8 @@
 ---
-import { getLocalizedValue } from '@lib/localized';
-import { sanityClient } from '@lib/sanity';
-
 interface Props {
-  locale?: string;
+  items: string[];
 }
-
-const { locale = 'en' } = Astro.props;
-
-const data = await sanityClient.fetch(`*[_type == "ticker"][0]{ items[]{ label } }`);
-
-const items = (data?.items || []).map((item: { label: Record<string, string> }) =>
-  getLocalizedValue(item.label, locale),
-);
+const { items } = Astro.props;
 ---
 
 <div class="ticker-wrap flex h-12 items-center overflow-hidden border-y border-[var(--accent-bd)] bg-[rgba(var(--vig-rgb),0.15)] backdrop-blur-[6px]">
