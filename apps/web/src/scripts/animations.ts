@@ -18,8 +18,13 @@ const EASE = {
 /** Reveal an element and animate it */
 function anim(el: HTMLElement | null, keyframes: Keyframe[], opts: KeyframeAnimationOptions = {}) {
   if (!el) return null;
+  if (reducedMotion) {
+    el.style.visibility = 'visible';
+    return null;
+  }
+  const animation = el.animate(keyframes, { fill: 'both', ...opts });
   el.style.visibility = 'visible';
-  return reducedMotion ? null : el.animate(keyframes, { fill: 'both', ...opts });
+  return animation;
 }
 
 /** Animate multiple elements with stagger */
@@ -37,6 +42,10 @@ function stagger(
 /** Trigger once when element enters viewport */
 function onVisible(selector: string, fn: (el: HTMLElement) => void, margin = '0px 0px -15% 0px') {
   if (reducedMotion) return;
+  const elements = $$(selector);
+  elements.forEach((el) => {
+    el.style.visibility = 'hidden';
+  });
   const observer = new IntersectionObserver(
     (entries) => {
       for (const e of entries) {
@@ -48,7 +57,7 @@ function onVisible(selector: string, fn: (el: HTMLElement) => void, margin = '0p
     },
     { rootMargin: margin },
   );
-  $$(selector).forEach((el) => {
+  elements.forEach((el) => {
     observer.observe(el);
   });
 }
@@ -283,6 +292,7 @@ if (tickerTrack && !reducedMotion) {
   new IntersectionObserver(([e]) => {
     tkInView = e.isIntersecting;
     if (!tkInView) tkTarget = 1;
+    else scheduleTick();
   }).observe($('.ticker-wrap')!);
 }
 
@@ -342,54 +352,14 @@ revealGrid(
 onVisible(
   '.why-grid',
   (grid) => {
-    // Feature columns
-    const featureDivs = $$('.why-feature > div');
-    featureDivs.forEach((c) => {
-      c.style.opacity = '0';
-    });
-    grid.style.visibility = 'visible';
-    grid.style.borderColor = 'transparent';
-    grid.style.backgroundColor = 'transparent';
-
-    stagger(
-      featureDivs,
+    anim(
+      grid,
       [
-        { opacity: 0, transform: 'translateY(50px)' },
+        { opacity: 0, transform: 'translateY(24px)' },
         { opacity: 1, transform: 'none' },
       ],
-      { duration: 900, easing: EASE.out },
-      150,
+      { duration: 850, easing: EASE.out },
     );
-
-    // Cards
-    const cards = $$('.why-card');
-    cards.forEach((c) => {
-      c.style.opacity = '0';
-    });
-    stagger(
-      cards,
-      [
-        { opacity: 0, transform: 'translateY(50px) scale(0.93)' },
-        { opacity: 1, transform: 'none' },
-      ],
-      { duration: 800, easing: EASE.back, delay: 200 },
-      100,
-    );
-
-    // Border + bg
-    const d = 300;
-    grid.animate([{ borderColor: 'transparent' }, { borderColor: 'var(--rule)' }], {
-      duration: 600,
-      delay: d,
-      fill: 'forwards',
-      easing: EASE.inOut,
-    });
-    grid.animate([{ backgroundColor: 'transparent' }, { backgroundColor: 'var(--rule)' }], {
-      duration: 600,
-      delay: d,
-      fill: 'forwards',
-      easing: EASE.inOut,
-    });
   },
   '0px 0px -20% 0px',
 );
@@ -481,6 +451,7 @@ onVisible(
 onVisible(
   '#contact',
   (section) => {
+    section.style.visibility = 'visible';
     const emailLink = section.querySelector<HTMLElement>('.flex.flex-col > a');
     if (emailLink) {
       anim(
@@ -518,66 +489,78 @@ const gl = $('#gl');
 const vignette = $('#vignette');
 
 // Scroll state
-let scrollY = 0;
+let scrollY = window.scrollY;
 let lastScrollY = 0;
 let lastScrollTime = 0;
-
-window.addEventListener(
-  'scroll',
-  () => {
-    scrollY = window.scrollY;
-
-    // Ticker velocity
-    if (tkInView) {
-      const now = performance.now();
-      if (lastScrollTime) {
-        const vel = (Math.abs(scrollY - lastScrollY) / (now - lastScrollTime)) * 1000;
-        tkTarget = Math.min(1 + vel / 600, 5);
-      }
-      lastScrollY = scrollY;
-      lastScrollTime = now;
-    }
-  },
-  { passive: true },
-);
-
-// Background parallax lerp state
+// Background parallax state
 let bgY = 0;
+let bgTargetY = 0;
+let frame = 0;
 
-// Main animation loop
-function tick() {
-  // Scroll-cue fade (0 → 120px scroll)
+function updateBackgroundTarget() {
+  const height = document.documentElement.scrollHeight;
+  const maxScroll = height - window.innerHeight;
+  bgTargetY = maxScroll > 0 ? (scrollY / maxScroll) * height * 0.08 : 0;
+}
+
+function scheduleTick() {
+  if (!reducedMotion && !frame) frame = requestAnimationFrame(tick);
+}
+
+function updateScroll() {
+  const now = performance.now();
+  scrollY = window.scrollY;
+
   if (scrollCue) {
-    const p = Math.min(scrollY / 120, 1);
-    scrollCue.style.opacity = String(1 - p);
-    if (p >= 1) scrollCue.style.visibility = 'hidden';
+    const progress = Math.min(scrollY / 120, 1);
+    scrollCue.style.opacity = String(1 - progress);
+    scrollCue.style.visibility = progress >= 1 ? 'hidden' : 'visible';
   }
 
+  if (tkInView) {
+    if (lastScrollTime) {
+      const velocity = (Math.abs(scrollY - lastScrollY) / (now - lastScrollTime)) * 1000;
+      tkTarget = Math.min(1 + velocity / 600, 5);
+    }
+    lastScrollY = scrollY;
+    lastScrollTime = now;
+  }
+
+  updateBackgroundTarget();
+  scheduleTick();
+}
+
+window.addEventListener('scroll', updateScroll, { passive: true });
+window.addEventListener('resize', updateScroll, { passive: true });
+updateBackgroundTarget();
+updateScroll();
+
+// Animate only while the ticker is visible or background parallax is settling.
+function tick() {
+  frame = 0;
+  let keepAnimating = false;
+
   // Ticker
-  if (tickerTrack && tkTotal) {
+  if (tickerTrack && tkTotal && tkInView) {
     tkSpeed += (tkTarget - tkSpeed) * 0.05;
     tkX -= 0.5 * tkSpeed;
     if (tkX <= -tkTotal) tkX += tkTotal;
     tickerTrack.style.transform = `translateX(${tkX}px)`;
+    tkTarget += (1 - tkTarget) * 0.02;
+    keepAnimating = true;
+  }
 
-    // Decay target speed toward 1
-    if (!tkInView || Math.abs(scrollY - lastScrollY) < 1) {
-      tkTarget += (1 - tkTarget) * 0.02;
+  // Background parallax settles after scroll, then stops scheduling frames.
+  if (gl && vignette) {
+    const difference = bgTargetY - bgY;
+    if (Math.abs(difference) > 0.1) {
+      bgY += difference * 0.08;
+      const transform = `translateY(${bgY}px)`;
+      gl.style.transform = transform;
+      vignette.style.transform = transform;
+      keepAnimating = true;
     }
   }
 
-  // Background parallax (lerped)
-  if (gl && vignette) {
-    const vh = window.innerHeight;
-    const maxScroll = document.documentElement.scrollHeight - vh;
-    const maxShift = document.documentElement.scrollHeight * 0.08;
-    const targetY = maxScroll > 0 ? (scrollY / maxScroll) * maxShift : 0;
-    bgY += (targetY - bgY) * 0.08;
-    const t = `translateY(${bgY}px)`;
-    gl.style.transform = t;
-    vignette.style.transform = t;
-  }
-
-  requestAnimationFrame(tick);
+  if (keepAnimating) frame = requestAnimationFrame(tick);
 }
-if (!reducedMotion) requestAnimationFrame(tick);

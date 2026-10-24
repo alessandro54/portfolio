@@ -46,9 +46,9 @@ const content = await getPageContent(locale);
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if ('requestIdleCallback' in window) {
     if (!reducedMotion) requestIdleCallback(loadScene, { timeout: 200 });
-    requestIdleCallback(loadAnims, { timeout: 1500 });
+    loadAnims();
   } else {
     if (!reducedMotion) setTimeout(loadScene, 0);
-    setTimeout(loadAnims, 100);
+    loadAnims();
   }
 </script>
