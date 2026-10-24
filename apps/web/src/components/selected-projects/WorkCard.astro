@@ -12,7 +12,16 @@ interface Props {
   locale?: string;
 }
 
-const { num, kind = 'project', title, outcome, tags, liveUrl, repos = [], locale = 'en' } = Astro.props;
+const {
+  num,
+  kind = 'project',
+  title,
+  outcome,
+  tags,
+  liveUrl,
+  repos = [],
+  locale = 'en',
+} = Astro.props;
 const isOss = kind === 'oss';
 const href = isOss ? repos[0]?.url : liveUrl || repos[0]?.url;
 const ui = useTranslations(locale);

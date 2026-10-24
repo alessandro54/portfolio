@@ -1,7 +1,8 @@
 ---
 import '../styles/global.css';
 import { useTranslations } from '@i18n/translations';
-import { sanityClient } from '@lib/sanity';
+import { getLocalizedValue } from '@lib/localized';
+import { sanityClient, sanityConfig } from '@lib/sanity';
 import { createImageUrlBuilder } from '@sanity/image-url';
 
 interface Props {
@@ -19,22 +20,22 @@ const seo = await sanityClient.fetch(
     themeColorDark, themeColorLight,
     appleTouchIcon, appleStatusBarStyle, appleMobileWebAppTitle,
     robotsDirective, author, keywords
-  }`
+  }`,
 );
 
-const t = (field: Record<string, string> | null) => field?.[locale] || field?.en || '';
-
-const builder = createImageUrlBuilder({ projectId: 'sczvled1', dataset: 'production' });
+const builder = createImageUrlBuilder(sanityConfig);
 const ogImageUrl = seo?.ogImage ? builder.image(seo.ogImage).width(1200).height(630).url() : null;
-const appleTouchIconUrl = seo?.appleTouchIcon ? builder.image(seo.appleTouchIcon).width(180).height(180).format('png').url() : null;
+const appleTouchIconUrl = seo?.appleTouchIcon
+  ? builder.image(seo.appleTouchIcon).width(180).height(180).format('png').url()
+  : null;
 
-const title = t(seo?.metaTitle) || ui('meta_title');
-const description = t(seo?.metaDescription) || ui('meta_description');
+const title = getLocalizedValue(seo?.metaTitle, locale) || ui('meta_title');
+const description = getLocalizedValue(seo?.metaDescription, locale) || ui('meta_description');
 const siteName = seo?.siteName || 'Alessandro Chumpitaz';
 const siteUrl = seo?.siteUrl || 'https://alessandro.chumpitaz.dev';
 const canonical = `${siteUrl}/${locale}/`;
 const alternate = `${siteUrl}/${otherLocale}/`;
-const keywords = t(seo?.keywords) || '';
+const keywords = getLocalizedValue(seo?.keywords, locale);
 const author = seo?.author || '';
 const robots = seo?.robotsDirective || 'index, follow';
 const twitterCard = seo?.twitterCardType || 'summary_large_image';
@@ -58,10 +59,7 @@ const profileData = JSON.stringify({
       addressCountry: 'PE',
     },
     knowsAbout: ['Python', 'TypeScript', 'Ruby on Rails', 'Django', 'Applied AI'],
-    sameAs: [
-      'https://www.linkedin.com/in/alessandrochumpitaz/',
-      'https://github.com/alessandro54',
-    ],
+    sameAs: ['https://www.linkedin.com/in/alessandrochumpitaz/', 'https://github.com/alessandro54'],
   },
 }).replace(/</g, '\\u003c');
 const themeColorDark = seo?.themeColorDark || '#09080f';
@@ -119,15 +117,6 @@ const appTitle = seo?.appleMobileWebAppTitle || siteName;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script type="application/ld+json" set:html={profileData} />
 
-    <!-- Critical CSS — paint without waiting for external stylesheet -->
-    <style is:inline>
-      :root{--bg:#09080f;--surface:#130f24;--fg:#faf9ff;--mid:rgba(250,249,255,0.62);--dim:rgba(250,249,255,0.42);--rule:rgba(250,249,255,0.07);--accent:#a78bfa;--accent-lo:rgba(167,139,250,0.10);--accent-bd:rgba(167,139,250,0.22);--nav-bg:rgba(9,8,15,0.70);--vig-rgb:9,8,15;--gradient-end:#e879f9;--h1-end:#fff}
-      html[data-theme="light"]{--bg:#fff;--surface:#f5f3ff;--fg:#09090b;--mid:rgba(9,9,11,0.68);--dim:rgba(9,9,11,0.62);--rule:rgba(9,9,11,0.08);--accent:#7c3aed;--accent-lo:rgba(124,58,237,0.08);--accent-bd:rgba(124,58,237,0.20);--nav-bg:rgba(255,255,255,0.85);--vig-rgb:255,255,255;--gradient-end:#a855f7;--h1-end:#a855f7}
-      *,*::before,*::after{margin:0;box-sizing:border-box}
-      body{background:var(--bg);color:var(--fg);font-family:'Jakarta Heading',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-      #gl{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block}
-      #vignette{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 65% 65% at 50% 50%,rgba(var(--vig-rgb),0.55) 0%,rgba(var(--vig-rgb),0.30) 40%,transparent 70%)}
-    </style>
     <script is:inline>
       (function(){
         var pref = localStorage.getItem('theme') || 'system';

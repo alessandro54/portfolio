@@ -49,53 +49,61 @@
 </style>
 
 <script>
-  const dot = document.getElementById('cursor-dot') as HTMLElement;
-  const ring = document.getElementById('cursor-ring') as HTMLElement;
+  if (matchMedia('(pointer: fine)').matches) {
+    const dot = document.getElementById('cursor-dot') as HTMLElement;
+    const ring = document.getElementById('cursor-ring') as HTMLElement;
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  let mx = -100, my = -100;
-  let rx = -100, ry = -100;
+    let mx = -100,
+      my = -100;
+    let rx = -100,
+      ry = -100;
+    let frame = 0;
 
-  document.addEventListener('mousemove', (e) => {
-    mx = e.clientX;
-    my = e.clientY;
-    dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
-  });
+    function tick() {
+      frame = 0;
+      const dx = mx - rx;
+      const dy = my - ry;
+      const amount = reducedMotion ? 1 : 0.15;
+      rx += dx * amount;
+      ry += dy * amount;
+      ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+      if (Math.abs(dx) + Math.abs(dy) > 0.1) frame = requestAnimationFrame(tick);
+    }
 
-  function lerp(a: number, b: number, t: number) { return a + (b - a) * t; }
+    document.addEventListener('mousemove', (e) => {
+      mx = e.clientX;
+      my = e.clientY;
+      dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+      if (!frame) frame = requestAnimationFrame(tick);
+    });
 
-  function tick() {
-    rx = lerp(rx, mx, 0.15);
-    ry = lerp(ry, my, 0.15);
-    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
-    requestAnimationFrame(tick);
+    const interactives = 'a, button, [role="button"], input, textarea, select';
+
+    document.addEventListener('mouseover', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.closest(interactives)) {
+        dot.classList.add('hover');
+        ring.classList.add('hover');
+      }
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      const target = e.target as HTMLElement;
+      if (target.closest(interactives)) {
+        dot.classList.remove('hover');
+        ring.classList.remove('hover');
+      }
+    });
+
+    document.addEventListener('mouseleave', () => {
+      dot.classList.add('hidden');
+      ring.classList.add('hidden');
+    });
+
+    document.addEventListener('mouseenter', () => {
+      dot.classList.remove('hidden');
+      ring.classList.remove('hidden');
+    });
   }
-  tick();
-
-  const interactives = 'a, button, [role="button"], input, textarea, select';
-
-  document.addEventListener('mouseover', (e) => {
-    const target = e.target as HTMLElement;
-    if (target.closest(interactives)) {
-      dot.classList.add('hover');
-      ring.classList.add('hover');
-    }
-  });
-
-  document.addEventListener('mouseout', (e) => {
-    const target = e.target as HTMLElement;
-    if (target.closest(interactives)) {
-      dot.classList.remove('hover');
-      ring.classList.remove('hover');
-    }
-  });
-
-  document.addEventListener('mouseleave', () => {
-    dot.classList.add('hidden');
-    ring.classList.add('hidden');
-  });
-
-  document.addEventListener('mouseenter', () => {
-    dot.classList.remove('hidden');
-    ring.classList.remove('hidden');
-  });
 </script>

@@ -1,8 +1,9 @@
 ---
-import SectionHeader from '@components/shared/SectionHeader.astro';
 import WorkCard from '@components/selected-projects/WorkCard.astro';
-import { sanityClient } from '@lib/sanity';
+import SectionHeader from '@components/shared/SectionHeader.astro';
 import { useTranslations } from '@i18n/translations';
+import { getLocalizedValue } from '@lib/localized';
+import { sanityClient } from '@lib/sanity';
 
 interface Props {
   locale?: string;
@@ -12,19 +13,24 @@ const { locale = 'en' } = Astro.props;
 const ui = useTranslations(locale);
 
 const data = await sanityClient.fetch(
-  `*[_id == "singleton-selectedProjects"][0]{ items[]{ _key, num, kind, title, outcome, tags, liveUrl, repos[]{ label, url } } }`
+  `*[_id == "singleton-selectedProjects"][0]{ items[]{ _key, num, kind, title, outcome, tags, liveUrl, repos[]{ label, url } } }`,
 );
 
-const t = (field: Record<string, string> | null) =>
-  field?.[locale] || field?.en || '';
-
 const projects = (data?.items ?? []).map(
-  (p: { num: string; kind?: string; title: Record<string, string>; outcome: Record<string, string>; tags: string[]; liveUrl?: string; repos?: { label: string; url: string }[] }) => ({
+  (p: {
+    num: string;
+    kind?: string;
+    title: Record<string, string>;
+    outcome: Record<string, string>;
+    tags: string[];
+    liveUrl?: string;
+    repos?: { label: string; url: string }[];
+  }) => ({
     num: p.num,
     locale,
     kind: p.kind || 'project',
-    title: t(p.title),
-    outcome: t(p.outcome),
+    title: getLocalizedValue(p.title, locale),
+    outcome: getLocalizedValue(p.outcome, locale),
     tags: p.tags ?? [],
     liveUrl: p.liveUrl,
     repos: p.repos ?? [],

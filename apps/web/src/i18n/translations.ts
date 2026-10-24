@@ -37,7 +37,8 @@ export const translations = {
     // Contact
     contact_heading_pre: 'Have a project?',
     contact_heading_em: "Let's talk.",
-    contact_body: "Tell me what you're building, what's slowing it down, or where an extra set of hands would help. I'll reply by email.",
+    contact_body:
+      "Tell me what you're building, what's slowing it down, or where an extra set of hands would help. I'll reply by email.",
     contact_email_label: 'Email me',
     contact_github: 'GitHub',
     contact_linkedin: 'LinkedIn',
@@ -45,7 +46,8 @@ export const translations = {
 
     // Metadata and footer
     meta_title: 'Alessandro Chumpitaz | Full Stack Engineer in Lima',
-    meta_description: 'Full Stack Engineer in Lima, Peru. I build Python and TypeScript services, modernize Rails and Django apps, and take features through production.',
+    meta_description:
+      'Full Stack Engineer in Lima, Peru. I build Python and TypeScript services, modernize Rails and Django apps, and take features through production.',
     footer_role: 'Full Stack Engineer · Lima, Peru',
   },
   es: {
@@ -86,7 +88,8 @@ export const translations = {
     // Contacto
     contact_heading_pre: '¿Tienes un proyecto?',
     contact_heading_em: 'Hablemos.',
-    contact_body: 'Cuéntame qué estás construyendo, qué te está frenando o en qué parte necesitas apoyo. Te responderé por correo.',
+    contact_body:
+      'Cuéntame qué estás construyendo, qué te está frenando o en qué parte necesitas apoyo. Te responderé por correo.',
     contact_email_label: 'Escríbeme',
     contact_github: 'GitHub',
     contact_linkedin: 'LinkedIn',
@@ -94,7 +97,8 @@ export const translations = {
 
     // Metadatos y pie de página
     meta_title: 'Alessandro Chumpitaz | Ingeniero Full Stack en Lima',
-    meta_description: 'Ingeniero Full Stack en Lima, Perú. Desarrollo servicios con Python y TypeScript, modernizo aplicaciones en Rails y Django y llevo funcionalidades a producción.',
+    meta_description:
+      'Ingeniero Full Stack en Lima, Perú. Desarrollo servicios con Python y TypeScript, modernizo aplicaciones en Rails y Django y llevo funcionalidades a producción.',
     footer_role: 'Ingeniero Full Stack · Lima, Perú',
   },
 } as const;

@@ -1,11 +1,12 @@
 import { createClient } from '@sanity/client';
 
-const projectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'sczvled1';
-const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
+export const sanityConfig = {
+  projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'sczvled1',
+  dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
+};
 
 export const sanityClient = createClient({
-  projectId,
-  dataset,
+  ...sanityConfig,
   apiVersion: '2026-04-08',
   useCdn: false,
 });

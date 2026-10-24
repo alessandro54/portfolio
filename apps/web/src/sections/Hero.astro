@@ -1,17 +1,18 @@
 ---
 import StatCard from '@components/hero/StatCard.astro';
-import { sanityClient } from '@lib/sanity';
 import { useTranslations } from '@i18n/translations';
+import { getLocalizedValue } from '@lib/localized';
+import { sanityClient } from '@lib/sanity';
 
 interface Props {
-    locale?: string;
+  locale?: string;
 }
 
-const { locale = "en" } = Astro.props;
+const { locale = 'en' } = Astro.props;
 const ui = useTranslations(locale);
 
 const hero = await sanityClient.fetch(
-    `*[_type == "hero"][0]{
+  `*[_type == "hero"][0]{
     badge,
     headline,
     subheadline,
@@ -22,15 +23,12 @@ const hero = await sanityClient.fetch(
   }`,
 );
 
-const t = (field: Record<string, string> | null) =>
-    field?.[locale] || field?.en || "";
-
 const stats = (hero?.stats || []).map(
-    (s: { value: number; suffix?: string; label: Record<string, string> }) => ({
-        value: s.value,
-        suffix: s.suffix,
-        label: t(s.label),
-    }),
+  (s: { value: number; suffix?: string; label: Record<string, string> }) => ({
+    value: s.value,
+    suffix: s.suffix,
+    label: getLocalizedValue(s.label, locale),
+  }),
 );
 ---
 
@@ -44,7 +42,7 @@ const stats = (hero?.stats || []).map(
         <span
             class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-[blink_2.4s_infinite] shrink-0"
         ></span>
-        {t(hero?.badge)}
+        {getLocalizedValue(hero?.badge, locale)}
     </div>
 
     <h1
@@ -52,27 +50,27 @@ const stats = (hero?.stats || []).map(
     >
         <span
             class="animated-gradient bg-[linear-gradient(100deg,var(--accent)_0%,var(--h1-end)_100%)] bg-clip-text [-webkit-text-fill-color:transparent]"
-            >{t(hero?.headline)}</span
+            >{getLocalizedValue(hero?.headline, locale)}</span
         ><br />
-        <span class="text-[var(--mid)] font-light">{t(hero?.subheadline)}</span>
+        <span class="text-[var(--mid)] font-light">{getLocalizedValue(hero?.subheadline, locale)}</span>
     </h1>
 
     <p
         class="hero-sub text-[clamp(0.88rem,1.35vw,1.02rem)] font-normal leading-[1.8] text-[var(--mid)] max-w-[460px] mx-auto mb-14"
     >
-        {t(hero?.description)}
+        {getLocalizedValue(hero?.description, locale)}
     </p>
 
     <div class="hero-btns flex gap-[0.8rem] justify-center mb-20">
         <a
             href="#contact"
             class="cta-primary inline-flex items-center justify-center gap-[0.45rem] px-10 py-4 rounded-lg text-[0.88rem] font-medium no-underline bg-[var(--accent)] text-[#09080f] border border-[var(--accent)]"
-            >{t(hero?.ctaLabel)}</a
+            >{getLocalizedValue(hero?.ctaLabel, locale)}</a
         >
         <a
             href="#work"
             class="inline-flex items-center justify-center gap-[0.45rem] px-10 py-4 rounded-lg text-[0.88rem] font-medium no-underline bg-transparent backdrop-blur-[2px] border border-[var(--accent-bd)] text-[var(--mid)] transition-[border-color,color] duration-[220ms] hover:border-[var(--accent)] hover:text-[var(--fg)]"
-            >{t(hero?.secondaryCtaLabel) || ui('hero_see_work')}</
+            >{getLocalizedValue(hero?.secondaryCtaLabel, locale) || ui('hero_see_work')}</
         >
     </div>
 

@@ -1,8 +1,9 @@
 ---
 import SectionHeader from '@components/shared/SectionHeader.astro';
 import WhyCard from '@components/why-me/WhyCard.astro';
-import { sanityClient } from '@lib/sanity';
 import { useTranslations } from '@i18n/translations';
+import { getLocalizedValue } from '@lib/localized';
+import { sanityClient } from '@lib/sanity';
 
 interface Props {
   locale?: string;
@@ -16,18 +17,16 @@ const data = await sanityClient.fetch(
     featureHeadlinePre, featureHeadlineEmphasis, featureHeadlinePost,
     featureParagraph1, featureParagraph2,
     cards[]{ _key, n, title, text }
-  }`
+  }`,
 );
 
-const t = (field: Record<string, string> | null) =>
-  field?.[locale] || field?.en || '';
-
-const cards: { n: string; title: string; text: string }[] =
-  (data?.cards ?? []).map((c: { n: string; title: Record<string, string>; text: Record<string, string> }) => ({
+const cards: { n: string; title: string; text: string }[] = (data?.cards ?? []).map(
+  (c: { n: string; title: Record<string, string>; text: Record<string, string> }) => ({
     n: c.n,
-    title: t(c.title),
-    text: t(c.text),
-  }));
+    title: getLocalizedValue(c.title, locale),
+    text: getLocalizedValue(c.text, locale),
+  }),
+);
 ---
 
 <section class="flex flex-col gap-2 px-12 pb-24 max-[900px]:px-8 max-[900px]:pb-16">
@@ -35,12 +34,12 @@ const cards: { n: string; title: string; text: string }[] =
   <div class="why-grid grid grid-cols-2 gap-px bg-[var(--rule)] border border-[var(--rule)] rounded-xl overflow-hidden max-[900px]:grid-cols-1">
     <div class="why-feature col-span-2 bg-[var(--surface)] px-12 py-[2.8rem] grid grid-cols-2 gap-16 items-center max-[900px]:col-span-1 max-[900px]:grid-cols-1 max-[900px]:gap-6">
       <div class="text-[clamp(1.15rem,1.9vw,1.65rem)] font-bold tracking-[-0.025em] text-[var(--fg)] leading-[1.32]">
-        {t(data?.featureHeadlinePre)}
-        <em class="animated-gradient not-italic bg-[linear-gradient(100deg,var(--accent)_10%,var(--gradient-end)_80%)] bg-clip-text [-webkit-text-fill-color:transparent]"> {t(data?.featureHeadlineEmphasis)}</em> {t(data?.featureHeadlinePost)}
+        {getLocalizedValue(data?.featureHeadlinePre, locale)}
+        <em class="animated-gradient not-italic bg-[linear-gradient(100deg,var(--accent)_10%,var(--gradient-end)_80%)] bg-clip-text [-webkit-text-fill-color:transparent]"> {getLocalizedValue(data?.featureHeadlineEmphasis, locale)}</em> {getLocalizedValue(data?.featureHeadlinePost, locale)}
       </div>
       <div>
-        <p class="text-[0.81rem] leading-[1.85] text-[var(--mid)]">{t(data?.featureParagraph1)}</p>
-        <p class="text-[0.81rem] leading-[1.85] text-[var(--mid)] mt-[0.9rem]">{t(data?.featureParagraph2)}</p>
+        <p class="text-[0.81rem] leading-[1.85] text-[var(--mid)]">{getLocalizedValue(data?.featureParagraph1, locale)}</p>
+        <p class="text-[0.81rem] leading-[1.85] text-[var(--mid)] mt-[0.9rem]">{getLocalizedValue(data?.featureParagraph2, locale)}</p>
       </div>
     </div>
     {cards.map(card => <WhyCard {...card} />)}

@@ -29,7 +29,7 @@ Web dev server runs at `localhost:4321`, Studio at `localhost:3333`. No test fra
 
 **Monorepo:** pnpm workspaces (`pnpm-workspace.yaml`) + Turborepo (`turbo.json`) orchestrate builds across apps. Always use `pnpm`, never npm/yarn.
 
-**Three.js scene** (`apps/web/src/scripts/scene.ts`): Custom 70×42 dot grid with spring physics, mouse-push interaction, scroll-triggered camera transitions, and wave morphing. Three.js is loaded via CDN (global `THREE`), not as an npm dependency.
+**WebGL scene** (`apps/web/src/scripts/scene.ts`): A hand-written WebGL 70×42 dot grid with spring physics, pointer interaction, scroll-triggered camera transitions, and wave morphing. It does not use Three.js or a rendering dependency.
 
 **Sanity config:** Project ID `sczvled1`, dataset `production`. Client reads from env vars `PUBLIC_SANITY_PROJECT_ID` / `PUBLIC_SANITY_DATASET` with hardcoded fallbacks (`apps/web/src/lib/sanity.ts`).
 
@@ -55,7 +55,7 @@ Web dev server runs at `localhost:4321`, Studio at `localhost:3333`. No test fra
 
 **Tailwind CSS v4:** Configured via `@tailwindcss/vite` plugin in `apps/web/astro.config.mjs`.
 
-**Animations:** GSAP + ScrollTrigger (`apps/web/src/scripts/animations.ts`). Elements listed in `apps/web/src/styles/global.css` start `visibility: hidden` and are revealed by scroll triggers. `#contact` is excluded from the section parallax animation.
+**Animations:** Native Web Animations API and IntersectionObserver (`apps/web/src/scripts/animations.ts`). Content is visible without JavaScript; the script adds entrance effects, counters, ticker motion, and scroll parallax. Reduced-motion preferences skip the WebGL scene and motion effects.
 
 **Deployment:** GitHub Actions (`.github/workflows/deploy.yml`) builds on push to `main` and deploys to Cloudflare Pages via `wrangler-action`. Uses the `production` GitHub environment.
 

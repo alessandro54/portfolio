@@ -11,9 +11,7 @@ export const contact = defineType({
       title: 'Email',
       type: 'string',
       validation: (r) =>
-        r
-          .required()
-          .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, { name: 'email', invert: false }),
+        r.required().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, { name: 'email', invert: false }),
     }),
     defineField({
       name: 'github',

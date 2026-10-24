@@ -3,19 +3,16 @@ import Cursor from '@components/shared/Cursor.astro';
 import Footer from '@components/shared/Footer.astro';
 import Nav from '@components/shared/Nav.astro';
 import Layout from '@layouts/Layout.astro';
+import Career from '@sections/Career.astro';
+import Contact from '@sections/Contact.astro';
 import Hero from '@sections/Hero.astro';
+import SelectedProjects from '@sections/SelectedProjects.astro';
 import Ticker from '@sections/Ticker.astro';
 import WhatIDo from '@sections/WhatIDo.astro';
 import WhyMe from '@sections/WhyMe.astro';
-import SelectedProjects from '@sections/SelectedProjects.astro';
-import Career from '@sections/Career.astro';
-import Contact from '@sections/Contact.astro';
 
 export function getStaticPaths() {
-  return [
-    { params: { locale: 'en' } },
-    { params: { locale: 'es' } },
-  ];
+  return [{ params: { locale: 'en' } }, { params: { locale: 'es' } }];
 }
 
 const { locale } = Astro.params;

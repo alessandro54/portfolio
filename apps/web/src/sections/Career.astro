@@ -1,8 +1,8 @@
 ---
 import ExperienceRow from '@components/career/ExperienceRow.astro';
 import SectionHeader from '@components/shared/SectionHeader.astro';
-import { sanityClient } from '@lib/sanity';
 import { useTranslations } from '@i18n/translations';
+import { sanityClient } from '@lib/sanity';
 
 interface Props {
   locale?: string;
@@ -12,21 +12,31 @@ const { locale = 'en' } = Astro.props;
 const ui = useTranslations(locale);
 
 const raw = await sanityClient.fetch(
-  `*[_type == "experience"] | order(order asc) { company, role, startDate, endDate, description, descriptionEs, techStack }`
+  `*[_type == "experience"] | order(order asc) { company, role, startDate, endDate, description, descriptionEs, techStack }`,
 );
 
 type Block = { children?: { text?: string }[] };
 
-const jobs = raw.map((e: { company: string; role: string; startDate: string; endDate?: string; description?: Block[]; descriptionEs?: Block[]; techStack?: string[] }) => {
-  const start = e.startDate?.slice(0, 4) ?? '';
-  const end = e.endDate ? e.endDate.slice(0, 4) : ui('career_present');
-  const date = `${start} — ${end}`;
-  const desc = (locale === 'es' ? e.descriptionEs ?? e.description : e.description ?? [])
-    .flatMap((b: Block) => b.children ?? [])
-    .map((s) => s.text ?? '')
-    .join('');
-  return { date, company: e.company, role: e.role, desc, techStack: e.techStack ?? [] };
-});
+const jobs = raw.map(
+  (e: {
+    company: string;
+    role: string;
+    startDate: string;
+    endDate?: string;
+    description?: Block[];
+    descriptionEs?: Block[];
+    techStack?: string[];
+  }) => {
+    const start = e.startDate?.slice(0, 4) ?? '';
+    const end = e.endDate ? e.endDate.slice(0, 4) : ui('career_present');
+    const date = `${start} — ${end}`;
+    const desc = (locale === 'es' ? (e.descriptionEs ?? e.description) : (e.description ?? []))
+      .flatMap((b: Block) => b.children ?? [])
+      .map((s) => s.text ?? '')
+      .join('');
+    return { date, company: e.company, role: e.role, desc, techStack: e.techStack ?? [] };
+  },
+);
 ---
 
 <section id="experience" class="flex flex-col gap-2 px-12 pb-24 max-[900px]:px-8 max-[900px]:pb-16">

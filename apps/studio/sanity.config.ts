@@ -29,11 +29,7 @@ export default defineConfig({
               .id('hero')
               .schemaType('hero')
               .child(
-                S.document()
-                  .id('hero')
-                  .title('Hero')
-                  .schemaType('hero')
-                  .documentId(HERO_DOC_ID),
+                S.document().id('hero').title('Hero').schemaType('hero').documentId(HERO_DOC_ID),
               ),
             S.listItem()
               .title('Ticker')
@@ -95,16 +91,23 @@ export default defineConfig({
               .title('SEO')
               .id('seo')
               .schemaType('seo')
-              .child(
-                S.document()
-                  .id('seo')
-                  .title('SEO')
-                  .schemaType('seo')
-                  .documentId(SEO_DOC_ID),
-              ),
+              .child(S.document().id('seo').title('SEO').schemaType('seo').documentId(SEO_DOC_ID)),
             S.divider(),
             S.documentTypeListItem('experience').title('Career'),
-            ...S.documentTypeListItems().filter((item) => !['hero', 'ticker', 'whatIDo', 'whyMe', 'selectedProjects', 'contact', 'seo', 'experience', 'recentWork'].includes(item.getId() ?? '')),
+            ...S.documentTypeListItems().filter(
+              (item) =>
+                ![
+                  'hero',
+                  'ticker',
+                  'whatIDo',
+                  'whyMe',
+                  'selectedProjects',
+                  'contact',
+                  'seo',
+                  'experience',
+                  'recentWork',
+                ].includes(item.getId() ?? ''),
+            ),
           ]),
     }),
     visionTool(),

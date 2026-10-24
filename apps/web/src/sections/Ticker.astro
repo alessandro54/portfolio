@@ -1,4 +1,5 @@
 ---
+import { getLocalizedValue } from '@lib/localized';
 import { sanityClient } from '@lib/sanity';
 
 interface Props {
@@ -7,12 +8,10 @@ interface Props {
 
 const { locale = 'en' } = Astro.props;
 
-const data = await sanityClient.fetch(
-  `*[_type == "ticker"][0]{ items[]{ label } }`
-);
+const data = await sanityClient.fetch(`*[_type == "ticker"][0]{ items[]{ label } }`);
 
 const items = (data?.items || []).map((item: { label: Record<string, string> }) =>
-  item.label?.[locale] || item.label?.en || ''
+  getLocalizedValue(item.label, locale),
 );
 ---
 
